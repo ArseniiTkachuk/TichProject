@@ -29,6 +29,7 @@ app.use(express.json())
 
 
 app.get('/getPars', ParController.getPars)
+app.post('/checkPars', ParController.checkPars)
 
 
 app.listen(PORT, (err) => {

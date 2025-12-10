@@ -155,7 +155,7 @@ export default {
     // Відправка пар на бекенд для перевірки
     async checkResults() {
       try {
-        const res = await axios.post(`${BASE_URL}/checkPairs`, { pairs: this.pairs });
+        const res = await axios.post(`${BASE_URL}/checkPars`, { pairs: this.pairs });
         this.result = res.data; // очікуємо { score, details }
       } catch (error) {
         alert("Помилка при перевірці результату");

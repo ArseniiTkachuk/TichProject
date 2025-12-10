@@ -1,4 +1,4 @@
-import Par from '../models/Par.js';
+import ParModel from '../models/Par.js';
 
 // Функція для перемішування масиву (Fisher-Yates shuffle)
 function shuffleArray(array) {
@@ -36,3 +36,36 @@ export const getPars = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+
+export const checkPars = async (req, res) => {
+  try {
+    const score = 0;
+    const details = []
+    
+    req.body.pairs.forEach(pair => {
+      if (pair.funcSlug === pair.graphSlug) {
+        score += 10;
+        details.push({
+          correct: true,
+          funcSlug: pair.funcSlug,
+          graphSlug:pair.graphSlug,
+        })
+      } else {
+        details.push({
+          correct: false,
+          funcSlug: pair.funcSlug,
+          graphSlug:pair.graphSlug, 
+        })
+      }
+    });
+
+    res.json({
+      score: score, 
+      details: details,
+    })
+  } catch(err) {
+
+  }
+  
+}
