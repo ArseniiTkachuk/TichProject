@@ -13,7 +13,7 @@ function shuffleArray(array) {
 export const getPars = async (req, res) => {
   try {
     // Отримуємо всі пари з БД
-    const allPars = await Par.find();
+    const allPars = await ParModel.find();
 
     if (allPars.length < 15) {
       return res.status(500).json({ message: 'Недостатньо пар у базі. Має бути мінімум 15.' });
