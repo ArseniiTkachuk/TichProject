@@ -40,22 +40,22 @@ export const getPars = async (req, res) => {
 
 export const checkPars = async (req, res) => {
   try {
-    const score = 0;
+    let score = 0;
     const details = []
     
     req.body.pairs.forEach(pair => {
-      if (pair.funcSlug === pair.graphSlug) {
+      if (pair.funcSlug == pair.graphSlug) {
         score += 10;
         details.push({
           correct: true,
           funcSlug: pair.funcSlug,
-          graphSlug:pair.graphSlug,
+          graphSlug: pair.graphSlug,
         })
       } else {
         details.push({
           correct: false,
           funcSlug: pair.funcSlug,
-          graphSlug:pair.graphSlug, 
+          graphSlug: pair.graphSlug, 
         })
       }
     });
@@ -65,7 +65,6 @@ export const checkPars = async (req, res) => {
       details: details,
     })
   } catch(err) {
-
+    res.status(500).json({ message: 'Server error', error: err.message })
   }
-  
 }
