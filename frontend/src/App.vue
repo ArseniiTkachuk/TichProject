@@ -1,7 +1,7 @@
 <template>
   <div>
     <header id="header">
-      <h1>Підібрати математичній функції її графік</h1>
+      <h1 class="header_text">Підібрати математичній функції її графік</h1>
     </header>
 
   <div id="background_test">  
@@ -31,7 +31,7 @@
 
       <!-- Секція графіків -->
       <div>
-        <h2>Графіки</h2>
+        <h3 class='text_func'>Графіки</h3>
         <ul>
           <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
           <li
@@ -49,19 +49,19 @@
       <!-- Секція створених пар (відображається, якщо є хоча б одна пара) -->
       <div
         v-if="pairs.length">
-        <h2>Обрані пари</h2>
+        <h3 class='text_func'>Обрані пари</h3>
         <ul>
           <!-- Перебираємо пари -->
-          <li
+          <li class="block_done"
             v-for="pair in pairs">
             <!-- Назва функції -->
-            <span>{{ getFuncLabel(pair.funcSlug) }}</span>
+            <span class="name_func">{{ getFuncLabel(pair.funcSlug) }}</span>
             <!-- Картинка графіка пари -->
-            <img
+            <img class="img_func"
               :src="getGraphUrl(pair.graphSlug)"/>
             <!-- Кнопка видалення пари -->
             <button @click="removePair(pair.funcSlug)" class="remove-btn">
-              &times;
+              Видалити пару
             </button>
           </li>
         </ul>
@@ -215,8 +215,10 @@ export default {
   margin-right: 10px;
   font-size: 10px;
   text-align: center;
-  
-  
+}
+
+.header_text {
+  text-shadow: 1px 1px 2px rgb(65, 65, 65);
 }
 
 #background_test {    /*Задній фон тесту*/
@@ -240,44 +242,102 @@ export default {
 
 /* Окремий елемент функції, графіка, пари */
 .function-item,
-.graph-item,
-.remove-btn {
+.graph-item {
   padding: 15px 10px;
   margin: 15px 0;
   cursor: pointer;
-  list-style-type: none;
   border: 1px solid #b9b9b9;
   border-radius: 10px;
   transition: background 0.3s, border-radius 0.3s, transform 0.3s;
-
+  list-style-type: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .function-item:hover,
-.graph-item:hover,
-.remove-btn:hover {
-  background-color: rgba(181, 224, 163, 0.3);
-  border: 1px solid rgb(100, 170, 100);
+.graph-item:hover {
+  background-color: rgba(168, 219, 145, 0.3);
+  border: 1px solid rgb(94, 170, 94);
   transform: rotateY(-5deg);
+  box-shadow: 0 0 2px rgb(120, 210, 129);
 }
 
 /* Активний (вибраний) елемент */
 .function-item.selected,
 .graph-item.selected {
-  box-shadow: 0 0 8px #3b82f6;
+  box-shadow: 0 0 2px rgb(75, 151, 232);
   transform: scale(1.02);
   list-style-type: none;
+  background-color: rgb(40, 101, 224, 0.3);
+  border: 1px solid rgb(27, 72, 221);
 }
 
+.block_done {
+  padding: 15px 10px;
+  margin: 15px 0;
+  cursor: pointer;
+  border: 1px solid #b9b9b9;
+  border-radius: 10px;
+  list-style-type: none;
+  background-color: rgba(168, 219, 145, 0.3);
+  border: 1px solid rgb(94, 170, 94);
+  box-shadow: 0 0 2px rgb(120, 210, 129);
+  text-align: center;
+}
+
+.name_func {
+  margin-bottom: 10px;
+}
+
+.img_func {
+  margin: 10px 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.remove-btn {
+    width: 130px;
+    height: 38px;
+    background-color: rgba(227, 90, 90, 0.9);
+    border: 1px solid rgb(205, 72, 72);
+    border-radius: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background 0.3s, border-radius 0.3s, transform 0.3s;
+}
+.remove-btn:hover {
+  background-color: rgba(229, 43, 43, 0.8);
+  border: 1px solid rgb(201, 50, 50);
+  transform: rotateY(-7deg);
+  box-shadow: 0 0 2px rgb(227, 75, 75);
+  transform: scale(1.02);
+}
 
 /* Кнопка перевірки */
 .check-btn {
-  width: 100%;
+  width: 95%;
   padding: 12px;
   font-size: 18px;
   border-radius: 10px;
-  background-color: #3b82f6;
+  background-color: rgba(64, 132, 241, 0.9);
   color: white;
+  cursor: pointer;
+  transition: background 0.3s, border-radius 0.3s, transform 0.3s;
+  display: block;
+  margin: 0 auto;
 }
+
+.check-btn:hover {
+  background-color: rgba(43, 119, 241, 0.9);
+  border: 1px solid rgb(10, 37, 237);
+  transform: rotateY(-7deg);
+  box-shadow: 0 0 2px rgb(39, 96, 238);
+  transform: scale(1.02);
+}
+
 .check-btn:disabled {
   background-color: #999;
   cursor: not-allowed;
