@@ -7,16 +7,20 @@
       </header>
 
       <div id="background_test">
+        <div class="text-row">
+          
+        
+            <h3 class="text_func">Математичні функції</h3>
+        </div>
+            <p class="text_des">
+               Обери функцію зверху, потім графік під нею. Створи 10 пар.
+            </p>
 
-        <h3 class="text_func">Математичні функції</h3>
-
-        <p class="text_des">
-          Обери функцію зверху, потім графік під нею. Створи 10 пар.
-        </p>
-
+          
+        
         <!-- Секція функцій -->
-
-        <div>
+        <div class="functions-graphs">
+          <div>
 
           <ul>
             <!-- Перебираємо доступні функції, які ще не вибрані у парах -->
@@ -29,7 +33,11 @@
 
         <!-- Секція графіків -->
         <div>
-          <h3 class='text_func'>Графіки</h3>
+          <div class="text-row">
+        
+             <h3 class='text_funcGraf'>Графіки</h3>
+          
+          </div>
           <ul>
             <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
             <li v-for="graph in availableGraphs" :class="{ selected: selectedGraphSlug === graph.slug }"
@@ -39,7 +47,7 @@
             </li>
           </ul>
         </div>
-
+       </div>
         <!-- Секція створених пар (відображається, якщо є хоча б одна пара) -->
         <div v-if="pairs.length">
           <h3 class='text_func'>Обрані пари</h3>
@@ -68,14 +76,14 @@
   </div>
   <!-- Контейнер для результату -->
   <div v-show="checkPage === 1">
-    <div>
+    <div class="result_page">
       <!-- Відображення результатів перевірки -->
       <section v-if="result">
-        <h2>Результат: {{ result.score }}%</h2>
+        <h2 class="text_result">Результат: {{ result.score }}%</h2>
         <ul>
-          <li v-for="item in result.details" :class="{ correct: item.correct, incorrect: !item.correct }">
-            {{ getFuncLabel(item.funcSlug) }} ↔
-            {{ item.correct ? 'Правильно' : 'Неправильно' }}
+          <li class="result_func" v-for="item in result.details" :class="{ correct: item.correct, incorrect: !item.correct }">
+            <div class="text_resultFunc">{{ getFuncLabel(item.funcSlug) }}</div>
+            <img :src="`${getGraphUrl(item.graphSlug)}`" />
           </li>
         </ul>
       </section>
@@ -102,7 +110,7 @@ const BASE_URL = "http://localhost:1111"; // Адрес бекенду
 export default {
   data() {
     return {
-      testingOneTry: true, // чи відбувається тест
+      testingOneTry: false, // чи відбувається тест
       // Масив з усіма функціями (отриманий з бекенду)
       functions: [],
       // Масив з усіма графіками (отриманий з бекенду)
@@ -230,7 +238,9 @@ export default {
 
 :global(body) {
   /*Задній фон сайту */
-  background: linear-gradient(135deg, rgb(180, 60, 220), rgb(120, 30, 170));
+  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  background-size: 200% 200%;
+  animation: gradientMove 10s ease infinite;
   font-family: "Roboto Slab", serif;
   margin: 0%;
 
@@ -264,11 +274,14 @@ export default {
 
 .text_func {
   margin: 15px 0 5px;
+
 }
 
 .text_des {
   font-size: 10px;
+
 }
+
 
 /* Окремий елемент функції, графіка, пари */
 .function-item,
@@ -331,11 +344,15 @@ export default {
 .remove-btn {
   width: 130px;
   height: 38px;
-  background-color: rgba(227, 90, 90, 0.9);
-  border: 1px solid rgb(205, 72, 72);
+
   border-radius: 10px;
   margin-left: 10px;
   cursor: pointer;
+  
+  background-color: rgba(255, 50, 50, 0.5);
+  border: 1px solid rgb(220, 20, 20);     
+  transform: rotateY(-5deg);
+  box-shadow: 0 0 4px rgb(255, 40, 40);     
   transition: background 0.3s, border-radius 0.3s, transform 0.3s;
 }
 
@@ -374,13 +391,7 @@ export default {
   cursor: not-allowed;
 }
 
-.correct {
-  background: #41e735;
-}
 
-.incorrect {
-  background: #e73535;
-}
 
 
 
@@ -440,4 +451,122 @@ export default {
   font-size: 16px;
   line-height: 1.4;
 }
+
+.result_page {
+  background-color: rgb(245, 246, 248);
+  width: 80%;
+  margin: 30px auto;
+  margin-bottom: 30px;
+  height: auto;
+  border-radius: 25px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  padding: 7px 15px 10px 20px;
+}
+
+.text_result {
+  text-align: center;
+}
+
+.result_func {
+    list-style-type: none;
+}
+
+.correct {
+  background-color: rgba(168, 219, 145, 0.3);
+  padding: 15px 10px;
+  margin: 15px 0;
+  cursor: pointer;
+  border-radius: 10px;
+  list-style-type: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  
+  border: 1px solid rgb(50, 180, 50);
+  transform: rotateY(-5deg);
+  box-shadow: 0 0 2px rgb(60, 220, 60);
+  transition: background 0.3s, border-radius 0.3s, transform 0.3s;
+  
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.incorrect {
+  background-color: rgba(255, 50, 50, 0.35);
+  
+  padding: 15px 10px;
+  margin: 15px 0;
+  cursor: pointer;
+  border-radius: 10px;
+  list-style-type: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+
+  transition: background 0.3s, border-radius 0.3s, transform 0.3s;
+  border: 1px solid rgb(220, 40, 40);
+  transform: rotateY(-5deg);
+  box-shadow: 0 0 3px rgb(255, 60, 60);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text_resultFunc {
+  padding-bottom: 15px;
+  font-size: 20px;
+}
+
+  #background_test .functions-graphs {
+    display: flex;
+    flex-direction: column; /* на малих екранах одна колонка */
+    gap: 30px; /* відстань між секціями */
+  }
+
+@media (min-width: 1024px) { /*Для екранів пк */
+  #background_test .functions-graphs {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  #background_test .functions-graphs > div {
+    flex: 1 1 48%; /* кожна секція ~половина ширини */
+    margin: 0;
+  }
+
+  #background_test {
+    width: 90%;
+  }
+
+.text-row {
+  display: flex;
+  justify-content: space-between; /* лівий і правий заголовки по краях */
+  align-items: center; /* вирівнювання по вертикалі */
+  margin-bottom: 5px;
+}
+
+.text_func {
+  flex: 1; /* займає половину або більше лівого простору */
+  margin: 0;
+}
+
+.text_funcGraf {
+  flex: 1; /* займає половину або більше правого простору */
+  text-align: left; /* щоб текст був праворуч */
+  margin: 0;
+}
+
+.text_des {
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+}
+
 </style>
