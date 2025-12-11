@@ -82,14 +82,12 @@
     </div>
   </div>
   <!-- Контейнер для використаної спроби -->
-  <div 
-  v-show="checkPage === 2"
-  class="page"
-  >
+  <div v-show="checkPage === 2" class="page">
     <div class="card">
       <div class="icon">🔒</div>
       <h2 class="title">Спроба використана</h2>
       <p class="text">Ви вже пройшли цей тест. Повторна спроба недоступна.</p>
+      <button @click="clearTestTry()">Очистити одну спробу</button>
     </div>
   </div>
 </template>
@@ -102,7 +100,7 @@ const BASE_URL = "http://localhost:1111"; // Адрес бекенду
 export default {
   data() {
     return {
-      testingOneTry: true, // чи відбувається тест
+      testingOneTry: false, // чи відбувається тест
       // Масив з усіма функціями (отриманий з бекенду)
       functions: [],
       // Масив з усіма графіками (отриманий з бекенду)
@@ -140,13 +138,13 @@ export default {
         return 2
       } else {
         // якщо результату немає і користувач ще не використав спробу
-        if (this.result == null && localStorage.getItem("OneTry") === null) {
+        if (this.result == null && localStorage.getItem("testTry") === null) {
           return 0
           // якщо користувач получив результат тестів
         } else if (this.result != null) {
           return 1
           // якщо користувач викоримстав спробу
-        } else if (localStorage.getItem("OneTry") !== null) {
+        } else if (localStorage.getItem("testTry") !== null) {
           return 2
         }
       }
@@ -188,6 +186,7 @@ export default {
       try {
         const res = await axios.post(`${BASE_URL}/checkPars`, { pairs: this.pairs });
         this.result = res.data; // очікуємо { score, details }
+        localStorage.setItem("testTry", "true")
       } catch (error) {
         alert("Помилка при перевірці результату");
         console.error(error);
@@ -207,6 +206,10 @@ export default {
         alert("Не вдалося завантажити дані");
         console.error(error);
       }
+    },
+
+    clearTestTry() {
+      localStorage.removeItem('testTry');
     },
 
 
@@ -384,9 +387,9 @@ export default {
 
 
 
- /* Одна спроба */
+/* Одна спроба */
 
- /* Задній фон сторінки */
+/* Задній фон сторінки */
 .page {
   min-height: 100vh;
   display: flex;
@@ -401,9 +404,17 @@ export default {
 
 /* Анімація градієнта */
 @keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Центральний блок */
