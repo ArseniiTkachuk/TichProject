@@ -1,95 +1,88 @@
 <template>
+  <!-- Контейнер для сторінки тестів -->
   <div>
-    <header id="header">
-      <h1 class="header_text">Підібрати математичній функції її графік</h1>
-    </header>
+    <div>
+      <header id="header">
+        <h1 class="header_text">Підібрати математичній функції її графік</h1>
+      </header>
 
-  <div id="background_test">  
+      <div id="background_test">
 
-    <h3 class="text_func">Математичні функції</h3>
-    
-    <p class="text_des">
-      Обери функцію зверху, потім графік під нею. Створи 10 пар.
-    </p>
+        <h3 class="text_func">Математичні функції</h3>
 
-      <!-- Секція функцій -->
-    
-      <div >
-        
-        <ul>
-          <!-- Перебираємо доступні функції, які ще не вибрані у парах -->
-          <li
-            v-for="func in availableFunctions"
-            :class="{ selected: selectedFuncSlug === func.slug }"
-            @click="selectFunction(func.slug)"
-            class="function-item"
-          >
-            {{ func.label }}
-          </li>
-        </ul>
+        <p class="text_des">
+          Обери функцію зверху, потім графік під нею. Створи 10 пар.
+        </p>
+
+        <!-- Секція функцій -->
+
+        <div>
+
+          <ul>
+            <!-- Перебираємо доступні функції, які ще не вибрані у парах -->
+            <li v-for="func in availableFunctions" :class="{ selected: selectedFuncSlug === func.slug }"
+              @click="selectFunction(func.slug)" class="function-item">
+              {{ func.label }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Секція графіків -->
+        <div>
+          <h3 class='text_func'>Графіки</h3>
+          <ul>
+            <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
+            <li v-for="graph in availableGraphs" :class="{ selected: selectedGraphSlug === graph.slug }"
+              @click="selectGraph(graph.slug)" class="graph-item">
+              <!-- Картинка графіка -->
+              <img :src="graph.imageUrl" :alt="graph.slug" />
+            </li>
+          </ul>
+        </div>
+
+        <!-- Секція створених пар (відображається, якщо є хоча б одна пара) -->
+        <div v-if="pairs.length">
+          <h3 class='text_func'>Обрані пари</h3>
+          <ul>
+            <!-- Перебираємо пари -->
+            <li class="block_done" v-for="pair in pairs">
+              <!-- Назва функції -->
+              <span class="name_func">{{ getFuncLabel(pair.funcSlug) }}</span>
+              <!-- Картинка графіка пари -->
+              <img class="img_func" :src="getGraphUrl(pair.graphSlug)" />
+              <!-- Кнопка видалення пари -->
+              <button @click="removePair(pair.funcSlug)" class="remove-btn">
+                Видалити пару
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!-- Секція графіків -->
-      <div>
-        <h3 class='text_func'>Графіки</h3>
-        <ul>
-          <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
-          <li
-            v-for="graph in availableGraphs"
-            :class="{ selected: selectedGraphSlug === graph.slug }"
-            @click="selectGraph(graph.slug)"
-            class="graph-item"
-          >
-            <!-- Картинка графіка -->
-            <img :src="graph.imageUrl" :alt="graph.slug" />
-          </li>
-        </ul>
-      </div>
+      <!-- Кнопка перевірки, активна тільки коли є 10 пар -->
+      <button class="check-btn" :disabled="pairs.length !== 10" @click="checkResults">
+        Перевірити результат
+      </button>
 
-      <!-- Секція створених пар (відображається, якщо є хоча б одна пара) -->
-      <div
-        v-if="pairs.length">
-        <h3 class='text_func'>Обрані пари</h3>
+      <!-- Відображення результатів перевірки -->
+      <section v-if="result">
+        <h2>Результат: {{ result.score }}%</h2>
         <ul>
-          <!-- Перебираємо пари -->
-          <li class="block_done"
-            v-for="pair in pairs">
-            <!-- Назва функції -->
-            <span class="name_func">{{ getFuncLabel(pair.funcSlug) }}</span>
-            <!-- Картинка графіка пари -->
-            <img class="img_func"
-              :src="getGraphUrl(pair.graphSlug)"/>
-            <!-- Кнопка видалення пари -->
-            <button @click="removePair(pair.funcSlug)" class="remove-btn">
-              Видалити пару
-            </button>
+          <li v-for="item in result.details" :class="{ correct: item.correct, incorrect: !item.correct }">
+            {{ getFuncLabel(item.funcSlug) }} ↔
+            {{ item.correct ? 'Правильно' : 'Неправильно' }}
           </li>
         </ul>
-      </div>
+      </section>
     </div>
+  </div>
+  <!-- Контейнер для результату -->
+  <div>
+    
+  </div>
+  <!-- Контейнер для використаної спроби -->
+  <div>
 
-    <!-- Кнопка перевірки, активна тільки коли є 10 пар -->
-    <button
-      class="check-btn"
-      :disabled="pairs.length !== 10"
-      @click="checkResults"
-    >
-      Перевірити результат
-    </button>
-
-    <!-- Відображення результатів перевірки -->
-    <section v-if="result">
-      <h2>Результат: {{ result.score }}%</h2>
-      <ul>
-        <li
-          v-for="item in result.details"
-          :class="{ correct: item.correct, incorrect: !item.correct }"
-        >
-          {{ getFuncLabel(item.funcSlug) }} ↔
-          {{ item.correct ? 'Правильно' : 'Неправильно' }}
-        </li>
-      </ul>
-    </section>
   </div>
 </template>
 
@@ -196,15 +189,17 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Science+Gothic:wght@100..900&display=swap');
 
-* {      /*Загальні налаштування*/
+* {
+  /*Загальні налаштування*/
   margin: 0;
   padding: 0;
 }
 
-:global(body) { /*Задній фон сайту */
+:global(body) {
+  /*Задній фон сайту */
   background: linear-gradient(135deg, rgb(180, 60, 220), rgb(120, 30, 170));
   font-family: "Roboto Slab", serif;
-  
+
 }
 
 #header {
@@ -221,12 +216,13 @@ export default {
   text-shadow: 1px 1px 2px rgb(65, 65, 65);
 }
 
-#background_test {    /*Задній фон тесту*/
+#background_test {
+  /*Задній фон тесту*/
   background-color: rgb(245, 246, 248);
   width: 80%;
   margin: 0 auto;
   margin-bottom: 30px;
-  height: auto; 
+  height: auto;
   border-radius: 25px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
   padding: 7px 15px 10px 20px;
@@ -299,15 +295,16 @@ export default {
 }
 
 .remove-btn {
-    width: 130px;
-    height: 38px;
-    background-color: rgba(227, 90, 90, 0.9);
-    border: 1px solid rgb(205, 72, 72);
-    border-radius: 10px;
-    margin-left: 10px;
-    cursor: pointer;
-    transition: background 0.3s, border-radius 0.3s, transform 0.3s;
+  width: 130px;
+  height: 38px;
+  background-color: rgba(227, 90, 90, 0.9);
+  border: 1px solid rgb(205, 72, 72);
+  border-radius: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background 0.3s, border-radius 0.3s, transform 0.3s;
 }
+
 .remove-btn:hover {
   background-color: rgba(229, 43, 43, 0.8);
   border: 1px solid rgb(201, 50, 50);
@@ -342,5 +339,4 @@ export default {
   background-color: #999;
   cursor: not-allowed;
 }
-
 </style>

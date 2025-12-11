@@ -33,7 +33,7 @@ app.post('/checkPars', ParController.checkPars)
 
 
 app.listen(PORT, (err) => {
-    if (err){
+    if (err) {
         return console.log(err)
     }
 
