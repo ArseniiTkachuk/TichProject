@@ -1,6 +1,6 @@
 <template>
   <!-- Контейнер для сторінки тестів -->
-  <div>
+  <div v-show="checkPage === 0">
     <div>
       <header id="header">
         <h1 class="header_text">Підібрати математичній функції її графік</h1>
@@ -64,6 +64,11 @@
         Перевірити результат
       </button>
 
+    </div>
+  </div>
+  <!-- Контейнер для результату -->
+  <div v-show="checkPage === 1">
+    <div>
       <!-- Відображення результатів перевірки -->
       <section v-if="result">
         <h2>Результат: {{ result.score }}%</h2>
@@ -76,12 +81,8 @@
       </section>
     </div>
   </div>
-  <!-- Контейнер для результату -->
-  <div>
-    
-  </div>
   <!-- Контейнер для використаної спроби -->
-  <div>
+  <div v-show="checkPage === 2">
 
   </div>
 </template>
@@ -94,6 +95,7 @@ const BASE_URL = "http://localhost:1111"; // Адрес бекенду
 export default {
   data() {
     return {
+      testingOneTry: true, // чи відбувається тест
       // Масив з усіма функціями (отриманий з бекенду)
       functions: [],
       // Масив з усіма графіками (отриманий з бекенду)
@@ -120,6 +122,27 @@ export default {
       return this.graphs.filter(
         (g) => !this.pairs.some((p) => p.graphSlug === g.slug)
       );
+    },
+
+    // Провірка на те яку сторінку відмалювати:
+    // 0 = сторінка з тестами
+    // 1 = сторінка з результатами тестів
+    // 2 = сторінка з використаною спробою
+    checkPage() {
+      if (this.testingOneTry === true) {
+        return 2
+      } else {
+        // якщо результату немає і користувач ще не використав спробу
+        if (this.result == null && localStorage.getItem("OneTry") === null) {
+          return 0
+          // якщо користувач получив результат тестів
+        } else if (this.result != null) {
+          return 1
+          // якщо користувач викоримстав спробу
+        } else if (localStorage.getItem("OneTry") !== null) {
+          return 2
+        }
+      }
     },
   },
   methods: {
@@ -178,7 +201,10 @@ export default {
         console.error(error);
       }
     },
+
+
   },
+
   created() {
     // При створенні компонента автоматично завантажуємо дані
     this.fetchData();
@@ -338,5 +364,13 @@ export default {
 .check-btn:disabled {
   background-color: #999;
   cursor: not-allowed;
+}
+
+.correct {
+  background: #41e735;
+}
+
+.incorrect {
+  background: #e73535;
 }
 </style>
