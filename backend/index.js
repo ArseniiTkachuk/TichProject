@@ -15,8 +15,8 @@ const PORT = 1111
 
 mongoose
     .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)
-    .then(() => console.log('DB OK'))
-    .catch((err) => console.log('DB error: ', err))
+    .then(() => console.log('BD OK'))
+    .catch((err) => console.log('BD error: ', err))
 
 
 const app = express()

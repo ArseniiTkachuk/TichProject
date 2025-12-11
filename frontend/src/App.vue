@@ -82,8 +82,15 @@
     </div>
   </div>
   <!-- Контейнер для використаної спроби -->
-  <div v-show="checkPage === 2">
-    <h1>ви використали одну спробу</h1>
+  <div 
+  v-show="checkPage === 2"
+  class="page"
+  >
+    <div class="card">
+      <div class="icon">🔒</div>
+      <h2 class="title">Спроба використана</h2>
+      <p class="text">Ви вже пройшли цей тест. Повторна спроба недоступна.</p>
+    </div>
   </div>
 </template>
 
@@ -95,7 +102,7 @@ const BASE_URL = "http://localhost:1111"; // Адрес бекенду
 export default {
   data() {
     return {
-      testingOneTry: false, // чи відбувається тест
+      testingOneTry: true, // чи відбувається тест
       // Масив з усіма функціями (отриманий з бекенду)
       functions: [],
       // Масив з усіма графіками (отриманий з бекенду)
@@ -225,6 +232,7 @@ export default {
   /*Задній фон сайту */
   background: linear-gradient(135deg, rgb(180, 60, 220), rgb(120, 30, 170));
   font-family: "Roboto Slab", serif;
+  margin: 0%;
 
 }
 
@@ -372,5 +380,64 @@ export default {
 
 .incorrect {
   background: #e73535;
+}
+
+
+
+ /* Одна спроба */
+
+ /* Задній фон сторінки */
+.page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Гарний градієнт */
+  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  background-size: 200% 200%;
+  animation: gradientMove 10s ease infinite;
+}
+
+/* Анімація градієнта */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Центральний блок */
+.card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  padding: 30px 40px;
+  /* padding: 10% 15%; */
+  margin: 5%;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 300px;
+  min-width: 100;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* Іконка замка */
+.icon {
+  font-size: 50px;
+  margin-bottom: 12px;
+}
+
+/* Заголовок */
+.title {
+  color: white;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+/* Опис */
+.text {
+  color: #f2f2f2;
+  font-size: 16px;
+  line-height: 1.4;
 }
 </style>
