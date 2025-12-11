@@ -83,7 +83,7 @@
   </div>
   <!-- Контейнер для використаної спроби -->
   <div v-show="checkPage === 2">
-
+    <h1>ви використали одну спробу</h1>
   </div>
 </template>
 
@@ -95,7 +95,7 @@ const BASE_URL = "http://localhost:1111"; // Адрес бекенду
 export default {
   data() {
     return {
-      testingOneTry: true, // чи відбувається тест
+      testingOneTry: false, // чи відбувається тест
       // Масив з усіма функціями (отриманий з бекенду)
       functions: [],
       // Масив з усіма графіками (отриманий з бекенду)
