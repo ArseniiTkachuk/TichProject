@@ -8,46 +8,49 @@
 
       <div id="background_test">
         <div class="text-row">
-          
-        
-            <h3 class="text_func">Математичні функції</h3>
-        </div>
-            <p class="text_des">
-               Обери функцію зверху, потім графік під нею. Створи 10 пар.
-            </p>
 
-          
-        
+
+          <h3 class="text_func">Математичні функції</h3>
+        </div>
+        <p class="text_des">
+          Обери функцію зверху, потім графік під нею. Створи 10 пар.
+        </p>
+
+
+
         <!-- Секція функцій -->
         <div class="functions-graphs">
+
+
           <div>
 
-          <ul>
-            <!-- Перебираємо доступні функції, які ще не вибрані у парах -->
-            <li v-for="func in availableFunctions" :class="{ selected: selectedFuncSlug === func.slug }"
-              @click="selectFunction(func.slug)" class="function-item">
-              {{ func.label }}
-            </li>
-          </ul>
-        </div>
-
-        <!-- Секція графіків -->
-        <div>
-          <div class="text-row">
-        
-             <h3 class='text_funcGraf'>Графіки</h3>
-          
+            <h3 class='text_funcGraf'>Функції</h3>
+            <ul>
+              <!-- Перебираємо доступні функції, які ще не вибрані у парах -->
+              <li v-for="func in availableFunctions" :class="{ selected: selectedFuncSlug === func.slug }"
+                @click="selectFunction(func.slug)" class="function-item">
+                {{ func.label }}
+              </li>
+            </ul>
           </div>
-          <ul>
-            <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
-            <li v-for="graph in availableGraphs" :class="{ selected: selectedGraphSlug === graph.slug }"
-              @click="selectGraph(graph.slug)" class="graph-item">
-              <!-- Картинка графіка -->
-              <img :src="graph.imageUrl" :alt="graph.slug" />
-            </li>
-          </ul>
+
+          <!-- Секція графіків -->
+          <div>
+            <div class="text-row">
+
+              <h3 class='text_funcGraf'>Графіки</h3>
+
+            </div>
+            <ul>
+              <!-- Перебираємо доступні графіки, які ще не вибрані у парах -->
+              <li v-for="graph in availableGraphs" :class="{ selected: selectedGraphSlug === graph.slug }"
+                @click="selectGraph(graph.slug)" class="graph-item">
+                <!-- Картинка графіка -->
+                <img :src="graph.imageUrl" :alt="graph.slug" />
+              </li>
+            </ul>
+          </div>
         </div>
-       </div>
         <!-- Секція створених пар (відображається, якщо є хоча б одна пара) -->
         <div v-if="pairs.length">
           <h3 class='text_func'>Обрані пари</h3>
@@ -81,7 +84,8 @@
       <section v-if="result">
         <h2 class="text_result">Результат: {{ result.score }}%</h2>
         <ul>
-          <li class="result_func" v-for="item in result.details" :class="{ correct: item.correct, incorrect: !item.correct }">
+          <li class="result_func" v-for="item in result.details"
+            :class="{ correct: item.correct, incorrect: !item.correct }">
             <div class="text_resultFunc">{{ getFuncLabel(item.funcSlug) }}</div>
             <img :src="`${getGraphUrl(item.graphSlug)}`" />
           </li>
@@ -351,11 +355,11 @@ export default {
   border-radius: 10px;
   margin-left: 10px;
   cursor: pointer;
-  
+
   background-color: rgba(255, 50, 50, 0.5);
-  border: 1px solid rgb(220, 20, 20);     
+  border: 1px solid rgb(220, 20, 20);
   transform: rotateY(-5deg);
-  box-shadow: 0 0 4px rgb(255, 40, 40);     
+  box-shadow: 0 0 4px rgb(255, 40, 40);
   transition: background 0.3s, border-radius 0.3s, transform 0.3s;
 }
 
@@ -479,7 +483,7 @@ export default {
 }
 
 .result_func {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .correct {
@@ -493,12 +497,12 @@ export default {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  
+
   border: 1px solid rgb(50, 180, 50);
   transform: rotateY(-5deg);
   box-shadow: 0 0 2px rgb(60, 220, 60);
   transition: background 0.3s, border-radius 0.3s, transform 0.3s;
-  
+
 
   display: flex;
   flex-direction: column;
@@ -507,7 +511,7 @@ export default {
 
 .incorrect {
   background-color: rgba(255, 50, 50, 0.35);
-  
+
   padding: 15px 10px;
   margin: 15px 0;
   cursor: pointer;
@@ -533,21 +537,26 @@ export default {
   font-size: 20px;
 }
 
-  #background_test .functions-graphs {
-    display: flex;
-    flex-direction: column; /* на малих екранах одна колонка */
-    gap: 30px; /* відстань між секціями */
-  }
+#background_test .functions-graphs {
+  display: flex;
+  flex-direction: column;
+  /* на малих екранах одна колонка */
+  gap: 30px;
+  /* відстань між секціями */
+}
 
-@media (min-width: 1024px) { /*Для екранів пк */
+@media (min-width: 1024px) {
+
+  /*Для екранів пк */
   #background_test .functions-graphs {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
   }
 
-  #background_test .functions-graphs > div {
-    flex: 1 1 48%; /* кожна секція ~половина ширини */
+  #background_test .functions-graphs>div {
+    flex: 1 1 48%;
+    /* кожна секція ~половина ширини */
     margin: 0;
   }
 
@@ -555,29 +564,33 @@ export default {
     width: 90%;
   }
 
-.text-row {
-  display: flex;
-  justify-content: space-between; /* лівий і правий заголовки по краях */
-  align-items: center; /* вирівнювання по вертикалі */
-  margin-bottom: 5px;
-}
+  .text-row {
+    display: flex;
+    justify-content: space-between;
+    /* лівий і правий заголовки по краях */
+    align-items: center;
+    /* вирівнювання по вертикалі */
+    margin-bottom: 5px;
+  }
 
-.text_func {
-  flex: 1; /* займає половину або більше лівого простору */
-  margin: 0;
-}
+  .text_func {
+    flex: 1;
+    /* займає половину або більше лівого простору */
+    margin: 0;
+  }
 
-.text_funcGraf {
-  flex: 1; /* займає половину або більше правого простору */
-  text-align: left; /* щоб текст був праворуч */
-  margin: 0;
-}
+  .text_funcGraf {
+    flex: 1;
+    /* займає половину або більше правого простору */
+    text-align: left;
+    /* щоб текст був праворуч */
+    margin: 0;
+  }
 
-.text_des {
-  font-size: 10px;
-  margin-top: 5px;
-}
+  .text_des {
+    font-size: 10px;
+    margin-top: 5px;
+  }
 
 }
-
 </style>
