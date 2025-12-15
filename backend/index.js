@@ -1,36 +1,49 @@
-import cors from 'cors'
-import mongoose from 'mongoose'
 import express from 'express'
+import mongoose from 'mongoose'
+import multer from 'multer'
+import cors from 'cors'
 import path from 'path'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import * as ParController from './controllers/ParController.js'
+import checkAuth from './checkAuth.js'
+
+import { registerValidator, loginValidator } from './validations.js'
+
+import * as UserController from './Controllers/UserController.js'
+import * as TestController from './Controllers/TestController.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
-const PORT = 1111
-
+const PORT = 2222
 
 mongoose
     .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)
-    .then(() => console.log('BD OK'))
-    .catch((err) => console.log('BD error: ', err))
+    .then(() => console.log('DB OK'))
+    .catch((err) => console.log('DB error: ', err))
 
 
-const app = express()
+const app = express();
 
 app.use(cors())
 
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use(express.json())
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => cb(null, 'uploads'),
+  filename: (_, file, cb) => cb(null, file.originalname),
+});
+
+const upload = multer({ storage })
+
+app.use(express.json());
 
 
-app.get('/getPars', ParController.getPars)
-app.post('/checkPars', ParController.checkPars)
+app.post("/register", registerValidator, UserController.register)
+app.post("/login", loginValidator, UserController.login)
 
+app.post('/test', checkAuth, upload.array('images'), TestController.createTest);
 
 app.listen(PORT, (err) => {
     if (err) {

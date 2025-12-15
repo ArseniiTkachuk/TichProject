@@ -1,21 +1,22 @@
 {
-  "name": "backand",
-  "version": "1.0.0",
-  "description": "",
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "my test backend for web project",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js",
-    "forseBD": "npm seedDB.js"
-    
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
-    "express": "^5.2.1",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.0.0",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.11"
-  }
+  } 
 }
