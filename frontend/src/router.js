@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import Auth from './pages/auth.vue' // сторінка авторизації 
+import Home from './pages/home.vue' // головна сторінка
 
 const routes = [
   { path: '/', redirect: '/auth' },
 
   { path: '/auth', name: 'Auth', component: Auth }, // маршрут авторизації
+  { path: '/home', name: 'Home', component: Home }, // маршрут головної сторінки
 
 ]
 
