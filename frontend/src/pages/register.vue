@@ -68,7 +68,9 @@ export default {
                 })
 
                 localStorage.setItem("tokenAuthTeacher", res.data.token)
-                this.$router.push('/profile')
+                localStorage.setItem('userId', res.data.userId);
+
+                this.$router.push('/home')
 
             } catch (err) {
                 console.error(err)

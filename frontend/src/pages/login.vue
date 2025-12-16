@@ -60,7 +60,9 @@ export default {
         });
 
         localStorage.setItem("tokenAuthTeacher", res.data.token);
-        this.$router.push('/profile');
+        localStorage.setItem('userId', res.data.userId);
+
+        this.$router.push('/home');
 
       } catch (err) {
         console.error(err);
@@ -82,10 +84,10 @@ export default {
 
 <style scoped>
 .auth {
-    display: flex;
-    flex-direction: column;
-    width: 360px;
-    text-align: center;
-    margin: 100px auto;
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  text-align: center;
+  margin: 100px auto;
 }
 </style>

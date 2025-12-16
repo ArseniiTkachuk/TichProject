@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import multer from 'multer'
 import cors from 'cors'
 import path from 'path'
+import crypto from 'crypto';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import checkAuth from './checkAuth.js'
@@ -31,11 +32,31 @@ app.use(cors())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, 'uploads'),
-  filename: (_, file, cb) => cb(null, file.originalname),
+  destination: (_, __, cb) => {
+    cb(null, 'uploads');
+  },
+
+  filename: (_, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueName =
+      crypto.randomBytes(16).toString('hex') + ext;
+
+    cb(null, uniqueName);
+  }
 });
 
-const upload = multer({ storage })
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5 MB
+  },
+  fileFilter: (_, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Тільки зображення'));
+    }
+    cb(null, true);
+  }
+});
 
 app.use(express.json());
 

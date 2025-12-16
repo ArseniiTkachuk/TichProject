@@ -6,7 +6,7 @@
     </div>
     <div v-else>
         <button @click="enterCode = true">Я студент</button>
-        <button @click="$router.push('/profile')">Я викладач</button>
+        <button @click="$router.push('/home')">Я викладач</button>
     </div>
 </template>
 <script>
