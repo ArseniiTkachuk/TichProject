@@ -1,13 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Auth from './pages/auth.vue' // сторінка авторизації 
+import Register from './pages/register.vue' //сторінка реєстрації
+import Login from './pages/login.vue' // сторінка входу
+
+import Test from './pages/test.vue' // сторінка проходження тесту
+
 import Home from './pages/home.vue' // головна сторінка
+import Profile from './pages/profile.vue' // сторінка профілю
 
 const routes = [
-  { path: '/', redirect: '/auth' },
 
-  { path: '/auth', name: 'Auth', component: Auth }, // маршрут авторизації
-  { path: '/home', name: 'Home', component: Home }, // маршрут головної сторінки
+  { path: '/', name: 'Home', component: Home }, // маршрут головної сторінки
+  { path: '/register', name: 'Register', component: Register }, // маршрут реєстрації
+  { path: '/login', name: 'Login', component: Login }, //маршрут входу
+  { path: '/profile', name: 'Profile', component: Profile }, // маршрут профільної сторінки
+  { path: '/test/:id', name: 'Test', component: Test } // Маршрут для тестів
 
 ]
 
@@ -22,14 +29,14 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("tokenAuthTeacher")
 
   // маршрути, які можна відвідувати без авторизації
-  const publicPages = ['/auth', ]
+  const publicPages = ['/register', '/login', '/', 'teste/:id']
 
   // якщо маршрут не публічний
   const authRequired = !publicPages.includes(to.path)
 
   if (authRequired && !token) {
     alert("Спочатку авторизуйтеся")
-    return next('/auth') // якщо не авторизований → на auth
+    return next('/register') // якщо не авторизований 
   }
 
 

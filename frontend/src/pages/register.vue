@@ -1,4 +1,5 @@
 <template>
+    <div class="auth">
         <h2>Register</h2>
 
         <input type="text" v-model="name" placeholder="Full name">
@@ -30,6 +31,7 @@
 
         <!-- Кнопка для переходу на логін -->
         <button class="login-btn" @click="$router.push('/login')">Вже є акаунт? Увійти</button>
+        </div>
 </template>
 
 <script>
@@ -66,7 +68,7 @@ export default {
                 })
 
                 localStorage.setItem("tokenAuthTeacher", res.data.token)
-                this.$router.push('/home')
+                this.$router.push('/profile')
 
             } catch (err) {
                 console.error(err)
@@ -89,5 +91,11 @@ export default {
 </script>
 
 <style scoped>
-
+.auth {
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+    text-align: center;
+    margin: 100px auto;
+}
 </style>
