@@ -348,7 +348,7 @@ export default {
           }
         });
 
-        this.message = "Тест створено!";
+        this.message = `Тест створено! Надішліть код учням, Code:${res.data.id}`;
         console.log(res.data);
 
       } catch (err) {

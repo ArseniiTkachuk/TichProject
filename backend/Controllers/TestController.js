@@ -84,65 +84,51 @@ export const createTest = async (req, res) => {
       }
     }
 
-    /*  IMAGES  */
-    if (req.files && req.files.length > 0) {
+    if (req.files?.length) {
       req.files.forEach(file => {
-        // очікуємо: images[q0][a1]
-        const match = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
-        if (!match) return;
 
-        const qIndex = Number(match[1]);
-        const aIndex = Number(match[2]);
+        /* ANSWER IMAGE */
+        const answerMatch = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        if (answerMatch) {
+          const q = Number(answerMatch[1]);
+          const a = Number(answerMatch[2]);
 
-        const answer =
-          parsedExercises[qIndex]?.answers?.[aIndex];
-
-        if (answer) {
-          answer.isImage = true;
-          answer.imageUrl = `/uploads/${file.filename}`;
+          const answer = parsedExercises[q]?.answers?.[a];
+          if (answer) {
+            answer.isImage = true;
+            answer.imageUrl = `/uploads/${file.filename}`;
+          }
+          return;
         }
+
+        /* PAIR RIGHT IMAGE */
+        const pairRightMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+        if (pairRightMatch) {
+          const q = Number(pairRightMatch[1]);
+          const r = Number(pairRightMatch[2]);
+
+          const right = parsedExercises[q]?.pairs?.right?.[r];
+          if (right) {
+            right.imageUrl = `/uploads/${file.filename}`;
+          }
+          return;
+        }
+
+        /* PAIR LEFT IMAGE */
+        const pairLeftMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[l(\d+)/);
+        if (pairLeftMatch) {
+          const q = Number(pairLeftMatch[1]);
+          const l = Number(pairLeftMatch[2]);
+
+          const left = parsedExercises[q]?.pairs?.left?.[l];
+          if (left) {
+            left.imageUrl = `/uploads/${file.filename}`;
+          }
+        }
+
       });
     }
 
-    /*  PAIR RIGHT IMAGES  */
-    if (req.files && req.files.length > 0) {
-      req.files.forEach(file => {
-        const matchAnswer = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
-        const matchPair = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
-
-        if (matchAnswer) {
-          const qIndex = Number(matchAnswer[1]);
-          const aIndex = Number(matchAnswer[2]);
-          parsedExercises[qIndex].answers[aIndex].imageUrl = `/uploads/${file.filename}`;
-        }
-
-        if (matchPair) {
-          const qIndex = Number(matchPair[1]);
-          const rIndex = Number(matchPair[2]);
-          parsedExercises[qIndex].pairs.right[rIndex].imageUrl = `/uploads/${file.filename}`;
-        }
-      });
-    }
-
-    /*  PAIR LEFT IMAGES  */
-    if (req.files && req.files.length > 0) {
-      req.files.forEach(file => {
-        const matchAnswer = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
-        const matchPair = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
-
-        if (matchAnswer) {
-          const qIndex = Number(matchAnswer[1]);
-          const aIndex = Number(matchAnswer[2]);
-          parsedExercises[qIndex].answers[aIndex].imageUrl = `/uploads/${file.filename}`;
-        }
-
-        if (matchPair) {
-          const qIndex = Number(matchPair[1]);
-          const lIndex = Number(matchPair[2]);
-          parsedExercises[qIndex].pairs.left[lIndex].imageUrl = `/uploads/${file.filename}`;
-        }
-      });
-    }
 
     /*  SAVE  */
     const test = new Test({
@@ -155,7 +141,7 @@ export const createTest = async (req, res) => {
 
     res.json({
       success: true,
-      test
+      id: test._id
     });
 
   } catch (err) {
@@ -175,7 +161,8 @@ export const getTest = async (req, res) => {
       return res.status(400).json({ message: "Невірний ID тесту" });
     }
 
-    const test = await Test.findById(testid);
+    const test = await Test.findById(testid).lean(); // повертає plain JS object
+
     if (!test) {
       return res.status(404).json({ message: "Тест не знайдено" });
     }
