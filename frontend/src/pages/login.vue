@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 
-const URL = "http://localhost:2222"
+const BackURL = "http://localhost:2222"
 
 
 export default {

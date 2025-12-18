@@ -166,3 +166,63 @@ export const createTest = async (req, res) => {
     });
   }
 };
+
+export const getTest = async (req, res) => {
+  try {
+    const testid = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(testid)) {
+      return res.status(400).json({ message: "Невірний ID тесту" });
+    }
+
+    const test = await Test.findById(testid);
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    // Перемішуємо масив exercises
+    const shuffledExercises = test.exercises
+      .map(ex => ({ ...ex })) // створюємо копії, щоб не змінювати оригінал
+      .sort(() => Math.random() - 0.5);
+
+    // Приховуємо правильні відповіді
+    const sanitizedExercises = shuffledExercises.map(ex => {
+      const newEx = { ...ex };
+
+      // Для типу one/many
+      if (newEx.answers) {
+        newEx.answers = newEx.answers.map(a => {
+          const { correct, ...rest } = a; // видаляємо correct
+          return rest;
+        });
+      }
+
+      // Для пар
+      if (newEx.pairs) {
+        const { correctMap, ...pairsRest } = newEx.pairs;
+        newEx.pairs = pairsRest;
+      }
+
+      // Для введення
+      if (newEx.correctAnswers) {
+        newEx.correctAnswers = []; // очищаємо correctAnswers
+      }
+
+      // Якщо є поле correctAnswerIndex для one-відповіді
+      if ('correctAnswerIndex' in newEx) {
+        delete newEx.correctAnswerIndex;
+      }
+
+      return newEx;
+    });
+
+    res.json({
+      ...test,
+      exercises: sanitizedExercises
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Помилка сервера" });
+  }
+};

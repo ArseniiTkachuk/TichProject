@@ -40,7 +40,7 @@
 <script>
 import axios from "axios"
 
-const URL = "http://localhost:2222"
+const BackURL = "http://localhost:2222"
 
 export default {
     data() {
@@ -64,7 +64,7 @@ export default {
 
             try {
 
-                const res = await axios.post(`${URL}/register`, {
+                const res = await axios.post(`${BackURL}/register`, {
                     name: this.name,
                     email: this.email,
                     password: this.password
