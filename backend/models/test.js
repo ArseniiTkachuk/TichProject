@@ -1,23 +1,34 @@
 import mongoose from "mongoose";
 
-/* ===== PAIR ===== */
+/*  PAIR  */
+const PairItemSchema = new mongoose.Schema({
+  text: String,
+  isImage: {
+    type: Boolean,
+    default: false
+  },
+  imageUrl: String
+}, { _id: false });
+
 const PairSchema = new mongoose.Schema({
   left: {
-    type: [String],
+    type: [PairItemSchema],
     required: true
   },
   right: {
-    type: [String],
+    type: [PairItemSchema],
     required: true
   },
   correctMap: {
     type: Map,
-    of: Number, // leftIndex -> rightIndex
+    of: Number,
     required: true
   }
 }, { _id: false });
 
-/* ===== ANSWER ===== */
+
+
+/*  ANSWER  */
 const AnswerSchema = new mongoose.Schema({
   text: String,
   correct: Boolean,
@@ -28,7 +39,7 @@ const AnswerSchema = new mongoose.Schema({
   imageUrl: String
 }, { _id: false });
 
-/* ===== EXERCISE ===== */
+/*  EXERCISE  */
 const ExerciseSchema = new mongoose.Schema({
   type: {
     type: String,
@@ -58,7 +69,7 @@ const ExerciseSchema = new mongoose.Schema({
 
 }, { _id: false });
 
-/* ===== TEST ===== */
+/*  TEST  */
 const TestSchema = new mongoose.Schema({
   title: {
     type: String,

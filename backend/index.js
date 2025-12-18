@@ -19,9 +19,9 @@ const __dirname = dirname(__filename);
 const PORT = 2222
 
 mongoose
-    .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)
-    .then(() => console.log('DB OK'))
-    .catch((err) => console.log('DB error: ', err))
+  .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)
+  .then(() => console.log('DB OK'))
+  .catch((err) => console.log('DB error: ', err))
 
 
 const app = express();
@@ -54,7 +54,10 @@ const upload = multer({
     if (!file.mimetype.startsWith('image/')) {
       return cb(new Error('Тільки зображення'));
     }
-    cb(null, true);
+    cb(
+      null,
+      Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname)
+    );
   }
 });
 
@@ -64,12 +67,12 @@ app.use(express.json());
 app.post("/register", registerValidator, UserController.register)
 app.post("/login", loginValidator, UserController.login)
 
-app.post('/test', checkAuth, upload.array('images'), TestController.createTest);
+app.post('/test', checkAuth, upload.any(), TestController.createTest);
 
 app.listen(PORT, (err) => {
-    if (err) {
-        return console.log(err)
-    }
+  if (err) {
+    return console.log(err)
+  }
 
-    console.log('Server OK')
+  console.log('Server OK')
 });

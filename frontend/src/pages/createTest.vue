@@ -19,7 +19,16 @@
       <div v-if="q.type === 'one' || q.type === 'many'" class="answers-block">
         <div v-for="(a, aIndex) in q.answers" :key="aIndex" class="answer-row">
           <input v-if="!a.isImage" v-model="a.text" placeholder="Введіть текст" class="answer-input" />
-          <input v-if="a.isImage" type="file" @change="onAnswerImageChange($event, qIndex, aIndex)" class="answer-file" />
+          <div v-if="a.isImage">
+            <label class="upload-label">
+              <span>Select image</span>
+              <input type="file" accept="image/*" @change="onAnswerImageChange($event, qIndex, aIndex)">
+            </label>
+
+            <img v-if="a.preview" :src="a.preview" class="preview-img" />
+
+          </div>
+
 
           <label>
             <template v-if="q.type === 'many'">
@@ -54,13 +63,25 @@
           <!-- Ліва колонка -->
           <div>
             <h6>Ліва колонка</h6>
-            <div v-for="(left, lIndex) in q.pairs.left" :key="'left-'+qIndex+'-'+lIndex" class="pair-row">
-              <input v-model="q.pairs.left[lIndex]" placeholder="Лівий елемент" class="pair-input" />
+            <div v-for="(left, lIndex) in q.pairs.left" :key="'left-' + qIndex + '-' + lIndex" class="pair-row">
+              <input v-if="!left.isImage" v-model="left.text" placeholder="Лівий елемент" class="pair-input" />
+              <div v-if="left.isImage">
+                <label class="upload-label">
+                  <span>Select image</span>
+                  <input type="file" accept="image/*" @change="onPairLeftImageChange($event, qIndex, lIndex)">
+                </label>
+                <img v-if="left.preview" :src="left.preview" class="preview-img" />
+              </div>
+
+              <label>
+                <input type="checkbox" v-model="left.isImage" /> Картинка
+              </label>
               <select v-model="q.pairs.correctMap[lIndex]">
-                <option v-for="(right, rIndex) in q.pairs.right" :key="'right-option-'+qIndex+'-'+rIndex" :value="rIndex">
-                  {{ right }}
+                <option v-for="(right, rIndex) in q.pairs.right" :key="rIndex" :value="rIndex">
+                  {{ rIndex + 1 }}
                 </option>
               </select>
+
               <button @click="removeLeft(qIndex, lIndex)" class="btn-small">Видалити лівий</button>
             </div>
             <button @click="addLeft(qIndex)" class="btn-small btn-add">Додати лівий</button>
@@ -69,8 +90,25 @@
           <!-- Права колонка -->
           <div>
             <h6>Права колонка</h6>
-            <div v-for="(right, rIndex) in q.pairs.right" :key="'right-'+qIndex+'-'+rIndex" class="pair-row">
-              <input v-model="q.pairs.right[rIndex]" placeholder="Правий елемент" class="pair-input" />
+            <div v-for="(right, rIndex) in q.pairs.right" :key="'right-' + qIndex + '-' + rIndex" class="pair-row">
+              <p>{{ rIndex + 1 }}</p>
+              <input v-if="!right.isImage" v-model="right.text" placeholder="Правий елемент" class="pair-input" />
+
+              <div v-if="right.isImage">
+                <label class="upload-label">
+                  <span>Select image</span>
+                  <input type="file" accept="image/*" @change="onPairRightImageChange($event, qIndex, rIndex)">
+                </label>
+                <img v-if="right.preview" :src="right.preview" class="preview-img" />
+              </div>
+
+
+
+              <label>
+                <input type="checkbox" v-model="right.isImage" />
+                Картинка
+              </label>
+
               <button @click="removeRight(qIndex, rIndex)" class="btn-small">Видалити правий</button>
             </div>
             <button @click="addRight(qIndex)" class="btn-small btn-add">Додати зайвий правий</button>
@@ -88,7 +126,7 @@
 
 <script>
 import axios from "axios";
-const URL = "http://localhost:2222";
+const BackURL = "http://localhost:2222";
 
 export default {
   data() {
@@ -99,7 +137,11 @@ export default {
           type: "one",
           question: "",
           answers: [],
-          pairs: { left: [], right: [], correctMap: {} },
+          pairs: {
+            left: [],
+            right: [],
+            correctMap: {}
+          },
           correctAnswers: [],
           correctAnswerIndex: null
         }
@@ -113,7 +155,11 @@ export default {
         type: "one",
         question: "",
         answers: [],
-        pairs: { left: [], right: [], correctMap: {} },
+        pairs: {
+          left: [],
+          right: [],
+          correctMap: {}
+        },
         correctAnswers: [],
         correctAnswerIndex: null
       });
@@ -121,13 +167,27 @@ export default {
 
     /* Answers */
     addAnswer(qIndex) {
-      this.exercises[qIndex].answers.push({ text: "", correct: false, isImage: false, file: null });
+      this.exercises[qIndex].answers.push({
+        text: "",
+        correct: false,
+        isImage: false,
+        file: null,
+        preview: null // додали прев’ю
+      });
     },
     removeAnswer(qIndex, aIndex) {
       this.exercises[qIndex].answers.splice(aIndex, 1);
     },
     onAnswerImageChange(event, qIndex, aIndex) {
-      this.exercises[qIndex].answers[aIndex].file = event.target.files[0];
+      const file = event.target.files[0];
+      const answer = this.exercises[qIndex].answers[aIndex];
+      if (file) {
+        answer.file = file;
+        answer.preview = URL.createObjectURL(file); // миттєве прев’ю
+      } else {
+        answer.file = null;
+        answer.preview = null;
+      }
     },
 
     /* Enter */
@@ -141,13 +201,29 @@ export default {
     /* Pairs */
     addLeft(qIndex) {
       const q = this.exercises[qIndex];
-      q.pairs.left.push("");
+
+      q.pairs.left.push({
+        text: "",
+        isImage: false,
+        file: null
+      });
+
       q.pairs.correctMap[q.pairs.left.length - 1] = 0;
-      if (q.pairs.right.length < q.pairs.left.length) q.pairs.right.push("");
+
+      if (q.pairs.right.length < q.pairs.left.length) {
+        q.pairs.right.push({
+          text: "",
+          isImage: false,
+          file: null
+        });
+      }
     },
     addRight(qIndex) {
-      const q = this.exercises[qIndex];
-      q.pairs.right.push("");
+      this.exercises[qIndex].pairs.right.push({
+        text: "",
+        isImage: false,
+        file: null
+      });
     },
     removeLeft(qIndex, lIndex) {
       const q = this.exercises[qIndex];
@@ -165,7 +241,6 @@ export default {
       const q = this.exercises[qIndex];
       q.pairs.right.splice(rIndex, 1);
 
-      // Оновлюємо correctMap
       for (const key in q.pairs.correctMap) {
         if (q.pairs.correctMap[key] === rIndex) {
           q.pairs.correctMap[key] = 0;
@@ -174,6 +249,30 @@ export default {
         }
       }
     },
+    onPairLeftImageChange(event, qIndex, lIndex) {
+      const file = event.target.files[0];
+      const left = this.exercises[qIndex].pairs.left[lIndex];
+      if (file) {
+        left.file = file;
+        left.preview = URL.createObjectURL(file);
+      } else {
+        left.file = null;
+        left.preview = null;
+      }
+    },
+
+    onPairRightImageChange(event, qIndex, rIndex) {
+      const file = event.target.files[0];
+      const right = this.exercises[qIndex].pairs.right[rIndex];
+      if (file) {
+        right.file = file;
+        right.preview = URL.createObjectURL(file);
+      } else {
+        right.file = null;
+        right.preview = null;
+      }
+    },
+
 
     /* Create Test */
     async createTest() {
@@ -217,13 +316,32 @@ export default {
         formData.append("exercises", JSON.stringify(exercisesData));
 
         // Додаємо картинки
-        this.exercises.forEach((q) => {
-          (q.answers || []).forEach((a) => {
-            if (a.isImage && a.file) formData.append("images", a.file);
+        this.exercises.forEach((q, qIndex) => {
+          // Для answers
+          (q.answers || []).forEach((a, aIndex) => {
+            if (a.isImage && a.file) {
+              formData.append(`images[q${qIndex}][a${aIndex}]`, a.file);
+            }
           });
+
+          // Для pairs
+          if (q.type === "pair") {
+            (q.pairs.right || []).forEach((r, rIndex) => {
+              if (r.isImage && r.file) {
+                formData.append(`pairImages[q${qIndex}][r${rIndex}]`, r.file);
+              }
+            });
+
+            (q.pairs.left || []).forEach((l, lIndex) => {
+              if (l.isImage && l.file) {
+                formData.append(`images-left[q${qIndex}][l${lIndex}]`, l.file);
+              }
+            });
+          }
         });
 
-        const res = await axios.post(`${URL}/test`, formData, {
+
+        const res = await axios.post(`${BackURL}/test`, formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}`,
             "Content-Type": "multipart/form-data"
@@ -340,6 +458,36 @@ export default {
 .btn-create-test:hover {
   background: #1e88e5;
 }
+
+.upload-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: #2f2f33;
+  border-radius: 8px;
+  border: 1px dashed #555;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.upload-label:hover {
+  background: #282f4a;
+  color: #acbaed;
+}
+
+.upload-label input {
+  display: none;
+}
+
+.preview-img {
+  max-width: 240px;
+  max-height: 240px;
+  margin-left: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 
 .message {
   margin-top: 10px;

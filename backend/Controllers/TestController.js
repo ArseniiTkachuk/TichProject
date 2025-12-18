@@ -1,7 +1,7 @@
 import Test from '../models/test.js';
 import mongoose from 'mongoose';
 
-/* ================= HELPERS ================= */
+/*  HELPERS  */
 
 const isValidIndex = (index, arr) =>
   Number.isInteger(index) && index >= 0 && index < arr.length;
@@ -11,7 +11,7 @@ const validateExercise = (ex) => {
     return 'Кожне питання повинно мати тип і текст';
   }
 
-  /* ---- ONE ---- */
+  /*  ONE  */
   if (ex.type === 'one') {
     const correctCount = ex.answers?.filter(a => a.correct).length || 0;
     if (correctCount !== 1) {
@@ -19,7 +19,7 @@ const validateExercise = (ex) => {
     }
   }
 
-  /* ---- MANY ---- */
+  /*  MANY  */
   if (ex.type === 'many') {
     const correctCount = ex.answers?.filter(a => a.correct).length || 0;
     if (correctCount < 1) {
@@ -27,14 +27,14 @@ const validateExercise = (ex) => {
     }
   }
 
-  /* ---- ENTER ---- */
+  /*  ENTER  */
   if (ex.type === 'enter') {
     if (!ex.correctAnswers || ex.correctAnswers.length === 0) {
       return 'Питання з введенням повинно мати правильну відповідь';
     }
   }
 
-  /* ---- PAIR ---- */
+  /*  PAIR  */
   if (ex.type === 'pair') {
     const { left, right, correctMap } = ex.pairs || {};
 
@@ -57,7 +57,7 @@ const validateExercise = (ex) => {
   return null;
 };
 
-/* ================= CONTROLLER ================= */
+/*  CONTROLLER  */
 
 export const createTest = async (req, res) => {
   try {
@@ -76,7 +76,7 @@ export const createTest = async (req, res) => {
       });
     }
 
-    /* ===== VALIDATION ===== */
+    /*  VALIDATION  */
     for (const ex of parsedExercises) {
       const error = validateExercise(ex);
       if (error) {
@@ -84,7 +84,7 @@ export const createTest = async (req, res) => {
       }
     }
 
-    /* ===== IMAGES ===== */
+    /*  IMAGES  */
     if (req.files && req.files.length > 0) {
       req.files.forEach(file => {
         // очікуємо: images[q0][a1]
@@ -104,7 +104,47 @@ export const createTest = async (req, res) => {
       });
     }
 
-    /* ===== SAVE ===== */
+    /*  PAIR RIGHT IMAGES  */
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        const matchAnswer = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        const matchPair = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+
+        if (matchAnswer) {
+          const qIndex = Number(matchAnswer[1]);
+          const aIndex = Number(matchAnswer[2]);
+          parsedExercises[qIndex].answers[aIndex].imageUrl = `/uploads/${file.filename}`;
+        }
+
+        if (matchPair) {
+          const qIndex = Number(matchPair[1]);
+          const rIndex = Number(matchPair[2]);
+          parsedExercises[qIndex].pairs.right[rIndex].imageUrl = `/uploads/${file.filename}`;
+        }
+      });
+    }
+
+    /*  PAIR LEFT IMAGES  */
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        const matchAnswer = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        const matchPair = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+
+        if (matchAnswer) {
+          const qIndex = Number(matchAnswer[1]);
+          const aIndex = Number(matchAnswer[2]);
+          parsedExercises[qIndex].answers[aIndex].imageUrl = `/uploads/${file.filename}`;
+        }
+
+        if (matchPair) {
+          const qIndex = Number(matchPair[1]);
+          const lIndex = Number(matchPair[2]);
+          parsedExercises[qIndex].pairs.left[lIndex].imageUrl = `/uploads/${file.filename}`;
+        }
+      });
+    }
+
+    /*  SAVE  */
     const test = new Test({
       title,
       author: new mongoose.Types.ObjectId(req.userId),
