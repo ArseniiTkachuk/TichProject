@@ -334,7 +334,7 @@ export default {
 
             (q.pairs.left || []).forEach((l, lIndex) => {
               if (l.isImage && l.file) {
-                formData.append(`images-left[q${qIndex}][l${lIndex}]`, l.file);
+                formData.append(`pairImages[q${qIndex}][l${lIndex}]`, l.file);
               }
             });
           }
