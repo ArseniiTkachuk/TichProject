@@ -7,7 +7,8 @@ const PairItemSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  imageUrl: String
+  imageUrl: String,
+  slug: String
 }, { _id: false });
 
 const PairSchema = new mongoose.Schema({

@@ -205,7 +205,8 @@ export default {
       q.pairs.left.push({
         text: "",
         isImage: false,
-        file: null
+        file: null,
+        slug: q.pairs.left.length
       });
 
       q.pairs.correctMap[q.pairs.left.length - 1] = 0;
@@ -214,7 +215,8 @@ export default {
         q.pairs.right.push({
           text: "",
           isImage: false,
-          file: null
+          file: null,
+          slug: q.pairs.right.length
         });
       }
     },
@@ -222,7 +224,8 @@ export default {
       this.exercises[qIndex].pairs.right.push({
         text: "",
         isImage: false,
-        file: null
+        file: null,
+        slug: q.pairs.right.length
       });
     },
     removeLeft(qIndex, lIndex) {

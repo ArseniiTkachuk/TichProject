@@ -6,10 +6,10 @@
         </div>
 
         <div v-if="isName && test.exercises.length > 0">
-            <answers v-if="['one', 'many'].includes(test.exercises[currentIndex].type)"
-                :ex="test.exercises[currentIndex]" :currentId="currentIndex" @answered="saveAnswer" />
+            <answers v-if="['one', 'many'].includes(currentEx.type)"
+                :ex="currentEx" :currentId="currentIndex" @answered="saveAnswer" />
 
-            <pairs v-else-if="test.exercises[currentIndex].type === 'pair'" :ex="test.exercises[currentIndex]" />
+            <pairs v-else-if="currentEx.type === 'pair'" :ex="currentEx" />
 
             <enters v-else-if="currentEx.type === 'enter'" :ex="currentEx" @answered="saveAnswer" :key="currentIndex" />
 
@@ -56,7 +56,9 @@ export default {
     data() {
         return {
             currentIndex: 0,
+            // відповіді користувача
             userAnswers: {},
+            
 
             correctTestCode: false,
 
