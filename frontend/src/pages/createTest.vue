@@ -206,7 +206,6 @@ export default {
         text: "",
         isImage: false,
         file: null,
-        slug: q.pairs.left.length
       });
 
       q.pairs.correctMap[q.pairs.left.length - 1] = 0;
@@ -216,7 +215,7 @@ export default {
           text: "",
           isImage: false,
           file: null,
-          slug: q.pairs.right.length
+
         });
       }
     },
@@ -225,7 +224,7 @@ export default {
         text: "",
         isImage: false,
         file: null,
-        slug: q.pairs.right.length
+
       });
     },
     removeLeft(qIndex, lIndex) {

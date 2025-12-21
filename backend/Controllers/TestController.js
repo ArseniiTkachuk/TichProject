@@ -70,6 +70,18 @@ export const createTest = async (req, res) => {
     let parsedExercises;
     try {
       parsedExercises = JSON.parse(exercises);
+      parsedExercises.forEach((ex, index) => {
+        ex.slug = `${index}`;
+        if (ex.type === "pair") {
+          ex.pairs.left.forEach((l, lIndex) => {
+            l.slug = `${lIndex}`;
+          })
+          ex.pairs.right.forEach((r, rIndex) => {
+            r.slug = `${rIndex}`;
+          })
+        }
+      });
+
     } catch (err) {
       return res.status(400).json({
         message: 'Некоректний формат exercises'

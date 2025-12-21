@@ -66,6 +66,11 @@ const ExerciseSchema = new mongoose.Schema({
   pairs: {
     type: PairSchema,
     default: null
+  },
+
+  slug:{
+    type: String,
+    required:true
   }
 
 }, { _id: false });

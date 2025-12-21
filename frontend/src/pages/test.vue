@@ -6,17 +6,18 @@
         </div>
 
         <div v-if="isName && test.exercises.length > 0">
-            <answers v-if="['one', 'many'].includes(currentEx.type)"
-                :ex="currentEx" :currentId="currentIndex" @answered="saveAnswer" />
+            <answers v-if="['one', 'many'].includes(currentEx.type)" :key="currentEx" :ex="currentEx"
+                :currentId="currentIndex" @answered="saveAnswer" />
 
-            <pairs v-else-if="currentEx.type === 'pair'" :ex="currentEx" />
+            <pairs v-else-if="currentEx.type === 'pair'" :ex="currentEx" @answered="saveAnswer"
+                @ISAnswer="isanswer = $event" :key="currentEx.slug" />
 
             <enters v-else-if="currentEx.type === 'enter'" :ex="currentEx" @answered="saveAnswer" :key="currentIndex" />
 
-            <button v-if="currentIndex === test.exercises.length - 1" :disabled="!userAnswers[currentIndex]">
+            <button v-if="currentIndex === test.exercises.length - 1" :disabled="!isAnswer">
                 Завершити тест
             </button>
-            <button v-else @click="currentIndex++" :disabled="!userAnswers[currentIndex]">
+            <button v-else @click="currentIndex++" :disabled="!isAnswer">
                 Далі
             </button>
 
@@ -55,10 +56,11 @@ export default {
 
     data() {
         return {
+            isanswer: true,
             currentIndex: 0,
             // відповіді користувача
             userAnswers: {},
-            
+
 
             correctTestCode: false,
 
@@ -75,6 +77,10 @@ export default {
     computed: {
         currentEx() {
             return this.test.exercises[this.currentIndex];
+        },
+
+        isAnswer() {
+            return this.userAnswers[this.currentIndex] && this.isanswer;
         }
     },
 
@@ -114,6 +120,8 @@ export default {
                 value: payload.value
             };
         },
+
+        
 
     }
 
