@@ -307,7 +307,6 @@ export const checkTest = async (req, res) => {
 
     /*  ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ  */
     const finalScore = Number(scor.toFixed(2));
-    console.log(scor)
 
     test.childrens.push({
       name,
