@@ -205,29 +205,6 @@ export default {
     box-sizing: border-box;
 }
 
-:global(body) {
-    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-    background-size: 200% 200%;
-    animation: gradientMove 10s ease infinite;
-    font-family: "Roboto Slab", serif;
-    height: 90vh;
-}
-
-/* Анімація градієнта */
-@keyframes gradientMove {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
 /*  Загальний контейнер тесту  */
 .test-wrapper {
     background-color: rgb(245, 246, 248);
