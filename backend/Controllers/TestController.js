@@ -173,7 +173,7 @@ export const getTest = async (req, res) => {
       return res.status(400).json({ message: "Невірний ID тесту" });
     }
 
-    const test = await Test.findById(testid).lean(); // повертає plain JS object
+    const test = await Test.findById(testid).lean();
 
     if (!test) {
       return res.status(404).json({ message: "Тест не знайдено" });
@@ -222,6 +222,111 @@ export const getTest = async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Помилка сервера" });
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+};
+
+export const checkTest = async (req, res) => {
+  try {
+    let scor = 0;
+    const { userAnswers, name } = req.body;
+    const testid = req.params.id;
+
+    if (!name) {
+      return res.status(400).json({ message: "Імʼя обовʼязкове" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(testid)) {
+      return res.status(400).json({ message: "Невірний ID тесту" });
+    }
+
+    const test = await Test.findById(testid);
+
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    const exBal = 100 / test.exercises.length;
+
+    /*  ПЕРЕВІРКА ВІДПОВІДЕЙ  */
+    test.exercises.forEach((ex) => {
+      const userAnsw = userAnswers.find(a => a.slug === ex.slug);
+      if (!userAnsw) return;
+
+      // ONE
+      if (ex.type === "one") {
+        if (ex.answers[userAnsw.value]?.correct) {
+          scor += exBal;
+        }
+      }
+
+      // MANY
+      if (ex.type === "many") {
+        const correctIndexes = ex.answers
+          .map((a, i) => a.correct ? i : null)
+          .filter(i => i !== null);
+
+        const part = exBal / correctIndexes.length;
+
+        userAnsw.value.forEach(i => {
+          if (correctIndexes.includes(i)) {
+            scor += part;
+          }
+        });
+      }
+
+      // ENTER
+      if (ex.type === "enter") {
+        if (ex.correctAnswers.includes(userAnsw.value)) {
+          scor += exBal;
+        }
+      }
+
+      // PAIR
+      if (ex.type === "pair") {
+        let correctCount = 0;
+        const total = ex.pairs.left.length; // кількість лівих елементів
+
+        userAnsw.value.forEach(([lSlug, rSlug]) => {
+          const leftIndex = ex.pairs.left.findIndex(l => l.slug === lSlug);
+          const rightIndex = ex.pairs.right.findIndex(r => r.slug === rSlug);
+
+          // Для Map ключі автоматично зберігаються як рядки
+          if (ex.pairs.correctMap.get(String(leftIndex)) === rightIndex) {
+            correctCount++;
+          }
+        });
+
+        scor += (exBal / total) * correctCount;
+      }
+
+    });
+
+    /*  ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ  */
+    const finalScore = Number(scor.toFixed(2));
+    console.log(scor)
+
+    test.childrens.push({
+      name,
+      scor: finalScore
+    });
+
+    await test.save();
+
+    res.json({
+      success: true,
+      score: finalScore,
+      max: 100
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
   }
 };

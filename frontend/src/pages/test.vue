@@ -14,7 +14,7 @@
 
             <enters v-else-if="currentEx.type === 'enter'" :ex="currentEx" @answered="saveAnswer" :key="currentIndex" />
 
-            <button v-if="currentIndex === test.exercises.length - 1" :disabled="!isAnswer">
+            <button v-if="currentIndex === test.exercises.length - 1" :disabled="!isAnswer" @click="finishTest">
                 Завершити тест
             </button>
             <button v-else @click="currentIndex++" :disabled="!isAnswer">
@@ -56,6 +56,7 @@ export default {
 
     data() {
         return {
+            testId: null,
             isanswer: true,
             currentIndex: 0,
             // відповіді користувача
@@ -102,8 +103,8 @@ export default {
 
         async fetchTest() {
             try {
-                const testId = this.$route.params.id;
-                const res = await axios.get(`${BackURL}/test/${testId}`);
+                this.testId = this.$route.params.id;
+                const res = await axios.get(`${BackURL}/test/${this.testId}`);
                 console.log(res.data); // <-- перевір, що реально повертає бекенд
                 this.test = res.data;
                 this.correctTestCode = true;
@@ -116,12 +117,32 @@ export default {
 
         saveAnswer(payload) {
             this.userAnswers[this.currentIndex] = {
-                type: this.currentEx.type,
-                value: payload.value
+                value: payload.value,
+                slug: this.currentEx.slug
             };
         },
 
-        
+        async finishTest() {
+            try {
+                const answersArray = Object.values(this.userAnswers);
+
+                const res = await axios.post(
+                    `${BackURL}/test/${this.testId}/result`,
+                    {
+                        userAnswers: answersArray,
+                        name: this.fullName
+                    }
+                );
+
+                alert(`Ваш результат: ${res.data.score} / ${res.data.max}`);
+                console.log(res.data);
+
+            } catch (err) {
+                console.error(err);
+                alert('Помилка при перевірці тесту');
+            }
+        }
+
 
     }
 

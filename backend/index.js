@@ -69,6 +69,7 @@ app.post("/login", loginValidator, UserController.login)
 
 app.post('/test', checkAuth, upload.any(), TestController.createTest)
 app.get('/test/:id', TestController.getTest)
+app.post('/test/:id/result', TestController.checkTest)
 
 app.listen(PORT, (err) => {
   if (err) {

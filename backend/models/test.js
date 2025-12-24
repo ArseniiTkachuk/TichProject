@@ -68,12 +68,25 @@ const ExerciseSchema = new mongoose.Schema({
     default: null
   },
 
-  slug:{
+  slug: {
     type: String,
-    required:true
+    required: true
   }
 
 }, { _id: false });
+
+
+/*  CHILDREN */
+const Childrens = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+
+  scor: Number
+
+}, { _id: false });
+
 
 /*  TEST  */
 const TestSchema = new mongoose.Schema({
@@ -91,7 +104,13 @@ const TestSchema = new mongoose.Schema({
   exercises: {
     type: [ExerciseSchema],
     required: true
+  },
+
+  childrens: {
+    type: [Childrens],
+    default: []
   }
+
 
 }, { timestamps: true });
 
