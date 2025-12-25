@@ -64,16 +64,21 @@ export default {
   margin: 0;
   padding: 0;
   font-family: "Playfair Display", serif;
+
 }
 
-/* ================= GLOBAL ================= */
+:global(body) {
+  margin: 0;
+}
+
+/*  GLOBAL  */
 .home {
   background: #f6f4ff;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
-/* ================= HERO ================= */
+/* HERO */
 .hero {
   min-height: 85vh;
   background: linear-gradient(135deg, #6a00ff, #ff5fd7);
@@ -82,34 +87,13 @@ export default {
   padding: 80px;
   color: white;
 
-  border-bottom-left-radius: 140px;
+  border-bottom-left-radius: 60px;
   border-bottom-right-radius: 60px;
   position: relative;
   overflow: hidden;
 }
 
-/* Glow blobs */
-.hero::before,
-.hero::after {
-  content: '';
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.14);
-  filter: blur(70px);
-  z-index: 0;
-}
 
-.hero::before {
-  top: -180px;
-  left: -180px;
-}
-
-.hero::after {
-  bottom: -220px;
-  right: -180px;
-}
 
 /* Content above blobs */
 .hero-content {
@@ -153,7 +137,7 @@ export default {
   cursor: pointer;
 }
 
-/* ================= SVG WAVE ================= */
+/*  SVG WAVE  */
 .hero-wave {
   display: block;
   width: 100%;
@@ -161,11 +145,11 @@ export default {
   margin-top: -1px;
 }
 
-/* ================= WHITE SECTION ================= */
+/* WHITE SECTION  */
 .white {
   background: white;
   margin: -60px auto 80px;
-  max-width: 1000px;
+  max-width: 1200px;
   padding: 60px;
   border-radius: 40px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, .1);
@@ -185,16 +169,36 @@ export default {
   padding: 30px;
   border-radius: 25px;
   font-size: 20px;
+  
+  position: relative;
+  overflow: hidden;
+  color: #000; /* базовий колір тексту */
+  transition: color 0.4s ease; /* швидша анімація тексту */
 }
 
-.test-card button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(135deg, #6a00ff, #ff5fd7);
-  color: white;
-  cursor: pointer;
+/* Hover: заповнення і зміна кольору тексту */
+.step:hover::before {
+  left: 0;
 }
+
+.step:hover {
+  color: white; /* текст стає білим */
+}
+
+/* Градієнт-псевдоелемент */
+.step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #6a00ff, #ff5fd7);
+  z-index: 0;
+  transition: left 0.6s ease; /* швидша анімація заповнення */
+
+}
+
+
+
 </style>
