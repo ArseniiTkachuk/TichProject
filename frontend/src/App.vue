@@ -1,9 +1,21 @@
 <template>
-  <router-view></router-view> <!-- тут показується сторінка яка відкрита -->
+  <router-view />
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  watch: {
+    $route: {
+      immediate: true,
+      handler(route) {
+        document.body.classList.remove('gradient-bg');
+
+        if (route.meta.gradientBg !== false) {
+          document.body.classList.add('gradient-bg');
+        }
+      }
+    }
+  }
 }
 </script>

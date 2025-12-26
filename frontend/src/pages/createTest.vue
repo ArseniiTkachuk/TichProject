@@ -157,9 +157,8 @@
       <div class="modal-el">
         <p>
           <strong>Посилання на тест:</strong>
-        <p><a :href="testLink" target="_blank">{{ testLink }}</a>
+          <a :href="testLink" target="_blank">{{ testLink }}</a>
           <button @click="copyToClipboard(testLink)" class="btn-copy">📋</button>
-        </p>
         </p>
       </div>
       <button @click="showModal = false" class="btn-close">✖</button>
@@ -317,6 +316,29 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+:local(body) {
+  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  background-size: 200% 200%;
+  animation: gradientMove 10s ease infinite;
+  font-family: "Roboto Slab", serif;
+  height: 90vh;
+}
+
+/* Анімація градієнта */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 * {
   margin: 0;
@@ -609,6 +631,7 @@ select:focus {
   margin-bottom: 20px;
 
 }
+
 .modal-content h2 {
   margin-bottom: 15px;
   font-size: 26px;
@@ -674,18 +697,32 @@ select:focus {
   transform: translateX(-50%);
   background: #4caf50;
   color: white;
-  padding: 15px 40px; /* Збільшуємо розмір блоку */
-  border-radius: 20px; /* Більші закруглення */
-  font-size: 20px; /* Збільшуємо текст */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  padding: 15px 40px;
+  /* Збільшуємо розмір блоку */
+  border-radius: 20px;
+  /* Більші закруглення */
+  font-size: 20px;
+  /* Збільшуємо текст */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation: slideInOut 1.5s forwards;
   z-index: 500;
 }
 
 @keyframes slideInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  10%, 90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-}
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
 </style>

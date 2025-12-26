@@ -1,10 +1,15 @@
+html,
 body {
-    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-    background-size: 200% 200%;
-    animation: gradientMove 10s ease infinite;
-    font-family: "Roboto Slab", serif;
-    height: 90vh;
+    margin: 0;
+    min-height: 100vh;
 }
+
+body.gradient-bg {
+    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+}
+
 
 /* Анімація градієнта */
 @keyframes gradientMove {

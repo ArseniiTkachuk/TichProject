@@ -12,14 +12,50 @@ import CreateTest from './pages/createTest.vue' // сторінка створе
 
 const routes = [
 
-  { path: '/', name: 'Home', component: Home }, // маршрут головної сторінки
-  { path: '/register', name: 'Register', component: Register }, // маршрут реєстрації
-  { path: '/login', name: 'Login', component: Login }, //маршрут входу
-  { path: '/home', name: 'AuthHome', component: AuthHome }, // маршрут головної сторінки авторизованого користувача
-  { path: '/test/:id', name: 'Test', component: Test }, // Маршрут для тестів
-  { path: '/createTest', name: 'CreateTest', component: CreateTest }, // маршрут для створення тестів
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+    meta: { gradientBg: false }
+  },
+
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: { gradientBg: false }
+  },
+
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: { gradientBg: false }
+  },
+
+  {
+    path: '/home',
+    name: 'AuthHome',
+    component: AuthHome,
+    meta: { gradientBg: true }
+  },
+
+  {
+    path: '/test/:id',
+    name: 'Test',
+    component: Test,
+    meta: { gradientBg: true } 
+  },
+
+  {
+    path: '/createTest',
+    name: 'CreateTest',
+    component: CreateTest,
+    meta: { gradientBg: true }
+  }
 
 ]
+
 
 const router = createRouter({
   history: createWebHistory(),
