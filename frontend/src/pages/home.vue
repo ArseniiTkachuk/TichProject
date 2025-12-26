@@ -169,33 +169,16 @@ export default {
   padding: 30px;
   border-radius: 25px;
   font-size: 20px;
-  
+
   position: relative;
   overflow: hidden;
-  color: #000; /* базовий колір тексту */
-  transition: color 0.4s ease; /* швидша анімація тексту */
-}
-
-/* Hover: заповнення і зміна кольору тексту */
-.step:hover::before {
-  left: 0;
+  color: #000;
+  background-clip: padding-box;
 }
 
 .step:hover {
-  color: white; /* текст стає білим */
-}
-
-/* Градієнт-псевдоелемент */
-.step::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #6a00ff, #ff5fd7);
-  z-index: 0;
-  transition: left 0.6s ease; /* швидша анімація заповнення */
+    background: linear-gradient(135deg, #b982f1, #f56abd);
+    box-shadow: 1px  (#b982f1, #f56abd);
 
 }
 
