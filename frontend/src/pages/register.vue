@@ -9,7 +9,6 @@
 
                 <input type="email" v-model="email" placeholder="Email" class="email">
                 <p v-if="errors.email" class="error">{{ errors.email }}</p>
-                <p v-if="result" class="error">{{ result }}</p>
 
                 <div class="password-wrapper">
                     <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Password">
@@ -30,6 +29,8 @@
 
 
                 <p v-if="errors.password" class="error">{{ errors.password }}</p>
+                <p v-if="result" class="error">{{ result }}</p>
+
 
                 <button @click="register">Зареєструватися</button>
 
@@ -125,7 +126,7 @@ export default {
 
 /* === та сама glass-card що modal-card === */
 .background_reg {
-    background: rgba(255, 255, 255, 0.25);
+    /* background: rgba(255, 255, 255, 0.25); */
     backdrop-filter: blur(14px);
     padding: 32px 36px;
     border-radius: 22px;
@@ -140,7 +141,10 @@ export default {
 .bg_gradient {
     border-radius: 22px;
 
-    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+    background: linear-gradient(135deg,
+            #0088ff,
+            #4d0cff,
+            #b000f8);
     background-size: 200% 200%;
     animation: gradientMove 10s ease infinite;
     font-family: "Roboto Slab", serif;
