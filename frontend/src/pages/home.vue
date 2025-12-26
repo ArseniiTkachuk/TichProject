@@ -182,6 +182,44 @@ export default {
 
 }
 
+@media (max-width: 768px) {
+  .hero {
+    padding: 40px 20px;
+    min-height: 70vh;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
 
+  .hero h1 {
+    font-size: 36px;
+
+  }
+
+  .hero p {
+    font-size: 16px;
+
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .white {
+    padding: 30px 20px;
+    margin: -40px 15px 40px;
+    border-radius: 30px;
+  }
+
+  .steps {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step {
+    padding: 20px;
+    font-size: 18px;
+  }
+}
 
 </style>
