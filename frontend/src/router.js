@@ -9,6 +9,7 @@ import Home from './pages/home.vue' // головна сторінка
 import AuthHome from './pages/authHome.vue' // сторінка профілю
 
 import CreateTest from './pages/createTest.vue' // сторінка створення тесну 
+import LoockTest from './pages/loockTest.vue'
 
 const routes = [
 
@@ -44,7 +45,7 @@ const routes = [
     path: '/test/:id',
     name: 'Test',
     component: Test,
-    meta: { gradientBg: true } 
+    meta: { gradientBg: true }
   },
 
   {
@@ -52,7 +53,14 @@ const routes = [
     name: 'CreateTest',
     component: CreateTest,
     meta: { gradientBg: true }
-  }
+  },
+
+  {
+    path: '/checkTest/:id',
+    name: 'LoockTest',
+    component: LoockTest,
+    meta: { gradientBg: true }
+  },
 
 ]
 

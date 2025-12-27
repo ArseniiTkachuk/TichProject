@@ -74,10 +74,9 @@
 <script>
 import axios from 'axios';
 
-import answers from '@/components/answers.vue';
-import pairs from '@/components/pairs.vue';
-import enters from '@/components/enters.vue';
-import message from '@/components/message.vue';
+import answers from '@/components/passageTest/answers.vue';
+import pairs from '@/components/passageTest/pairs.vue';
+import enters from '@/components/passageTest/enters.vue'; 
 
 const BackURL = "http://localhost:2222"
 
@@ -86,7 +85,6 @@ export default {
         answers,
         pairs,
         enters,
-        message
     },
 
     data() {

@@ -1,4 +1,5 @@
 import UserModel from "../models/User.js";
+import TestModel from "../models/Test.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { validationResult } from 'express-validator'
@@ -93,25 +94,36 @@ export const login = async (req, res) => {
         })
     }
 }
-
 export const userProfile = async (req, res) => {
     try {
-        const user = await UserModel.findOne({ _id: req.userId }).lean();
+        // 1. Отримуємо дані користувача
+        const user = await UserModel.findById(req.userId).lean();
         if (!user) {
-            return res.status(404).json({
-                message: 'Користувач не існує'
-            })
+            return res.status(404).json({ message: 'Користувач не існує' });
         }
+
+        // 2. Отримуємо тести
+        const rawTests = await TestModel.find({ author: req.userId })
+            .select('title slug exercises.question') // беремо тільки потрібне
+            .lean();
+
+        // 3. Трансформуємо дані у потрібний вам формат
+        const formattedTests = rawTests.map(test => ({
+            id: test._id,
+            title: test.title,
+            slug: test.slug, // додав slug, бо ви просили його раніше
+            tasks: test.exercises.map(ex => ex.question), // створюємо масив тільки з текстів питань
+            currentTaskIndex: 0
+        }));
+
         res.json({
             name: user.name,
-            imageUrl: user.imageUrl
-        })
-        
+            imageUrl: user.imageUrl,
+            tests: formattedTests
+        });
 
     } catch (err) {
-        console.log(err)
-        res.status(500).json({
-            message: 'Помилка сервера'
-        })
+        console.log(err);
+        res.status(500).json({ message: 'Помилка сервера' });
     }
 }

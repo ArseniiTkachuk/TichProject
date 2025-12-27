@@ -13,7 +13,6 @@
         <!-- Desktop кнопки -->
         <div class="buttons-desktop">
           <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
-          <button class="action-btn" @click="goToMyTests">📚 Мої тести</button>
           <button class="action-btn" @click="goToResults">📊 Результати</button>
           <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
           <button class="action-btn danger" @click="logout">🚪 Вийти</button>
@@ -24,7 +23,6 @@
           <button class="menu-btn" @click.stop="toggleMobileMenu">⋮</button>
           <div v-if="mobileMenuOpen" class="mobile-dropdown">
             <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
-            <button class="action-btn" @click="goToMyTests">📚 Мої тести</button>
             <button class="action-btn" @click="goToResults">📊 Результати</button>
             <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
             <button class="action-btn danger" @click="logout">🚪 Вийти</button>
@@ -36,13 +34,16 @@
     <!-- TEST CARDS -->
     <main class="profile-content">
       <div class="tests-grid">
-        <div class="test-card" v-for="test in userTests" :key="test.id">
+        <div class="test-card" v-for="test in userTests" :key="test.id" @click="$router.push(`/checkTest/${ test.id }`)">
           <h3 class="test-title">{{ test.title }}</h3>
           <transition name="slide-task" mode="out-in">
             <div class="test-task-window" :key="test.currentTaskIndex">
               {{ test.tasks[test.currentTaskIndex] }}
             </div>
           </transition>
+        </div>
+        <div v-if="userTests.length < 1">
+          <h3 class="test-title">Тут з'являться ваші тести</h3>
         </div>
       </div>
     </main>
@@ -59,12 +60,7 @@ export default {
     return {
       user: { name: "", imageUrl: "" },
       mobileMenuOpen: false,
-      userTests: [
-        { id: 1, title: "Тест 1", tasks: ["В якому році було зруйновано Річ посполину", "Встановіть відповідність", "Скільки речень у ньому"], currentTaskIndex: 0 },
-        { id: 2, title: "Тест 2", tasks: ["Завдання A", "Завдання B"], currentTaskIndex: 0 },
-        { id: 3, title: "Тест 3", tasks: ["Завдання X", "Завдання Y", "Завдання Z"], currentTaskIndex: 0 },
-        { id: 4, title: "Тест 4", tasks: ["Завдання M", "Завдання N"], currentTaskIndex: 0 }
-      ]
+      userTests: [],
     };
   },
   mounted() {
@@ -82,6 +78,7 @@ export default {
           name: res.data.name,
           imageUrl: res.data.imageUrl ? BackURL + res.data.imageUrl : ""
         };
+        this.userTests = res.data.tests;
       } catch (err) {
         console.error(err);
       }
@@ -94,7 +91,6 @@ export default {
       });
     },
     logout() { localStorage.removeItem("tokenAuthTeacher"); localStorage.removeItem("userId"); this.$router.push("/login"); },
-    goToMyTests() { this.$router.push("/myTests"); },
     goToResults() { this.$router.push("/results"); },
     goToSettings() { this.$router.push("/settings"); },
     toggleMobileMenu() { this.mobileMenuOpen = !this.mobileMenuOpen; },
@@ -235,6 +231,7 @@ export default {
   border-radius: 12px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   gap: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s, box-shadow 0.2s;
@@ -242,6 +239,7 @@ export default {
 
 .test-card:hover {
   transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
@@ -262,12 +260,6 @@ export default {
   font-size: 14px;
   opacity: 0.9;
   transition: all 0.2s;
-}
-
-/* ховер-ефект всередині картки (необов'язково) */
-.test-task-window:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #fff;
 }
 
 

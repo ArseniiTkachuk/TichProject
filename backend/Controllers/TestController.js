@@ -329,3 +329,27 @@ export const checkTest = async (req, res) => {
     });
   }
 };
+
+
+export const getOneTest = async (req, res) => {
+  try {
+    const testid = req.params.id;
+
+    const test = await Test.findById(testid).lean();
+
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    res.json({
+      test
+    })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+
+}

@@ -114,4 +114,5 @@ const TestSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-export default mongoose.model('Test', TestSchema);
+const Test = mongoose.models.Test || mongoose.model('Test', TestSchema);
+export default Test;

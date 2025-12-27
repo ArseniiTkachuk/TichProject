@@ -142,7 +142,6 @@
       <button @click="createTest" class="btn-create-test">Створити тест</button>
     </div>
     <p class="message">{{ message }}</p>
-    <div v-if="copied" class="copied-toast">Скопійовано!</div>
   </div>
 
   <!-- Модальне вікно створеного тесту -->
@@ -155,14 +154,15 @@
         </p>
       </div>
       <div class="modal-el">
+        <strong>Посилання на тест: </strong>
         <p>
-          <strong>Посилання на тест:</strong>
           <a :href="testLink" target="_blank">{{ testLink }}</a>
           <button @click="copyToClipboard(testLink)" class="btn-copy">📋</button>
         </p>
       </div>
       <button @click="showModal = false" class="btn-close">✖</button>
     </div>
+    <div v-if="copied" class="copied-toast">Скопійовано!</div>
   </div>
 
 </template>
