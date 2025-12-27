@@ -66,6 +66,7 @@ app.use(express.json());
 
 app.post("/register", registerValidator, UserController.register)
 app.post("/login", loginValidator, UserController.login)
+app.post("/auth", checkAuth,)
 
 app.post('/test', checkAuth, upload.any(), TestController.createTest)
 app.get('/test/:id', TestController.getTest)

@@ -13,7 +13,11 @@ const UserSchema = new mongoose.Schema({
     passwordHash: {
         type: String,
         required: true
-    }
+    },
+    imageUrl: {
+        type: String,
+        default: "/utils/defaultUserImg.png"
+    },
 
 }, { timestamps: true })
 

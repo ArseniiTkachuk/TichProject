@@ -66,7 +66,6 @@ export default {
         });
 
         localStorage.setItem("tokenAuthTeacher", res.data.token);
-        localStorage.setItem('userId', res.data.userId);
 
         this.$router.push('/home');
 

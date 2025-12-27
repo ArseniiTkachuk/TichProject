@@ -39,7 +39,7 @@ export const register = async (req, res) => {
         const token = jwt.sign({ _id: user._id }, 'TOKEN', { expiresIn: '30d' })
 
         const { passwordHash, ...userData } = user._doc
-        res.json({ ...userData, token })
+        res.json({ token })
 
     } catch (err) {
         console.log(err)
@@ -48,7 +48,7 @@ export const register = async (req, res) => {
 }
 
 
-export const login = async(req, res) => {
+export const login = async (req, res) => {
     try {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
@@ -67,7 +67,7 @@ export const login = async(req, res) => {
         // Перевірка, чи вірний password
         const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash)
 
-        if (!isValidPass){
+        if (!isValidPass) {
             return res.status(404).json({
                 message: 'Невірний логін або пароль'
             })
@@ -81,16 +81,34 @@ export const login = async(req, res) => {
             expiresIn: '30d'
         })
 
-        const {passwordHash, ... userData} = user._doc
+        const { passwordHash, ...userData } = user._doc
 
         res.json({
-            ... userData,
             token
         })
-    }catch (err){
+    } catch (err) {
         console.log(err)
         res.status(500).json({
             message: 'Не вдалося ввійти'
+        })
+    }
+}
+
+export const userProfile = async (req, res) => {
+    try {
+        const user = await UserModel.findOne({ _id: req.userId })
+        if (!user) {
+            return res.status(404).json({
+                message: 'Користувач не існує'
+            })
+        }
+
+        
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'Помилка сервера'
         })
     }
 }

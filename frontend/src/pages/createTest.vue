@@ -146,8 +146,8 @@
   </div>
 
   <!-- Модальне вікно створеного тесту -->
-  <div v-if="showModal" class="modal-overlay">
-    <div class="modal-content animated-modal">
+  <div v-if="showModal" class="modal-overlay" @click="showModal = false">
+    <div class="modal-content animated-modal" @click.stop>
       <h2>🎉 Тест створено!</h2>
       <div class="modal-el">
         <p><strong>Код тесту:</strong> <span class="code-text">{{ testCode }}</span>
@@ -267,14 +267,11 @@ export default {
       right.preview = file ? URL.createObjectURL(file) : null;
     },
     async createTest() {
-      const userId = localStorage.getItem("userId");
-      if (!userId) { this.message = "Невалідний ID вчителя. Зробіть повторний логін."; return; }
       if (!this.title || this.exercises.length === 0) { this.message = "Тест має містити назву та хоча б одне питання!"; return; }
 
       try {
         const formData = new FormData();
         formData.append("title", this.title);
-        formData.append("author", userId);
 
         const exercisesData = this.exercises.map(q => {
           const answers = (q.answers || []).map((a, i) => ({
@@ -316,29 +313,6 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
-
-:local(body) {
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  background-size: 200% 200%;
-  animation: gradientMove 10s ease infinite;
-  font-family: "Roboto Slab", serif;
-  height: 90vh;
-}
-
-/* Анімація градієнта */
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
 * {
   margin: 0;

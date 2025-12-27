@@ -7,11 +7,7 @@
       <div class="hero-content">
         <h1>Створюй тести. Проходь. Розвивайся.</h1>
         <p>Платформа для навчання та перевірки знань</p>
-        <div v-if="enterCode">
-          <button @click="enterCode = false"> Back </button>
-          <enterTestCode />
-        </div>
-        <div v-else class="actions">
+        <div class="actions">
           <button class="primary" @click="enterCode = true">Я студент</button>
           <button class="secondary" @click="$router.push('/home')">Я викладач</button>
         </div>
@@ -35,16 +31,24 @@
 
 
   </div>
+
+  <div v-if="enterCode" class="modal-overlay" @click="enterCode = false">
+    <div class="modal-card" @click.stop>
+
+      <h2 class="modal-title">Enter code for test</h2>
+
+      <input v-model="testCode" placeholder="Enter code" class="modal-input">
+
+      <button class="modal-btn" @click="$router.push(`/test/${testCode}`)"> Go </button>
+
+    </div>
+  </div>
 </template>
 
 <script>
 
-import enterTestCode from '@/components/enterTestCode.vue';
-
 export default {
-  components: {
-    enterTestCode,
-  },
+
   data() {
     return {
       enterCode: false
@@ -66,6 +70,98 @@ export default {
   font-family: "Playfair Display", serif;
 
 }
+
+
+
+
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+
+.modal-text {
+  color: white;
+  font-size: 15px;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+
+/* ===== MODAL CARD ===== */
+.modal-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  padding: 30px 35px;
+  border-radius: 22px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  margin: 10px;
+}
+
+/* ===== TITLE ===== */
+.modal-title {
+  color: white;
+  font-size: 22px;
+  margin-bottom: 18px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== INPUT ===== */
+.modal-input {
+  width: 90%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.modal-input:focus {
+  outline: none;
+  border: 1px solid #ff00b3;
+  box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
+}
+
+/* ===== ERROR ===== */
+.modal-error {
+  color: rgb(255, 200, 200);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* ===== BUTTON ===== */
+.modal-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 17px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg,
+      #4d0cff,
+      #b000f8,
+      #ff00b3);
+  color: white;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.modal-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+}
+
+
 
 :global(body) {
   margin: 0;
@@ -177,8 +273,8 @@ export default {
 }
 
 .step:hover {
-    background: linear-gradient(135deg, #b982f1, #f56abd);
-    box-shadow: 1px  (#b982f1, #f56abd);
+  background: linear-gradient(135deg, #b982f1, #f56abd);
+  box-shadow: 1px (#b982f1, #f56abd);
 
 }
 
@@ -221,5 +317,4 @@ export default {
     font-size: 18px;
   }
 }
-
 </style>
