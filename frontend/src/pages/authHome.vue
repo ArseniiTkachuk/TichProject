@@ -1,16 +1,18 @@
 <template>
   <section class="profile-page">
-    <!-- Верх профілю -->
+    <!-- HEADER -->
     <header class="profile-header">
-      <div class="avatar">👤</div>
+      <div class="avatar">
+        <img :src="user.imageUrl" alt="Avatar" />
+      </div>
 
       <div class="user-info">
-        <h1 class="name">Мій профіль</h1>
+        <h1 class="name">{{ user.name || "Мій профіль" }}</h1>
         <p class="role">Викладач · Автор тестів</p>
       </div>
     </header>
 
-    <!-- Дії -->
+    <!-- ACTION LIST -->
     <main class="profile-actions">
       <button class="action-btn primary" @click="$router.push('/createTest')">
         ➕ Створити тест
@@ -36,119 +38,171 @@
 </template>
 
 <script>
+import axios from "axios";
+
+const BackURL = "http://localhost:2222";
+
 export default {
   name: "ProfilePage",
+
+  data() {
+    return {
+      user: {
+        name: "",
+        imageUrl: ""
+      }
+    };
+  },
+
+  mounted() {
+    this.fetchUser();
+  },
+
   methods: {
-    goToMyTests() {
-      alert("Тут буде список створених тестів")
+    async fetchUser() {
+      try {
+        const res = await axios.get(`${BackURL}/auth`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}`
+          }
+        });
+
+        this.user = {
+          name: res.data.name,
+          imageUrl: res.data.imageUrl ? BackURL + res.data.imageUrl : ""
+        };
+      } catch (err) {
+        console.error("fetchUser error:", err);
+      }
     },
-    goToResults() {
-      alert("Тут буде статистика проходжень")
-    },
-    goToSettings() {
-      alert("Тут будуть налаштування профілю")
-    },
+
     logout() {
-      localStorage.removeItem("tokenAuthTeacher")
-      localStorage.removeItem("userId")
-      this.$router.push('/login')
+      localStorage.removeItem("tokenAuthTeacher");
+      localStorage.removeItem("userId");
+      this.$router.push("/login");
+    },
+
+    goToMyTests() {
+      this.$router.push("/myTests");
+    },
+
+    goToResults() {
+      this.$router.push("/results");
+    },
+
+    goToSettings() {
+      this.$router.push("/settings");
     }
   }
-}
+};
 </script>
 
 <style scoped>
-.profile-page {
-  min-height: 100vh;
-  padding: 60px 80px;
-  color: #fff;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto Slab', serif;
 }
 
-/* Верх профілю */
+.profile-page {
+  min-height: 100vh;
+  width: 95%;
+  max-width: 900px;
+  margin: 30px auto;
+  background-color: #f5f6f8;
+  border-radius: 25px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER */
 .profile-header {
   display: flex;
   align-items: center;
   gap: 24px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .avatar {
   width: 96px;
   height: 96px;
   border-radius: 50%;
+  overflow: hidden;
   background: linear-gradient(135deg, #ffffff, #e6dfff);
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 42px;
-  color: #4d0cff;
+  align-items: center;
 }
 
-.name {
-  margin: 0;
-  font-size: 34px;
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-info .name {
+  font-size: 32px;
   font-weight: 700;
 }
 
-.role {
-  margin-top: 6px;
-  font-size: 15px;
+.user-info .role {
+  margin-top: 4px;
+  font-size: 14px;
   opacity: 0.85;
 }
 
-/* Кнопки */
-.profile-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-}
-
+/* BUTTONS */
 .action-btn {
-  padding: 18px;
-  border-radius: 16px;
-  font-size: 15px;
+  padding: 14px 20px;
+  border-radius: 12px;
   font-weight: 600;
-  cursor: pointer;
   border: none;
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  transition: all 0.3s;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
 }
 
 .action-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 0, 179, 0.5);
 }
 
-/* Основна дія */
 .action-btn.primary {
-  background: linear-gradient(135deg, #ffffff, #e6dfff);
-  color: #4d0cff;
+  font-weight: 700;
 }
 
-.action-btn.primary:hover {
-  background: linear-gradient(135deg, #ffffff, #d9d2ff);
-}
-
-/* Небезпечна */
 .action-btn.danger {
-  background: rgba(255, 80, 80, 0.25);
+  background: linear-gradient(135deg, #ff4d4d, #ff0000);
 }
 
-.action-btn.danger:hover {
-  background: rgba(255, 80, 80, 0.4);
+/* ACTION CONTAINER */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
-/* Адаптив */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .profile-page {
-    padding: 40px 20px;
+    padding: 20px;
   }
 
   .profile-header {
     flex-direction: column;
     text-align: center;
+  }
+
+  .action-btn {
+    max-width: 100%;
   }
 }
 </style>

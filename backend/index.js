@@ -30,6 +30,8 @@ app.use(cors())
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/utils', express.static(path.join(__dirname, 'utils')));
+
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -66,7 +68,7 @@ app.use(express.json());
 
 app.post("/register", registerValidator, UserController.register)
 app.post("/login", loginValidator, UserController.login)
-app.post("/auth", checkAuth,)
+app.get("/auth", checkAuth, UserController.userProfile)
 
 app.post('/test', checkAuth, upload.any(), TestController.createTest)
 app.get('/test/:id', TestController.getTest)

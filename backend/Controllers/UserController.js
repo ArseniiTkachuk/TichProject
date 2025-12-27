@@ -96,13 +96,16 @@ export const login = async (req, res) => {
 
 export const userProfile = async (req, res) => {
     try {
-        const user = await UserModel.findOne({ _id: req.userId })
+        const user = await UserModel.findOne({ _id: req.userId }).lean();
         if (!user) {
             return res.status(404).json({
                 message: 'Користувач не існує'
             })
         }
-
+        res.json({
+            name: user.name,
+            imageUrl: user.imageUrl
+        })
         
 
     } catch (err) {
