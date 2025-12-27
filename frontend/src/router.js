@@ -10,6 +10,7 @@ import AuthHome from './pages/authHome.vue' // сторінка профілю
 
 import CreateTest from './pages/createTest.vue' // сторінка створення тесну 
 import LoockTest from './pages/loockTest.vue'
+import EditProfile from './pages/editProfile.vue'
 
 const routes = [
 
@@ -61,6 +62,13 @@ const routes = [
     component: LoockTest,
     meta: { gradientBg: true }
   },
+
+  {
+    path: '/editProfile',
+    name: 'EditProfile',
+    component: EditProfile,
+    meta: { gradientBg: true }
+  }
 
 ]
 

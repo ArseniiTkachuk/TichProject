@@ -13,7 +13,6 @@
         <!-- Desktop кнопки -->
         <div class="buttons-desktop">
           <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
-          <button class="action-btn" @click="goToResults">📊 Результати</button>
           <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
           <button class="action-btn danger" @click="logout">🚪 Вийти</button>
         </div>
@@ -23,7 +22,6 @@
           <button class="menu-btn" @click.stop="toggleMobileMenu">⋮</button>
           <div v-if="mobileMenuOpen" class="mobile-dropdown">
             <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
-            <button class="action-btn" @click="goToResults">📊 Результати</button>
             <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
             <button class="action-btn danger" @click="logout">🚪 Вийти</button>
           </div>
@@ -91,8 +89,7 @@ export default {
       });
     },
     logout() { localStorage.removeItem("tokenAuthTeacher"); localStorage.removeItem("userId"); this.$router.push("/login"); },
-    goToResults() { this.$router.push("/results"); },
-    goToSettings() { this.$router.push("/settings"); },
+    goToSettings() { this.$router.push("/editProfile"); },
     toggleMobileMenu() { this.mobileMenuOpen = !this.mobileMenuOpen; },
     closeMobileMenu() { this.mobileMenuOpen = false; }
   }
