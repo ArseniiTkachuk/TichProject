@@ -152,12 +152,33 @@ export default {
     display: inline-block;
 }
 
+/* Картинки в колонках */
 .item img {
-    width: 100%;
     max-width: 150px;
+    max-height: 150px;
+    width: auto;
     height: auto;
-    border-radius: 6px;
+    border-radius: 8px;
 }
+
+/* Картинки в обраних парах */
+.pair-item img {
+    max-width: 150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+
+    .item img,
+    .pair-item img {
+        max-width: 120px;
+        max-height: 120px;
+    }
+}
+
 
 /* Вибрані пари */
 .selected-pairs {

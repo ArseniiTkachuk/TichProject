@@ -5,13 +5,8 @@
     <h3 class="question">{{ ex.question }}</h3>
 
     <!-- Варіанти відповідей -->
-    <div 
-      v-for="(a, aIndex) in ex.answers"
-      :key="currentId + '-' + aIndex"
-      class="answer-card"
-      :class="{ selected: isSelected(aIndex) }"
-      @click="handleClick(aIndex)"
-    >
+    <div v-for="(a, aIndex) in ex.answers" :key="currentId + '-' + aIndex" class="answer-card"
+      :class="{ selected: isSelected(aIndex) }" @click="handleClick(aIndex)">
       <!-- RADIO / CHECKBOX ліворуч -->
       <span v-if="ex.type === 'one'" class="check-wrapper">
         <input type="radio" :name="'one-' + currentId" :checked="userSelection === aIndex" />
@@ -137,12 +132,13 @@ export default {
 }
 
 .answer-img {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
+
 
 .check-wrapper {
   position: relative;
@@ -182,9 +178,10 @@ export default {
 
 @media (max-width: 600px) {
   .answer-img {
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
   }
+
   .question {
     font-size: 18px;
   }
