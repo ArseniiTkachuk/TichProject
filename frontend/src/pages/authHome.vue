@@ -14,7 +14,7 @@
         <div class="buttons-desktop">
           <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
           <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
-          <button class="action-btn danger" @click="logout">🚪 Вийти</button>
+          <button class="action-btn danger" @click="showModalRemote = true">🚪 Вийти</button>
         </div>
 
         <!-- Mobile menu -->
@@ -23,7 +23,7 @@
           <div v-if="mobileMenuOpen" class="mobile-dropdown">
             <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
             <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
-            <button class="action-btn danger" @click="logout">🚪 Вийти</button>
+            <button class="action-btn danger" @click="showModalRemote = true">🚪 Вийти</button>
           </div>
         </div>
       </div>
@@ -32,7 +32,8 @@
     <!-- TEST CARDS -->
     <main class="profile-content">
       <div class="tests-grid">
-        <div class="test-card" v-for="test in userTests" :key="test.id" @click="$router.push(`/checkTest/${ test.id }`)">
+        <div class="test-card" v-for="test in userTests" :key="test.id"
+          @click="$router.push(`/checkTest/${test.id}`)">
           <h3 class="test-title">{{ test.title }}</h3>
           <transition name="slide-task" mode="out-in">
             <div class="test-task-window" :key="test.currentTaskIndex">
@@ -46,6 +47,20 @@
       </div>
     </main>
   </section>
+
+  <!-- Модальне вікно вийти з профілю -->
+  <div v-if="showModalRemote" class="modal-overlay" @click="showModalRemote = false">
+    <div class="modal-content delete-modal animated-modal" @click.stop>
+      <h2>🚪 Вийти з профілю?</h2>
+      <div class="delete-text">
+        <p>Ви впевнені, що хочете залишити цей профіль?</p>
+      </div>
+      <div class="delete-buttons">
+        <button @click="logout" class="btn-confirm">🚪 Вийти</button>
+        <button @click="showModalRemote = false" class="btn-cancel">Скасувати</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -59,6 +74,7 @@ export default {
       user: { name: "", imageUrl: "" },
       mobileMenuOpen: false,
       userTests: [],
+      showModalRemote: false,
     };
   },
   mounted() {
@@ -246,11 +262,15 @@ export default {
 }
 
 .test-task-window {
-  border: 2px solid rgba(255, 255, 255, 0.5); /* рамка */
-  border-radius: 8px; /* округлі кути */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  /* рамка */
+  border-radius: 8px;
+  /* округлі кути */
   padding: 10px;
-  min-height: 50px; /* мінімальна висота */
-  background: rgba(255, 255, 255, 0.1); /* напівпрозорий фон */
+  min-height: 50px;
+  /* мінімальна висота */
+  background: rgba(255, 255, 255, 0.1);
+  /* напівпрозорий фон */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -302,6 +322,210 @@ export default {
 }
 
 
+/*  MODAL WINDOW */
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 300;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease forwards;
+}
 
+/* Modal Box */
+.modal-content {
+    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+    color: white;
+    padding: 50px 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    transform: scale(0.8);
+    animation: popIn 0.3s forwards;
+}
 
+/* Animations */
+@keyframes popIn {
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal text styles */
+.modal-el {
+    margin-bottom: 20px;
+
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 26px;
+}
+
+.modal-content a {
+    color: #fff;
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.code-text {
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-family: monospace;
+}
+
+/* Copy Button */
+.btn-copy {
+    margin-left: 10px;
+    padding: 5px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s;
+}
+
+.btn-copy:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* Close Button */
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.2);
+}
+
+/* Модальне вікно Видалити тест */
+.delete-modal {
+    background: linear-gradient(135deg, #ff4d4d, #b00000);
+    padding: 40px 30px;
+    border-radius: 25px;
+    color: #fff;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8);
+    animation: popIn 0.3s forwards;
+}
+
+.delete-modal h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.delete-text {
+    font-size: 16px;
+    margin-bottom: 25px;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+/* Кнопки */
+.delete-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-confirm {
+    background: #ff1a1a;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(255, 26, 26, 0.4);
+}
+
+.btn-confirm:hover {
+    background: #e60000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 0, 0, 0.5);
+}
+
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+/* Закрити модалку */
+.delete-modal .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.delete-modal .btn-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.2);
+}
+
+/* Анімація */
+@keyframes popIn {
+    to {
+        transform: scale(1);
+    }
+}
 </style>

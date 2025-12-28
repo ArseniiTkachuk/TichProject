@@ -46,12 +46,12 @@ const validateExercise = (ex) => {
       return 'Правих варіантів повинно бути не менше ніж лівих';
     }
 
-    for (let i = 0; i < left.length; i++) {
-      const mappedIndex = Number(correctMap?.[i]);
-      if (!isValidIndex(mappedIndex, right)) {
-        return 'Некоректна відповідність у парах';
-      }
+    const values = Object.values(correctMap);
+    const hasDuplicates = values.some((v, i) => values.indexOf(v) !== i);
+    if (hasDuplicates) {
+      return 'Некоректна відповідність між парами'
     }
+
   }
 
   return null;
@@ -352,4 +352,28 @@ export const getOneTest = async (req, res) => {
     });
   }
 
+}
+
+export const remove = async (req, res) => {
+  try {
+    const testId = req.params.id;
+
+    const doc = await Test.findByIdAndDelete(testId);
+
+    if (!doc) {
+      return res.status(404).json({
+        message: 'Тест не знайдений'
+      });
+    }
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не вдалося видалити тест'
+    });
+  }
 }

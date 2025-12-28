@@ -12,6 +12,12 @@
                 <span class="icon">🔗</span>
                 <span class="btn-text">Поділитися</span>
             </button>
+
+            <button class="btn-delete" title="Видалити тест" @click="showModalRemote = true">
+                <div class="blur-bg"></div>
+                <span class="icon">🗑️</span>
+                <span class="btn-text">Видалити</span>
+            </button>
         </nav>
 
         <header class="test-header">
@@ -65,7 +71,22 @@
             </div>
             <button @click="showModal = false" class="btn-close">✖</button>
         </div>
-        <div v-if="copied" class="copied-toast">Скопійовано!</div>
+    </div>
+
+
+    <!-- Модальне вікно видалити тест -->
+    <div v-if="showModalRemote" class="modal-overlay" @click="showModalRemote = false">
+        <div class="modal-content delete-modal animated-modal" @click.stop>
+            <h2>🗑️ Видалити тест?</h2>
+            <div class="delete-text">
+                <p>Ви впевнені, що хочете видалити цей тест?</p>
+                <p> Цю дію не можна буде відмінити.</p>
+            </div>
+            <div class="delete-buttons">
+                <button @click="deleteTest" class="btn-confirm">🗑️ Видалити</button>
+                <button @click="showModalRemote = false" class="btn-cancel">Скасувати</button>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -91,9 +112,9 @@ export default {
         return {
             test: {},
             showModal: false,
+            showModalRemote: false,
             testCode: "",
             testLink: "",
-            copied: false,
         };
     },
 
@@ -110,7 +131,8 @@ export default {
 
                 // Зберігаємо код та посилання
                 this.testCode = testId;
-                this.testLink = `${window.location.origin}/test/${testId}`;
+                this.testLink = this.testLink = window.location.origin + this.$router.resolve({ path: `/test/${testId}` }).href
+
 
             } catch (err) {
                 console.error(err);
@@ -119,10 +141,22 @@ export default {
 
         copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                this.copied = true;
-                setTimeout(() => (this.copied = false), 1500);
+                this.$root.showToast('Скопійовано');
+
             }).catch(err => console.error(err));
         },
+
+        async deleteTest() {
+            try {
+                const testId = this.$route.params.id;
+                await axios.delete(`${BACK_URL}/test/${testId}`);
+                this.$root.showToast('Тест успішно видалено!');
+                this.$router.back(); // Переходимо на головну або на список тестів
+            } catch (err) {
+                console.error(err);
+                this.$root.showToast('Помилка при видаленні тесту');
+            }
+        }
     }
 };
 </script>
@@ -151,6 +185,35 @@ export default {
     /* Розносить кнопки в різні боки */
     align-items: center;
     gap: 15px;
+}
+
+
+/* стилі для кнопки Видалити */
+.btn-delete {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255, 50, 50, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 50, 50, 0.6);
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-delete:hover {
+    background: rgba(255, 50, 50, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 50, 50, 0.3);
+}
+
+.btn-delete .icon {
+    font-size: 18px;
 }
 
 /* Базові стилі для обох кнопок (можна згрупувати) */
@@ -449,40 +512,98 @@ export default {
     transform: scale(1.2);
 }
 
-/* toast notification */
-.copied-toast {
-    position: fixed;
-    bottom: 10%;
-    right: 0%;
-    transform: translateX(-50%);
-    background: #4caf50;
-    color: white;
-    padding: 15px 40px;
-    /* Збільшуємо розмір блоку */
-    border-radius: 20px;
-    /* Більші закруглення */
-    font-size: 20px;
-    /* Збільшуємо текст */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideInOut 1.5s forwards;
-    z-index: 500;
+/* Модальне вікно Видалити тест */
+.delete-modal {
+    background: linear-gradient(135deg, #ff4d4d, #b00000);
+    padding: 40px 30px;
+    border-radius: 25px;
+    color: #fff;
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8);
+    animation: popIn 0.3s forwards;
 }
 
-@keyframes slideInOut {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
+.delete-modal h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
 
-    10%,
-    90% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
+.delete-text {
+    font-size: 16px;
+    margin-bottom: 25px;
+    opacity: 0.9;
+    line-height: 1.4;
+}
 
-    100% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
+/* Кнопки */
+.delete-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-confirm {
+    background: #ff1a1a;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(255, 26, 26, 0.4);
+}
+
+.btn-confirm:hover {
+    background: #e60000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 0, 0, 0.5);
+}
+
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+/* Закрити модалку */
+.delete-modal .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.delete-modal .btn-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.2);
+}
+
+/* Анімація */
+@keyframes popIn {
+    to {
+        transform: scale(1);
     }
 }
 </style>

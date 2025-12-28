@@ -77,6 +77,8 @@ app.post('/test', checkAuth, upload.any(), TestController.createTest)
 app.get('/test/:id', TestController.getTest)
 app.get('/getOneTest/:id', TestController.getOneTest)
 app.post('/test/:id/result', TestController.checkTest)
+app.delete('/test/:id', TestController.remove)
+
 
 app.listen(PORT, (err) => {
   if (err) {
