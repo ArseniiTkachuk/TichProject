@@ -7,6 +7,9 @@ import crypto from 'crypto';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import checkAuth from './checkAuth.js'
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 import { registerValidator, loginValidator } from './validations.js'
 
@@ -16,7 +19,7 @@ import * as TestController from './Controllers/TestController.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 2222;
 
 mongoose
   .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)
@@ -80,5 +83,5 @@ app.listen(PORT, (err) => {
     return console.log(err)
   }
 
-  console.log('Server OK')
+  console.log(`Server OK on ${PORT}`)
 });

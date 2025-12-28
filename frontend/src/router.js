@@ -79,6 +79,7 @@ const router = createRouter({
 })
 
 
+
 // Перевірка авторизації перед кожним переходом
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("tokenAuthTeacher")
