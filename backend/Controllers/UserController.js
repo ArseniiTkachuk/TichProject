@@ -127,3 +127,28 @@ export const userProfile = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера' });
     }
 }
+
+
+export const update = async(req, res) => {
+    try {
+
+        await UserModel.updateOne({
+            _id: req.userId
+        },
+        {
+            name: req.body.name,
+            imageUrl: req.body.imageUrl
+        })
+        
+        res.json({
+            success: true
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Не вдалося обновити профіль'
+        });
+    }
+
+
+}

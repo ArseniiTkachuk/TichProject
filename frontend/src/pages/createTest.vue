@@ -299,12 +299,12 @@ export default {
         // Зберігаємо код та посилання
         this.testCode = res.data.id;
         this.testLink = window.location.origin + this.$router.resolve({ path: `/test/${res.data.id}` }).href
-        console.log(this.testLink)
         this.showModal = true;
         
       } catch (err) {
         console.error("AxiosError", err);
         this.message = "Помилка при створенні тесту: " + (err.response?.data?.message || err.message);
+        this.$root.showToast("Помилка при створенні тесту", "error")
       }
     }
   }

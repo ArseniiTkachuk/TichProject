@@ -136,6 +136,7 @@ export default {
 
             } catch (err) {
                 console.error(err);
+                this.$root.showToast("Помилка при завантаженні тесту", "error")
             }
         },
 
@@ -143,7 +144,10 @@ export default {
             navigator.clipboard.writeText(text).then(() => {
                 this.$root.showToast('Скопійовано');
 
-            }).catch(err => console.error(err));
+            }).catch(err => {
+                console.error(err) 
+                this.$root.showToast('Помилка!', 'error');
+            });
         },
 
         async deleteTest() {
@@ -154,7 +158,7 @@ export default {
                 this.$router.back(); // Переходимо на головну або на список тестів
             } catch (err) {
                 console.error(err);
-                this.$root.showToast('Помилка при видаленні тесту');
+                this.$root.showToast('Помилка при видаленні тесту', 'error');
             }
         }
     }

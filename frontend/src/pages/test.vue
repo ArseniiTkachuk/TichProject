@@ -75,7 +75,7 @@ import axios from 'axios';
 
 import answers from '@/components/passageTest/answers.vue';
 import pairs from '@/components/passageTest/pairs.vue';
-import enters from '@/components/passageTest/enters.vue'; 
+import enters from '@/components/passageTest/enters.vue';
 
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 
@@ -142,6 +142,7 @@ export default {
 
             if (this.fullName.length <= 3) {
                 this.error = 'Імя має складатися мінімум з 3 символів'
+                this.$root.showToast("Помилка!", "error")
             } else {
                 this.isName = true
             }
@@ -157,6 +158,7 @@ export default {
                 this.correctTestCode = true;
             } catch (err) {
                 console.error(err);
+                this.$root.showToast("Помилка!", "error")
                 this.correctTestCode = false;
             }
         },
@@ -186,7 +188,7 @@ export default {
 
             } catch (err) {
                 console.error(err);
-                alert('Помилка при перевірці тесту');
+                this.$root.showToast("Помилка при перевірці тесту", "error")
             }
         }
 

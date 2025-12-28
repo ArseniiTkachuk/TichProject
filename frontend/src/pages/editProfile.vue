@@ -65,7 +65,7 @@ export default {
                 this.user = { name: res.data.name, imageUrl: BackURL + res.data.imageUrl };
             } catch (err) {
                 console.error(err);
-                this.showToast("Помилка завантаження профілю", "error");
+                this.$root.showToast("Помилка завантаження профілю", "error");
             }
         },
         onAvatarChange(event) {
