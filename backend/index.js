@@ -72,12 +72,16 @@ app.use(express.json());
 app.post("/register", registerValidator, UserController.register)
 app.post("/login", loginValidator, UserController.login)
 app.get("/auth", checkAuth, UserController.userProfile)
+app.patch('/auth/:id', upload.any(), UserController.update)
+
+
 
 app.post('/test', checkAuth, upload.any(), TestController.createTest)
 app.get('/test/:id', TestController.getTest)
 app.get('/getOneTest/:id', TestController.getOneTest)
 app.post('/test/:id/result', TestController.checkTest)
 app.delete('/test/:id', TestController.remove)
+
 
 
 app.listen(PORT, (err) => {
