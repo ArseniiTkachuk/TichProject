@@ -129,25 +129,24 @@ export const userProfile = async (req, res) => {
 }
 
 
-export const update = async(req, res) => {
+export const update = async (req, res) => {
     try {
+        const updateData = {
+            name: req.body.name
+        };
 
-        await UserModel.updateOne({
-            _id: req.userId
-        },
-        {
-            name: req.body.name,
-            imageUrl: req.body.imageUrl
-        })
-        
-        res.json({
-            success: true
-        })
+        // Якщо файл завантажено, додаємо imageUrl
+        if (req.file) {
+            updateData.imageUrl = `/uploads/${req.file.filename}`;
+        }
+
+        await UserModel.updateOne({ _id: req.userId }, updateData);
+
+        res.json({ success: true });
+
     } catch (err) {
         console.log(err);
-        res.status(500).json({
-            message: 'Не вдалося обновити профіль'
-        });
+        res.status(500).json({ message: "Не вдалося обновити профіль" });
     }
 
 

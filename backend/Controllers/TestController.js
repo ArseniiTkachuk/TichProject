@@ -108,7 +108,7 @@ export const createTest = async (req, res) => {
           const answer = parsedExercises[q]?.answers?.[a];
           if (answer) {
             answer.isImage = true;
-            answer.imageUrl = `/uploads/${file.filename}`;
+            answer.imageUrl = file.url;
           }
           return;
         }
@@ -121,7 +121,7 @@ export const createTest = async (req, res) => {
 
           const right = parsedExercises[q]?.pairs?.right?.[r];
           if (right) {
-            right.imageUrl = `/uploads/${file.filename}`;
+            right.imageUrl = file.url;
           }
           return;
         }
@@ -134,7 +134,7 @@ export const createTest = async (req, res) => {
 
           const left = parsedExercises[q]?.pairs?.left?.[l];
           if (left) {
-            left.imageUrl = `/uploads/${file.filename}`;
+            left.imageUrl = file.url;
           }
         }
 
