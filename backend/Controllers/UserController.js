@@ -137,7 +137,7 @@ export const update = async (req, res) => {
 
         // Якщо файл завантажено, додаємо imageUrl
         if (req.file) {
-            updateData.imageUrl = `/uploads/${req.file.filename}`;
+            updateData.imageUrl = req.file.url;
         }
 
         await UserModel.updateOne({ _id: req.userId }, updateData);
