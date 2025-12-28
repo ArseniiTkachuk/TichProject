@@ -34,7 +34,7 @@
 </template>
 
 <script>
-const BackURL = "http://localhost:2222";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
   props: {
@@ -86,7 +86,7 @@ export default {
     },
 
     loadImg(url) {
-      return `${BackURL}${url}`;
+      return `${BACK_URL}${url}`;
     }
   }
 };

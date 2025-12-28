@@ -2,12 +2,8 @@
   <div class="answers-block">
     <h3 class="question">{{ ex.question }}</h3>
 
-    <div 
-      v-for="(a, aIndex) in ex.answers"
-      :key=" '-' + aIndex"
-      class="answer-card"
-      :class="{ 'is-correct': a.correct }"
-    >
+    <div v-for="(a, aIndex) in ex.answers" :key="'-' + aIndex" class="answer-card"
+      :class="{ 'is-correct': a.correct }">
       <div class="status-icon">
         <span v-if="a.correct" class="badge correct">✓</span>
         <span v-else class="badge-empty"></span>
@@ -16,14 +12,14 @@
       <p v-if="!a.isImage" class="answer-text">{{ a.text }}</p>
 
       <img v-else :src="loadImg(a.imageUrl)" alt="answer image" class="answer-img" />
-      
+
       <span v-if="a.correct" class="correct-label">Правильна відповідь</span>
     </div>
   </div>
 </template>
 
 <script>
-const BackURL = "http://localhost:2222";
+const BACK_URL = "http://localhost:2222";
 
 export default {
   props: {
@@ -31,7 +27,7 @@ export default {
   },
   methods: {
     loadImg(url) {
-      return `${BackURL}${url}`;
+      return `${BACK_URL}${url}`;
     }
   }
 };
@@ -65,7 +61,8 @@ export default {
 
 /* Стиль для правильної відповіді */
 .answer-card.is-correct {
-  background: rgba(76, 175, 80, 0.1); /* Світло-зелений фон */
+  background: rgba(76, 175, 80, 0.1);
+  /* Світло-зелений фон */
   border: 1px solid #4caf50;
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.15);
 }
@@ -125,8 +122,10 @@ export default {
   .answer-card {
     padding: 10px 15px;
   }
+
   .correct-label {
-    display: none; /* Ховаємо текст на мобільних для економії місця */
+    display: none;
+    /* Ховаємо текст на мобільних для економії місця */
   }
 }
 </style>

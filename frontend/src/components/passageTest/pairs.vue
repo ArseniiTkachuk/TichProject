@@ -59,7 +59,7 @@ export default {
     props: { ex: { type: Object, required: true } },
     data() {
         return {
-            BackURL: "http://localhost:2222",
+            BackURL: import.meta.env.VITE_BACK_URL,
             left: this.ex.pairs.left,
             right: this.ex.pairs.right,
             selectedLeftSlug: null,

@@ -77,7 +77,8 @@ import answers from '@/components/loockTest/answers.vue';
 import enters from '@/components/loockTest/enters.vue';
 import pairs from '@/components/loockTest/pairs.vue';
 
-const BackURL = "http://localhost:2222";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
+
 
 
 export default {
@@ -104,7 +105,7 @@ export default {
         async fetchTest() {
             try {
                 const testId = this.$route.params.id;
-                const res = await axios.get(`${BackURL}/getOneTest/${testId}`);
+                const res = await axios.get(`${BACK_URL}/getOneTest/${testId}`);
                 this.test = res.data.test;
 
                 // Зберігаємо код та посилання

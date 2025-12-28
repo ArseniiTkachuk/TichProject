@@ -16,7 +16,7 @@ import * as TestController from './Controllers/TestController.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PORT = 2222
+const PORT = process.env.PORT || 3000;
 
 mongoose
   .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0',)

@@ -44,7 +44,7 @@
 <script>
 import axios from "axios"
 
-const BackURL = "http://localhost:2222"
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
     data() {
@@ -68,7 +68,7 @@ export default {
 
             try {
 
-                const res = await axios.post(`${BackURL}/register`, {
+                const res = await axios.post(`${BACK_URL}/register`, {
                     name: this.name,
                     email: this.email,
                     password: this.password

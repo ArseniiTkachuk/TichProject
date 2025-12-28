@@ -50,7 +50,7 @@
 
 <script>
 import axios from "axios";
-const BackURL = "http://localhost:2222";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
   name: "ProfilePage",
@@ -69,12 +69,12 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const res = await axios.get(`${BackURL}/auth`, {
+        const res = await axios.get(`${BACK_URL}/auth`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}` }
         });
         this.user = {
           name: res.data.name,
-          imageUrl: res.data.imageUrl ? BackURL + res.data.imageUrl : ""
+          imageUrl: res.data.imageUrl ? BACK_URL + res.data.imageUrl : ""
         };
         this.userTests = res.data.tests;
       } catch (err) {

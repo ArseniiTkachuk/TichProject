@@ -4,7 +4,7 @@
 
     <div class="pairs-list">
       <div class="info-label">Правильні відповідності:</div>
-      
+
       <div v-for="leftItem in ex.pairs.left" :key="leftItem.slug" class="pair-row">
         <div class="pair-card left">
           <img v-if="leftItem.isImage" :src="`${BackURL}${leftItem.imageUrl}`" class="preview-img" />
@@ -18,9 +18,8 @@
 
         <div class="pair-card right">
           <template v-if="getRightItem(leftItem.slug)">
-            <img v-if="getRightItem(leftItem.slug).isImage" 
-                 :src="`${BackURL}${getRightItem(leftItem.slug).imageUrl}`" 
-                 class="preview-img" />
+            <img v-if="getRightItem(leftItem.slug).isImage" :src="`${BackURL}${getRightItem(leftItem.slug).imageUrl}`"
+              class="preview-img" />
             <span v-else>{{ getRightItem(leftItem.slug).text }}</span>
           </template>
         </div>
@@ -30,8 +29,8 @@
         <div class="info-label unused-label">Зайві елементи (не мають пари):</div>
         <div class="unused-list">
           <div v-for="rItem in unusedRightItems" :key="rItem.slug" class="pair-card right unused">
-             <img v-if="rItem.isImage" :src="`${BackURL}${rItem.imageUrl}`" class="preview-img" />
-             <span v-else>{{ rItem.text }}</span>
+            <img v-if="rItem.isImage" :src="`${BackURL}${rItem.imageUrl}`" class="preview-img" />
+            <span v-else>{{ rItem.text }}</span>
           </div>
         </div>
       </div>
@@ -46,7 +45,7 @@ export default {
   },
   data() {
     return {
-      BackURL: "http://localhost:2222"
+      BackURL: import.meta.env.VITE_BACK_URL,
     };
   },
   computed: {
@@ -117,8 +116,13 @@ export default {
   transition: all 0.3s ease;
 }
 
-.pair-card.left { border-left: 5px solid #4d0cff; }
-.pair-card.right { border-right: 5px solid #ff00b3; }
+.pair-card.left {
+  border-left: 5px solid #4d0cff;
+}
+
+.pair-card.right {
+  border-right: 5px solid #ff00b3;
+}
 
 /* Стиль для зайвих елементів */
 .unused-section {
@@ -127,7 +131,9 @@ export default {
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
-.unused-label { color: #888; }
+.unused-label {
+  color: #888;
+}
 
 .unused-list {
   display: flex;
@@ -150,7 +156,12 @@ export default {
   color: #4caf50;
 }
 
-.line { width: 30px; height: 2px; background: currentColor; opacity: 0.3; }
+.line {
+  width: 30px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.3;
+}
 
 .preview-img {
   max-width: 100px;
@@ -159,8 +170,17 @@ export default {
 }
 
 @media (max-width: 600px) {
-  .pair-row { flex-direction: column; }
-  .connector { transform: rotate(90deg); margin: 10px 0; }
-  .pair-card.unused { width: 100%; }
+  .pair-row {
+    flex-direction: column;
+  }
+
+  .connector {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+
+  .pair-card.unused {
+    width: 100%;
+  }
 }
 </style>

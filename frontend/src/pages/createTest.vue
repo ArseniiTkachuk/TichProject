@@ -169,7 +169,7 @@
 
 <script>
 import axios from "axios";
-const BackURL = "http://localhost:2222";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
   data() {
@@ -292,7 +292,7 @@ export default {
           }
         });
 
-        const res = await axios.post(`${BackURL}/test`, formData, {
+        const res = await axios.post(`${BACK_URL}/test`, formData, {
           headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}`, "Content-Type": "multipart/form-data" }
         });
 
