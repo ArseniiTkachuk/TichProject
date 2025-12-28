@@ -86,7 +86,7 @@ router.beforeEach((to, from, next) => {
   const userId = localStorage.getItem("usetId")
 
   // маршрути, які можна відвідувати без авторизації
-  const publicPages = ['/register', '/login', '/', 'teste/:id']
+  const publicPages = ['/register', '/login', '/', '/test/:id']
 
   // якщо маршрут не публічний
   const authRequired = !publicPages.includes(to.path)

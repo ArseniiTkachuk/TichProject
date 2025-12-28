@@ -73,7 +73,7 @@ export default {
     methods: {
         selectLeft(obj) { this.selectedLeftSlug = obj.slug; },
         selectRight(obj) {
-            if (!this.selectedLeftSlug) { this.$emit('msg', 'Спочатку оберіть елемент з лівої колонки!'); return; }
+            if (!this.selectedLeftSlug) { this.$root.showToast('Спочатку оберіть елемент з лівої колонки!', 'error'); return; }
             this.pairs.push([this.selectedLeftSlug, obj.slug]);
             this.selectedLeftSlug = null;
             if (this.pairs.length === this.left.length) {
