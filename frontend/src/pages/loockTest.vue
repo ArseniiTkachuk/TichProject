@@ -2,22 +2,38 @@
     <div v-if="test.exercises" class="test-view-container">
         <nav class="navigation">
             <button @click="$router.back()" class="btn-back">
-                <div class="blur-bg"></div>
+
                 <span class="arrow">←</span>
                 <span class="btn-text">Назад</span>
             </button>
 
             <button class="btn-share" title="Поділитися тестом" @click="showModal = true">
-                <div class="blur-bg"></div>
+
                 <span class="icon">🔗</span>
                 <span class="btn-text">Поділитися</span>
             </button>
 
-            <button class="btn-delete" title="Видалити тест" @click="showModalRemote = true">
-                <div class="blur-bg"></div>
-                <span class="icon">🗑️</span>
-                <span class="btn-text">Видалити</span>
-            </button>
+
+            <!-- меню -->
+            <div class="menu-wrapper" ref="menuWrapper">
+                <button class="menu-btn" @click.stop="toggleMenu">⋮</button>
+                <div v-if="menuOpen" class="mobile-dropdown">
+                    <button class="btn-results" title="Результати тесту" @click="showResultsModal = true">
+
+                        <span class="icon">📊</span>
+                        <span >Результати</span>
+                    </button>
+
+                    <button class="btn-delete" title="Видалити тест" @click="showModalRemote = true">
+
+                        <span class="icon">🗑️</span>
+                        <span >Видалити</span>
+                    </button>
+                </div>
+            </div>
+
+
+
         </nav>
 
         <header class="test-header">
@@ -41,16 +57,14 @@
 
                 <div class="exercise-body">
                     <answers v-if="exercise.type === 'one' || exercise.type === 'many'" :ex="exercise" />
-
                     <enters v-if="exercise.type === 'enter'" :ex="exercise" />
-
                     <pairs v-if="exercise.type === 'pair'" :ex="exercise" />
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Модальне вікно поділитися тестом -->
+    <!-- Модальне вікно Поділитися -->
     <div v-if="showModal" class="modal-overlay" @click="showModal = false">
         <div class="modal-content animated-modal" @click.stop>
             <h2>🔗 Поділитися тестом!</h2>
@@ -70,8 +84,7 @@
         </div>
     </div>
 
-
-    <!-- Модальне вікно видалити тест -->
+    <!-- Модальне вікно Видалити -->
     <div v-if="showModalRemote" class="modal-overlay" @click="showModalRemote = false">
         <div class="modal-content delete-modal animated-modal" @click.stop>
             <h2>🗑️ Видалити тест?</h2>
@@ -86,71 +99,92 @@
         </div>
     </div>
 
+    <!-- Модальне вікно Результати -->
+    <div v-if="showResultsModal" class="modal-overlay" @click="showResultsModal = false">
+        <div class="modal-content animated-modal" @click.stop>
+            <h2>📊 Результати тесту</h2>
+            <div class="modal-el" v-if="test.childrens && test.childrens.length">
+                <ul>
+                    <li v-for="(child, idx) in test.childrens" :key="idx">
+                        {{ idx + 1 }}. <strong>{{ child.name }}</strong> — Результат: {{ child.scor }}% | Виходів: {{
+                            child.leaveCount || 0 }}
+                    </li>
+                </ul>
+            </div>
+            <div v-else>
+                <p>Ще ніхто не проходив тест.</p>
+            </div>
+            <button @click="showResultsModal = false" class="btn-close">✖</button>
+        </div>
+    </div>
+
+
+
 </template>
 
 <script>
 import api from '@/services/api'
-
 import answers from '@/components/loockTest/answers.vue';
 import enters from '@/components/loockTest/enters.vue';
 import pairs from '@/components/loockTest/pairs.vue';
 
-
-
 export default {
-    components: {
-        answers,
-        enters,
-        pairs
-    },
+    components: { answers, enters, pairs },
     data() {
         return {
             test: {},
             showModal: false,
             showModalRemote: false,
+            showResultsModal: false,
             testCode: "",
             testLink: "",
+            menuOpen: false,
         };
     },
-
     mounted() {
         this.fetchTest();
+        document.addEventListener('click', this.handleClickOutside);
     },
-
+    beforeUnmount() {
+        document.removeEventListener('click', this.handleClickOutside);
+    },
     methods: {
+        handleClickOutside(event) {
+            const menu = this.$refs.menuWrapper;
+            if (menu && !menu.contains(event.target)) {
+                this.menuOpen = false;
+            }
+        },
+        toggleMenu() {
+            this.menuOpen = !this.menuOpen;
+        },
         async fetchTest() {
             try {
                 const testId = this.$route.params.id;
                 const res = await api.get(`/getOneTest/${testId}`);
                 this.test = res.data.test;
 
-                // Зберігаємо код та посилання
                 this.testCode = testId;
-                this.testLink = window.location.origin + window.location.pathname + `#/test/${testId}`
-
-
+                this.testLink = window.location.origin + window.location.pathname + `#/test/${testId}`;
             } catch (err) {
                 console.error(err);
-                this.$root.showToast("Помилка при завантаженні тесту", "error")
+                this.$root.showToast("Помилка при завантаженні тесту", "error");
             }
         },
-
         copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 this.$root.showToast('Скопійовано');
-
             }).catch(err => {
-                console.error(err)
+                console.error(err);
                 this.$root.showToast('Помилка!', 'error');
             });
         },
-
         async deleteTest() {
             try {
                 const testId = this.$route.params.id;
                 await api.delete(`/test/${testId}`);
                 this.$root.showToast('Тест успішно видалено!');
-                this.$router.back(); // Переходимо на головну або на список тестів
+                this.$router.back();
             } catch (err) {
                 console.error(err);
                 this.$root.showToast('Помилка при видаленні тесту', 'error');
@@ -217,7 +251,8 @@ export default {
 
 /* Базові стилі для обох кнопок (можна згрупувати) */
 .btn-back,
-.btn-share {
+.btn-share,
+.menu-btn {
     position: relative;
     display: flex;
     align-items: center;
@@ -243,7 +278,8 @@ export default {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-.btn-share:hover {
+.btn-share:hover,
+.menu-btn:hover {
     background: rgba(77, 12, 255, 0.3);
     /* Додаємо легкий колір бренду при наведенні */
     border-color: rgba(255, 255, 255, 0.5);
@@ -261,6 +297,36 @@ export default {
     transition: transform 0.3s ease;
 }
 
+
+/* MOBILE MENU */
+.menu-btn {
+    font-size: 22px;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-wrapper {
+    position: relative;
+    /* Відліковий контейнер для абсолютного меню */
+    display: inline-block;
+    /* Щоб меню не займало всю ширину */
+}
+
+.mobile-dropdown {
+    position: absolute;
+    top: 100%;
+    /* одразу під кнопкою */
+    right: 0;
+    /* прижаття праворуч */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px;
+    border-radius: 8px;
+    z-index: 100;
+}
+
 /* Адаптивність: на малих екранах ховаємо текст, залишаємо іконки */
 @media (max-width: 480px) {
     .btn-text {
@@ -268,7 +334,8 @@ export default {
     }
 
     .btn-back,
-    .btn-share {
+    .btn-share,
+    .menu-btn {
         padding: 10px 15px;
     }
 }
@@ -293,6 +360,8 @@ export default {
     transform: translateX(-5px);
     /* Стрілочка рухається вліво при наведенні */
 }
+
+
 
 /* Шапка */
 .test-header {
@@ -593,4 +662,28 @@ export default {
         transform: scale(1);
     }
 }
+
+.btn-results {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(0, 150, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 150, 255, 0.6);
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-results:hover {
+    background: rgba(0, 150, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 150, 255, 0.3);
+}
+
 </style>

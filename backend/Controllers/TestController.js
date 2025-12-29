@@ -80,7 +80,11 @@ export const createTest = async (req, res) => {
             r.slug = `${rIndex}`;
           })
         }
-      });
+
+        if (ex.type === "enter") {
+          ex.correctAnswers = ex.correctAnswers.map(str => str.trim());
+        }
+      })
 
     } catch (err) {
       return res.status(400).json({
@@ -232,7 +236,7 @@ export const getTest = async (req, res) => {
 export const checkTest = async (req, res) => {
   try {
     let scor = 0;
-    const { userAnswers, name, leaveCount} = req.body;
+    const { userAnswers, name, leaveCount } = req.body;
     const testid = req.params.id;
 
     if (!name) {
@@ -280,7 +284,7 @@ export const checkTest = async (req, res) => {
 
       // ENTER
       if (ex.type === "enter") {
-        if (ex.correctAnswers.includes(userAnsw.value)) {
+        if (ex.correctAnswers.includes(userAnsw.value.trim())) {
           scor += exBal;
         }
       }
@@ -310,7 +314,7 @@ export const checkTest = async (req, res) => {
 
     test.childrens.push({
       name,
-      scor: finalScore
+      scor: finalScore,
       leaveCount
     });
 
