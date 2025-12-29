@@ -1,12 +1,15 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router.js'   // імпортуємо наш маршрутизатор
+import router from './router.js'
 import './assets/main.css'
+
+import { createPinia } from 'pinia' 
 
 const app = createApp(App)
 
-// підключаємо роутер до Vue
-app.use(router)
+const pinia = createPinia()
+app.use(pinia)                       
 
-app.mount('#app')  // монтуємо додаток у div з id="app" у index.html
+app.use(router)                      
 
+app.mount('#app')

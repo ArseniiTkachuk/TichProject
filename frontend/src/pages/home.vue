@@ -51,7 +51,8 @@ export default {
 
   data() {
     return {
-      enterCode: false
+      enterCode: false,
+      testCode: ''
     }
   },
 

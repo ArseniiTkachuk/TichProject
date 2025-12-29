@@ -71,13 +71,11 @@
 
 </template>
 <script>
-import axios from 'axios';
+import api from '@/services/api'
 
 import answers from '@/components/passageTest/answers.vue';
 import pairs from '@/components/passageTest/pairs.vue';
 import enters from '@/components/passageTest/enters.vue';
-
-const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
     components: {
@@ -152,7 +150,7 @@ export default {
         async fetchTest() {
             try {
                 this.testId = this.$route.params.id;
-                const res = await axios.get(`${BACK_URL}/test/${this.testId}`);
+                const res = await api.get(`/test/${this.testId}`);
                 console.log(res.data); // <-- перевір, що реально повертає бекенд
                 this.test = res.data;
                 this.correctTestCode = true;
@@ -175,8 +173,8 @@ export default {
             try {
                 const answersArray = Object.values(this.userAnswers);
 
-                const res = await axios.post(
-                    `${BACK_URL}/test/${this.testId}/result`,
+                const res = await api.post(
+                    `/test/${this.testId}/result`,
                     {
                         userAnswers: answersArray,
                         name: this.fullName

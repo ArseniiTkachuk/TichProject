@@ -33,7 +33,7 @@
     <main class="profile-content">
       <div class="tests-grid">
         <div class="test-card" v-for="test in userTests" :key="test.id"
-          @click="$router.push(`/checkTest/${test.id}`)">
+          @click="$router.push(`/loockTest/${test.id}`)">
           <h3 class="test-title">{{ test.title }}</h3>
           <transition name="slide-task" mode="out-in">
             <div class="test-task-window" :key="test.currentTaskIndex">
@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '@/services/api'
+  
 const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 export default {
@@ -85,7 +86,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const res = await axios.get(`${BACK_URL}/auth`, {
+        const res = await api.get(`/auth`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}` }
         });
         this.user = {

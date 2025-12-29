@@ -1,15 +1,19 @@
 <template>
+  <AppLoader />
   <router-view />
   <Toast ref="toast" />
 </template>
 
 <script>
 import Toast from "@/components/Toast.vue";
+import AppLoader from '@/components/AppLoader.vue'
+
 export default {
   name: "App",
 
   components: {
-    Toast
+    Toast,
+    AppLoader
   },
 
   watch: {

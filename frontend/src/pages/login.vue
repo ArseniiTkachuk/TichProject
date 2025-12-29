@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '@/services/api'
+  
 
-const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 
 export default {
@@ -60,7 +60,7 @@ export default {
       this.errors = {};
 
       try {
-        const res = await axios.post(`${BACK_URL}/login`, {
+        const res = await api.post(`/login`, {
           email: this.email,
           password: this.password
         });

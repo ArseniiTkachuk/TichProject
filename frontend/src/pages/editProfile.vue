@@ -33,8 +33,9 @@
 </template>
 
 <script>
-import axios from "axios";
-const BACK_URL = "http://localhost:2222";
+import api from '@/services/api'
+
+const BACK_URL = import.meta.env.VITE_BACK_URL
 
 export default {
   name: "ProfileSettings",
@@ -51,7 +52,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const res = await axios.get(`${BACK_URL}/auth`, {
+        const res = await api.get(`/auth`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}` },
         });
         this.user = { name: res.data.name, imageUrl: BACK_URL + res.data.imageUrl };
@@ -76,7 +77,7 @@ export default {
         formData.append("name", this.user.name);
         if (this.avatarFile) formData.append("avatar", this.avatarFile);
 
-        await axios.patch(`${BACK_URL}/auth`, formData, {
+        await api.patch(`/auth`, formData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}`,
             "Content-Type": "multipart/form-data",
@@ -112,7 +113,7 @@ export default {
   padding: 40px 30px 60px;
   background: #fefefe;
   border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   position: relative;
   text-align: center;
 }
@@ -129,12 +130,12 @@ export default {
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(77,12,255,0.3);
+  box-shadow: 0 4px 15px rgba(77, 12, 255, 0.3);
 }
 
 .btn-back:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(77,12,255,0.5);
+  box-shadow: 0 6px 20px rgba(77, 12, 255, 0.5);
 }
 
 .profile-header h1 {
@@ -160,7 +161,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-bottom: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .avatar-preview img {
@@ -226,11 +227,11 @@ export default {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 6px 20px rgba(77,12,255,0.4);
+  box-shadow: 0 6px 20px rgba(77, 12, 255, 0.4);
 }
 
 .btn-save:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(77,12,255,0.6);
+  box-shadow: 0 8px 25px rgba(77, 12, 255, 0.6);
 }
 </style>

@@ -42,9 +42,7 @@
 </template>
 
 <script>
-import axios from "axios"
-
-const BACK_URL = import.meta.env.VITE_BACK_URL;
+import api from '@/services/api'
 
 export default {
     data() {
@@ -68,7 +66,7 @@ export default {
 
             try {
 
-                const res = await axios.post(`${BACK_URL}/register`, {
+                const res = await api.post(`/register`, {
                     name: this.name,
                     email: this.email,
                     password: this.password

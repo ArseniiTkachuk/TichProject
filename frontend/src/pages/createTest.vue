@@ -167,8 +167,8 @@
 </template>
 
 <script>
-import axios from "axios";
-const BACK_URL = import.meta.env.VITE_BACK_URL;
+import api from '@/services/api'
+  
 
 export default {
   data() {
@@ -290,7 +290,7 @@ export default {
           }
         });
 
-        const res = await axios.post(`${BACK_URL}/test`, formData, {
+        const res = await api.post(`/test`, formData, {
           headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}`, "Content-Type": "multipart/form-data" }
         });
 
@@ -298,7 +298,7 @@ export default {
         this.message = '';
         // Зберігаємо код та посилання
         this.testCode = res.data.id;
-        this.testLink = window.location.origin + this.$router.resolve({ path: `/test/${res.data.id}` }).href
+        this.testLink = window.location.origin + window.location.pathname + `#/test/${res.data.id}`
         this.showModal = true;
         
       } catch (err) {

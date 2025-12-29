@@ -49,9 +49,6 @@
             </div>
         </main>
     </div>
-    <div v-else class="loading-state">
-        <p>Завантаження тесту...</p>
-    </div>
 
     <!-- Модальне вікно поділитися тестом -->
     <div v-if="showModal" class="modal-overlay" @click="showModal = false">
@@ -92,13 +89,11 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/services/api'
 
 import answers from '@/components/loockTest/answers.vue';
 import enters from '@/components/loockTest/enters.vue';
 import pairs from '@/components/loockTest/pairs.vue';
-
-const BACK_URL = import.meta.env.VITE_BACK_URL;
 
 
 
@@ -126,12 +121,12 @@ export default {
         async fetchTest() {
             try {
                 const testId = this.$route.params.id;
-                const res = await axios.get(`${BACK_URL}/getOneTest/${testId}`);
+                const res = await api.get(`/getOneTest/${testId}`);
                 this.test = res.data.test;
 
                 // Зберігаємо код та посилання
                 this.testCode = testId;
-                this.testLink = this.testLink = window.location.origin + this.$router.resolve({ path: `/test/${testId}` }).href
+                this.testLink = window.location.origin + window.location.pathname + `#/test/${testId}`
 
 
             } catch (err) {
@@ -145,7 +140,7 @@ export default {
                 this.$root.showToast('Скопійовано');
 
             }).catch(err => {
-                console.error(err) 
+                console.error(err)
                 this.$root.showToast('Помилка!', 'error');
             });
         },
@@ -153,7 +148,7 @@ export default {
         async deleteTest() {
             try {
                 const testId = this.$route.params.id;
-                await axios.delete(`${BACK_URL}/test/${testId}`);
+                await api.delete(`/test/${testId}`);
                 this.$root.showToast('Тест успішно видалено!');
                 this.$router.back(); // Переходимо на головну або на список тестів
             } catch (err) {
@@ -326,18 +321,6 @@ export default {
     opacity: 0.5;
 }
 
-
-/* Надпис завантаження тесту */
-.loading-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
 
 /* Картки завдань */
 .exercise-card {
