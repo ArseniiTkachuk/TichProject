@@ -313,7 +313,7 @@ export const checkTest = async (req, res) => {
     const finalScore = Number(scor.toFixed(2));
 
     test.childrens.push({
-      slug: test.childrens.length,
+      slug: `child${test.childrens.length}`,
       name,
       scor: finalScore,
       leaveCount,
@@ -337,6 +337,87 @@ export const checkTest = async (req, res) => {
   }
 };
 
+export const checkUserTest = async (req, res) => {
+  try {
+    const { testId, childSlug } = req.params; // childSlug — це унікальний запис учня в test.childrens
+
+    if (!mongoose.Types.ObjectId.isValid(testId)) {
+      return res.status(400).json({ message: "Невірний ID тесту" });
+    }
+
+    const test = await Test.findById(testId).lean();
+    if (!test) return res.status(404).json({ message: "Тест не знайдено" });
+
+    const childResult = test.childrens.find(c => String(c.slug) === childSlug);
+    if (!childResult) return res.status(404).json({ message: "Результат учня не знайдено" });
+
+    const userAnswers = childResult.userAnswer;
+
+    const results = test.exercises.map(ex => {
+      const userAnsw = userAnswers.find(a => a.slug === ex.slug);
+      let isCorrect = false;
+      let userValue = userAnsw ? userAnsw.value : null;
+
+      switch (ex.type) {
+        case "one":
+          isCorrect = ex.answers[userValue]?.correct || false;
+          break;
+        case "many":
+          const correctIndexes = ex.answers.map((a, i) => a.correct ? i : null).filter(i => i !== null);
+          isCorrect = userValue
+            ? correctIndexes.every(idx => userValue.includes(idx)) &&
+            userValue.length === correctIndexes.length
+            : false;
+          break;
+        case "enter":
+          isCorrect = userValue
+            ? ex.correctAnswers.some(ans => ans.trim().toLowerCase() === userValue?.trim().toLowerCase())
+            : false;
+          break;
+        case "pair":
+          if (userValue) {
+            let correctCount = 0;
+            const total = ex.pairs.left.length;
+
+            userValue.forEach(([lSlug, rSlug]) => {
+              const leftIndex = ex.pairs.left.findIndex(l => l.slug === lSlug);
+              const rightIndex = ex.pairs.right.findIndex(r => r.slug === rSlug);
+              if (ex.pairs.correctMap[String(leftIndex)] === rightIndex) {
+                correctCount++;
+              }
+            });
+
+            isCorrect = correctCount === ex.pairs.left.length;
+          }
+          break;
+      }
+
+      return {
+        question: ex.question,
+        type: ex.type,
+        answers: {
+          answer: ex.answers,
+          correctAnswers: ex.correctAnswers,
+          pairs: ex.pairs
+        },
+        userAnswer: userValue,
+        isCorrect
+      };
+    });
+
+    res.json({
+      name: childResult.name,
+      score: childResult.scor,
+      results
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+};
 
 export const getOneTest = async (req, res) => {
   try {

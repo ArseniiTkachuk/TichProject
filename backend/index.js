@@ -86,6 +86,7 @@ app.get("/getOneTest/:id", TestController.getOneTest);
 app.post("/test/:id/result", TestController.checkTest);
 app.delete("/test/:id", TestController.remove);
 app.patch("/test/:id", checkAuth, uploadWithHash.any(), hashFiles, TestController.update);
+app.get("/test/:testId/result/:childSlug", checkAuth, TestController.checkUserTest)
 
 
 // Слухач

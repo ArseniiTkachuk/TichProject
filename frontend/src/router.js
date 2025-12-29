@@ -12,6 +12,7 @@ import CreateTest from './pages/createTest.vue' // сторінка створе
 import LoockTest from './pages/loockTest.vue'
 import EditProfile from './pages/editProfile.vue'
 import EditTest from './pages/editTest.vue'
+import StudentTestResult from './pages/studentTestResult.vue'
 
 import testMsg from './pages/Tests/testMsg.vue'
 
@@ -84,6 +85,13 @@ const routes = [
     path: '/editProfile',
     name: 'EditProfile',
     component: EditProfile,
+    meta: { gradientBg: true }
+  },
+
+  {
+    path: '/test/:id/result/:slug',
+    name: 'StudentTestResult',
+    component: StudentTestResult,
     meta: { gradientBg: true }
   }
 

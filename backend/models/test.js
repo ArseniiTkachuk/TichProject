@@ -79,7 +79,7 @@ const ExerciseSchema = new mongoose.Schema({
 /*  CHILDREN */
 const Childrens = new mongoose.Schema({
   slug: {
-    type: Number,
+    type: String,
     required: true
   },
 

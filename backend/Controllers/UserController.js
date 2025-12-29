@@ -114,7 +114,7 @@ export const userProfile = async (req, res) => {
             slug: test.slug, 
             tasks: test.exercises.map(ex => ex.question), // створюємо масив тільки з текстів питань
             currentTaskIndex: 0
-        }));
+        })); 
 
         res.json({
             name: user.name,
