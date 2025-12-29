@@ -382,3 +382,97 @@ export const remove = async (req, res) => {
     });
   }
 }
+
+export const update = async (req, res) => {
+  try {
+    const { title, exercises } = req.body;
+    const { id } = req.params; // id тесту з маршруту
+
+    if (!title || !exercises) {
+      return res.status(400).json({ message: 'Невалідні дані' });
+    }
+
+    let parsedExercises;
+    try {
+      parsedExercises = JSON.parse(exercises);
+
+      parsedExercises.forEach((ex, index) => {
+        ex.slug = `${index}`;
+        if (ex.type === "pair") {
+          ex.pairs.left.forEach((l, lIndex) => l.slug = `${lIndex}`);
+          ex.pairs.right.forEach((r, rIndex) => r.slug = `${rIndex}`);
+        }
+        if (ex.type === "enter") {
+          ex.correctAnswers = ex.correctAnswers.map(str => str.trim());
+        }
+      });
+
+    } catch (err) {
+      return res.status(400).json({ message: 'Некоректний формат exercises' });
+    }
+
+    /*  VALIDATION  */
+    for (const ex of parsedExercises) {
+      const error = validateExercise(ex);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+    }
+
+    /*  PROCESS FILES  */
+    if (req.files?.length) {
+      req.files.forEach(file => {
+
+        /* ANSWER IMAGE */
+        const answerMatch = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        if (answerMatch) {
+          const q = Number(answerMatch[1]);
+          const a = Number(answerMatch[2]);
+          const answer = parsedExercises[q]?.answers?.[a];
+          if (answer) {
+            answer.isImage = true;
+            answer.imageUrl = file.url;
+          }
+          return;
+        }
+
+        /* PAIR RIGHT IMAGE */
+        const pairRightMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+        if (pairRightMatch) {
+          const q = Number(pairRightMatch[1]);
+          const r = Number(pairRightMatch[2]);
+          const right = parsedExercises[q]?.pairs?.right?.[r];
+          if (right) right.imageUrl = file.url;
+          return;
+        }
+
+        /* PAIR LEFT IMAGE */
+        const pairLeftMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[l(\d+)/);
+        if (pairLeftMatch) {
+          const q = Number(pairLeftMatch[1]);
+          const l = Number(pairLeftMatch[2]);
+          const left = parsedExercises[q]?.pairs?.left?.[l];
+          if (left) left.imageUrl = file.url;
+        }
+
+      });
+    }
+
+    /*  UPDATE TEST  */
+    const updatedTest = await Test.findByIdAndUpdate(
+      id,
+      { title, exercises: parsedExercises },
+      { new: true } // повертає оновлений документ
+    );
+
+    if (!updatedTest) {
+      return res.status(404).json({ message: 'Тест не знайдено' });
+    }
+
+    res.json({ success: true, id: updatedTest._id });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Помилка при оновленні тесту', error: err.message });
+  }
+}

@@ -19,15 +19,18 @@
                 <button class="menu-btn" @click.stop="toggleMenu">⋮</button>
                 <div v-if="menuOpen" class="mobile-dropdown">
                     <button class="btn-results" title="Результати тесту" @click="showResultsModal = true">
-
                         <span class="icon">📊</span>
-                        <span >Результати</span>
+                        <span>Результати</span>
+                    </button>
+
+                    <button class="btn-edit" title="Редагувати тест" @click="editTest">
+                        <span class="icon">✏️</span>
+                        <span>Редагувати</span>
                     </button>
 
                     <button class="btn-delete" title="Видалити тест" @click="showModalRemote = true">
-
                         <span class="icon">🗑️</span>
-                        <span >Видалити</span>
+                        <span>Видалити</span>
                     </button>
                 </div>
             </div>
@@ -149,6 +152,11 @@ export default {
         document.removeEventListener('click', this.handleClickOutside);
     },
     methods: {
+        editTest() {
+            const testId = this.$route.params.id;
+            this.$router.push({ path: `/editTest/${testId}` });
+        },
+
         handleClickOutside(event) {
             const menu = this.$refs.menuWrapper;
             if (menu && !menu.contains(event.target)) {
@@ -325,6 +333,31 @@ export default {
     padding: 8px;
     border-radius: 8px;
     z-index: 100;
+}
+
+/* Редагувати */
+
+.btn-edit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255, 200, 0, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 200, 0, 0.6);
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-edit:hover {
+    background: rgba(255, 200, 0, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 200, 0, 0.3);
 }
 
 /* Адаптивність: на малих екранах ховаємо текст, залишаємо іконки */
@@ -685,5 +718,4 @@ export default {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 150, 255, 0.3);
 }
-
 </style>

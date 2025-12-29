@@ -11,8 +11,18 @@ import AuthHome from './pages/authHome.vue' // сторінка профілю
 import CreateTest from './pages/createTest.vue' // сторінка створення тесну 
 import LoockTest from './pages/loockTest.vue'
 import EditProfile from './pages/editProfile.vue'
+import EditTest from './pages/editTest.vue'
+
+import testMsg from './pages/Tests/testMsg.vue'
 
 const routes = [
+
+  {
+    path: '/testMsg',
+    name: 'TestMsg',
+    component: testMsg,
+    meta: { gradientBg: true }
+  },
 
   {
     path: '/',
@@ -53,6 +63,13 @@ const routes = [
     path: '/createTest',
     name: 'CreateTest',
     component: CreateTest,
+    meta: { gradientBg: true }
+  },
+
+  {
+    path: '/editTest/:id',
+    name: 'EditTest',
+    component: EditTest,
     meta: { gradientBg: true }
   },
 
