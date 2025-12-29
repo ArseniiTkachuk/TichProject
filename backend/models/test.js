@@ -83,6 +83,8 @@ const Childrens = new mongoose.Schema({
     required: true
   },
 
+  leaveCount: Number,
+
   scor: Number
 
 }, { _id: false });

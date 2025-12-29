@@ -1,4 +1,4 @@
-import Test from '../models/test.js';
+import Test from '../models/Test.js';
 import mongoose from 'mongoose';
 
 /*  HELPERS  */
@@ -232,7 +232,7 @@ export const getTest = async (req, res) => {
 export const checkTest = async (req, res) => {
   try {
     let scor = 0;
-    const { userAnswers, name } = req.body;
+    const { userAnswers, name, leaveCount} = req.body;
     const testid = req.params.id;
 
     if (!name) {
@@ -311,6 +311,7 @@ export const checkTest = async (req, res) => {
     test.childrens.push({
       name,
       scor: finalScore
+      leaveCount
     });
 
     await test.save();

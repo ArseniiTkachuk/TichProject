@@ -101,6 +101,9 @@ export default {
 
             test: {},
 
+            leaveCount: 0,
+            wasVisible: !document.hidden
+
         }
 
     },
@@ -127,9 +130,20 @@ export default {
 
     mounted() {
         this.fetchTest();
+        document.addEventListener(
+            'visibilitychange',
+            this.handleVisibilityChange
+        )
     },
 
     methods: {
+
+        handleVisibilityChange() {
+            if (this.wasVisible && document.hidden) {
+                this.leaveCount++
+            }
+            this.wasVisible = !document.hidden
+        },
 
         goBack() {
             this.$router.back();
@@ -177,7 +191,8 @@ export default {
                     `/test/${this.testId}/result`,
                     {
                         userAnswers: answersArray,
-                        name: this.fullName
+                        name: this.fullName,
+                        leaveCount: this.leaveCount
                     }
                 );
 
@@ -191,6 +206,13 @@ export default {
         }
 
 
+    },
+
+    beforeUnmount() {
+        document.removeEventListener(
+            'visibilitychange',
+            this.handleVisibilityChange
+        )
     }
 
 
