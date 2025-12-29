@@ -313,9 +313,11 @@ export const checkTest = async (req, res) => {
     const finalScore = Number(scor.toFixed(2));
 
     test.childrens.push({
+      slug: test.childrens.length,
       name,
       scor: finalScore,
-      leaveCount
+      leaveCount,
+      userAnswer: userAnswers
     });
 
     await test.save();

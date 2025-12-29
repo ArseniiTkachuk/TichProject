@@ -106,14 +106,28 @@
     <div v-if="showResultsModal" class="modal-overlay" @click="showResultsModal = false">
         <div class="modal-content animated-modal" @click.stop>
             <h2>📊 Результати тесту</h2>
-            <div class="modal-el" v-if="test.childrens && test.childrens.length">
-                <ul>
-                    <li v-for="(child, idx) in test.childrens" :key="idx">
-                        {{ idx + 1 }}. <strong>{{ child.name }}</strong> — Результат: {{ child.scor }}% | Виходів: {{
-                            child.leaveCount || 0 }}
-                    </li>
-                </ul>
+            <div class="results-list" v-if="test.childrens && test.childrens.length">
+                <div v-for="(child, idx) in test.childrens" :key="idx" class="result-card">
+                    <div class="result-left">
+                        <div class="avatar">
+                            {{ child.name.charAt(0).toUpperCase() }}
+                        </div>
+
+                        <div class="user-info">
+                            <strong>{{ child.name }}</strong>
+                            <span class="meta">Виходів: {{ child.leaveCount || 0 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="result-right">
+                        <div class="score">{{ child.scor }}%</div>
+                        <div class="progress">
+                            <div class="progress-bar" :style="{ width: child.scor + '%' }"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div v-else>
                 <p>Ще ніхто не проходив тест.</p>
             </div>
@@ -360,18 +374,6 @@ export default {
     box-shadow: 0 6px 15px rgba(255, 200, 0, 0.3);
 }
 
-/* Адаптивність: на малих екранах ховаємо текст, залишаємо іконки */
-@media (max-width: 480px) {
-    .btn-text {
-        display: none;
-    }
-
-    .btn-back,
-    .btn-share,
-    .menu-btn {
-        padding: 10px 15px;
-    }
-}
 
 .btn-back:hover {
     background: rgba(255, 255, 255, 0.25);
@@ -601,6 +603,97 @@ export default {
     transform: scale(1.2);
 }
 
+/* ===== RESULTS MODAL ===== */
+.results-list {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 10px;
+    padding-bottom: 0;
+}
+
+.results-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+/* RESULT CARD */
+.result-card {
+    display: flex;
+    cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    transition: .3s;
+}
+
+.result-card:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-2px);
+}
+
+/* LEFT */
+.result-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffcc00, #ff9900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #000;
+}
+
+.user-info strong {
+    font-size: 15px;
+    display: block;
+}
+
+.meta {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* RIGHT */
+.result-right {
+    text-align: right;
+}
+
+.score {
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.progress {
+    width: 90px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00ffcc, #00ccff);
+    transition: width .4s ease;
+}
+
+
+
 /* Модальне вікно Видалити тест */
 .delete-modal {
     background: linear-gradient(135deg, #ff4d4d, #b00000);
@@ -717,5 +810,35 @@ export default {
     background: rgba(0, 150, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 150, 255, 0.3);
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 480px) {
+    .btn-text {
+        display: none;
+    }
+
+    .modal-content {
+        padding: 30px 22px;
+    }
+
+    .result-right {
+        min-width: 80px;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .btn-back,
+    .btn-share,
+    .menu-btn {
+        padding: 10px 15px;
+    }
+
+    .avatar {
+        display: none;
+    }
+
 }
 </style>

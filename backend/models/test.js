@@ -78,6 +78,11 @@ const ExerciseSchema = new mongoose.Schema({
 
 /*  CHILDREN */
 const Childrens = new mongoose.Schema({
+  slug: {
+    type: Number,
+    required: true
+  },
+
   name: {
     type: String,
     required: true
@@ -85,7 +90,12 @@ const Childrens = new mongoose.Schema({
 
   leaveCount: Number,
 
-  scor: Number
+  scor: Number,
+
+  userAnswer: {
+    type: [Object],
+    required: true
+  }
 
 }, { _id: false });
 
