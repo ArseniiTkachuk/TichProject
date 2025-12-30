@@ -13,7 +13,6 @@
 
         <div class="connector">
           <div class="line"></div>
-          <span class="arrow">→</span>
         </div>
 
         <div class="pair-card right">
@@ -36,7 +35,35 @@
       </div>
       <div class="unused-section">
         <div class="info-label unused-label"> Відповіді користувача:</div>
-        
+        <div v-for="uPair in ex.userAnswer" :key="`${uPair[0]}-pair`" class="pair-row">
+          <div class="pair-card left">
+            <img v-if="findleft(uPair[0]).isImage" :src="`${BackURL}${findleft(uPair[0]).imageUrl}`"
+              class="preview-img" />
+            <span v-else>{{ findleft(uPair[0]).text }}</span>
+          </div>
+
+          <div v-if="isCorrectAnswer(uPair)" class="connector">
+            <div class="line"></div>
+            <strong class="icon"> ✔ </strong>
+            <div class="line"></div>
+          </div>
+
+          <div v-else :class="isCorrect" class="connector noCorrect">
+            <div class="line"></div>
+            <strong class="icon"> ✖ </strong>
+            <div class="line"></div>
+          </div>
+
+
+
+          <div class="pair-card right">
+            <img v-if="findright(uPair[0]).isImage" :src="`${BackURL}${findright(uPair[0]).imageUrl}`"
+              class="preview-img" />
+            <span v-else>{{ findright(uPair[0]).text }}</span>
+          </div>
+
+        </div>
+
       </div>
 
     </div>
@@ -56,7 +83,7 @@ export default {
   computed: {
     // Знаходимо всі індекси правих елементів, які задіяні в correctMap
     usedRightIndices() {
-      if (!this.ex.pairs || !this.ex.answers.pairs.correctMap) return [];
+      if (!this.ex.answers.pairs || !this.ex.answers.pairs.correctMap) return [];
       return Object.values(this.ex.answers.pairs.correctMap);
     },
     // Фільтруємо праву колонку, щоб знайти ті, чиїх індексів немає в correctMap
@@ -65,7 +92,8 @@ export default {
       return this.ex.answers.pairs.right.filter((item, index) => {
         return !this.usedRightIndices.includes(index);
       });
-    }
+    },
+
   },
   methods: {
     getRightItem(leftSlug) {
@@ -73,7 +101,27 @@ export default {
       const rightIndex = this.ex.answers.pairs.correctMap[leftSlug];
       // Повертаємо об'єкт за цим індексом
       return this.ex.answers.pairs.right[rightIndex];
-    }
+    },
+
+    // шукаю лівий та правий елемент по слуг
+    findleft(slug) {
+      return this.ex.answers.pairs.left.find(l => l.slug === slug)
+    },
+    findright(slug) {
+      return this.ex.answers.pairs.right.find(r => r.slug === slug)
+    },
+    isCorrectAnswer([lSlug, rSlug]) {
+      const leftIndex = this.ex.answers.pairs.left.findIndex(l => l.slug === lSlug);
+      const rightIndex = this.ex.answers.pairs.right.findIndex(r => r.slug === rSlug);
+      if (this.ex.answers.pairs.correctMap[String(leftIndex)] === rightIndex) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+
+
   }
 };
 </script>
@@ -89,6 +137,8 @@ export default {
   font-size: 22px;
   font-weight: 600;
   color: #2a2a2a;
+  margin: 0;
+  margin-bottom: 3vh;
 }
 
 .info-label {
@@ -161,6 +211,11 @@ export default {
   color: #4caf50;
 }
 
+.connector.noCorrect {
+  color: #d33232;
+
+}
+
 .line {
   width: 30px;
   height: 2px;
@@ -184,8 +239,17 @@ export default {
     margin: 10px 0;
   }
 
+  .icon {
+    transform: rotate(-90deg);
+  }
+
   .pair-card.unused {
     width: 100%;
   }
+
+  .question {
+    font-size: 18px;
+  }
+
 }
 </style>

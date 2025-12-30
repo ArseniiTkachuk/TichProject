@@ -1,5 +1,7 @@
 <template>
   <div class="answers">
+    <h3 class="question">{{ ex.question }}</h3>
+
     <div v-for="(a, idx) in ex.answers.answer" :key="idx" :class="answerClass(idx, a)" class="answer-item">
       <span class="icon">
         <!-- Просто правильна відповідь -->
@@ -8,7 +10,9 @@
         <span v-else-if="isChosen(idx)">✖</span>
       </span>
 
-      {{ a.text }}
+      <p v-if="!a.isImage" class="answer-text">{{ a.text }}</p>
+
+      <img v-else :src="loadImg(a.imageUrl)" alt="answer image" class="answer-img" />
 
       <!-- Підпис правильна, якщо учень не вибрав -->
       <span v-if="isChosen(idx)" class="correct-label">(Вибрано)</span>
@@ -17,6 +21,8 @@
 </template>
 
 <script>
+const BACK_URL = import.meta.env.VITE_BACK_URL;
+
 export default {
   name: "OneMany",
   props: {
@@ -40,11 +46,22 @@ export default {
         chosen: this.isChosen(idx),
       };
     },
+    loadImg(url) {
+      return `${BACK_URL}${url}`;
+    }
   },
 };
 </script>
 
 <style scoped>
+.question {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2a2a2a;
+  margin: 0;
+  margin-bottom: 3vh;
+}
+
 .answers {
   margin-top: 12px;
 }
@@ -59,6 +76,20 @@ export default {
   border: 1px solid #949393;
   background: #f7f5f5;
 
+}
+
+.answer-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.answer-text {
+  flex: 1;
+  font-size: 16px;
+  color: #222;
+  margin: 0;
 }
 
 /* Правильна відповідь */
@@ -93,5 +124,12 @@ export default {
 .icon {
   width: 22px;
   text-align: center;
+}
+
+
+@media (max-width: 600px) {
+  .question {
+    font-size: 18px;
+  }
 }
 </style>

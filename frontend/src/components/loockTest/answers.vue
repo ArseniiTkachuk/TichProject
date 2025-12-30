@@ -19,7 +19,8 @@
 </template>
 
 <script>
-const BACK_URL = "http://localhost:2222";
+const BACK_URL = import.meta.env.VITE_BACK_URL;
+  
 
 export default {
   props: {

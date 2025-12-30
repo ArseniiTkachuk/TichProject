@@ -15,13 +15,13 @@
       </div>
     </div>
     <div>
-      <div v-if="ex.isCorrect" class="info-header">
+      <div v-if="ex.isCorrect" class="info-header resUser">
         <span class="status-icon">✔</span>
         <span class="label">Відповідь користувача:</span>
         <div>{{ ex.userAnswer }}</div>
         <span class="label">(Правельна)</span>
       </div>
-      <div v-else class="info-header">
+      <div v-else class="info-header resUser">
         <span class="status-icon-wrong">✖</span>
         <span class="label-wrong">Відповідь користувача:</span>
         <div>{{ ex.userAnswer }}</div>
@@ -54,6 +54,7 @@ export default {
   font-weight: 600;
   color: #2a2a2a;
   margin: 0;
+  margin-bottom: 3vh;
 }
 
 /* Контейнер для правильних відповідей */
@@ -134,6 +135,10 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.resUser {
+  display: flex;
+}
+
 @media (max-width: 600px) {
   .question {
     font-size: 18px;
@@ -142,6 +147,10 @@ export default {
   .answer-chip {
     font-size: 14px;
     padding: 6px 12px;
+  }
+
+  .resUser {
+    flex-direction: column;
   }
 }
 </style>

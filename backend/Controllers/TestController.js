@@ -377,7 +377,6 @@ export const checkUserTest = async (req, res) => {
         case "pair":
           if (userValue) {
             let correctCount = 0;
-            const total = ex.pairs.left.length;
 
             userValue.forEach(([lSlug, rSlug]) => {
               const leftIndex = ex.pairs.left.findIndex(l => l.slug === lSlug);
