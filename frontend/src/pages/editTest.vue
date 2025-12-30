@@ -29,7 +29,7 @@
                     <input v-if="!a.isImage" v-model="a.text" placeholder="Введіть текст" class="answer-input" />
                     <div v-if="a.isImage">
                         <label v-if="a.preview">
-                            <img :src="a.preview" class="preview-img" title="Натисніть, щоб змінити" />
+                            <img :src="loadImg(a.preview)" class="preview-img" title="Натисніть, щоб змінити" />
                             <input class="upload-label-input" type="file" accept="image/*"
                                 @change="onAnswerImageChange($event, qIndex, aIndex)">
                         </label>
@@ -79,7 +79,8 @@
                                 class="pair-input" />
                             <div v-if="left.isImage">
                                 <label v-if="left.preview">
-                                    <img :src="left.preview" class="preview-img" title="Натисніть, щоб змінити" />
+                                    <img :src="loadImg(left.preview)" class="preview-img"
+                                        title="Натисніть, щоб змінити" />
                                     <input class="upload-label-input" type="file" accept="image/*"
                                         @change="onPairLeftImageChange($event, qIndex, lIndex)">
                                 </label>
@@ -110,7 +111,8 @@
                                 class="pair-input" />
                             <div v-if="right.isImage">
                                 <label v-if="right.preview">
-                                    <img :src="right.preview" class="preview-img" title="Натисніть, щоб змінити" />
+                                    <img :src="loadImg(right.preview)" class="preview-img"
+                                        title="Натисніть, щоб змінити" />
                                     <input class="upload-label-input" type="file" accept="image/*"
                                         @change="onPairRightImageChange($event, qIndex, rIndex)">
                                 </label>
@@ -162,6 +164,9 @@
 <script>
 import api from '@/services/api'
 
+const BACK_URL = import.meta.env.VITE_BACK_URL;
+
+
 export default {
     data() {
         return {
@@ -196,8 +201,21 @@ export default {
                     return {
                         ...q,
                         correctAnswerIndex,
-                        answers: q.answers.map(a => ({ ...a, preview: a.isImage ? a.url : null })),
-                        pairs: q.pairs || { left: [], right: [], correctMap: {} },
+                        answers: q.answers.map(a => ({ ...a, preview: a.isImage ? a.imageUrl : null })),
+                        pairs: q.type === "pair" && q.pairs
+                            ? {
+                                left: (q.pairs.left || []).map(l => ({
+                                    ...l,
+                                    preview: l.isImage ? l.imageUrl : null
+                                })),
+                                right: (q.pairs.right || []).map(r => ({
+                                    ...r,
+                                    preview: r.isImage ? r.imageUrl : null
+                                })),
+                                correctMap: q.pairs.correctMap || {}
+                            }
+                            : { left: [], right: [], correctMap: {} },
+
                         correctAnswers: q.correctAnswers || []
                     };
                 });
@@ -323,7 +341,10 @@ export default {
             right.file = file || null;
             right.preview = file ? URL.createObjectURL(file) : null;
         },
-        
+
+        loadImg(url) {
+            return `${BACK_URL}${url}`;
+        }
     },
     mounted() {
         this.fetchTest();
