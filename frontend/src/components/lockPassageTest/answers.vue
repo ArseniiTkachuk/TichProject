@@ -1,16 +1,9 @@
 <template>
   <div class="answers">
-    <div
-      v-for="(a, idx) in ex.answers.answer"
-      :key="idx"
-      :class="answerClass(idx, a)"
-      class="answer-item"
-    >
+    <div v-for="(a, idx) in ex.answers.answer" :key="idx" :class="answerClass(idx, a)" class="answer-item">
       <span class="icon">
-        <!-- Вибрана правильна відповідь -->
-        <span v-if="a.correct && isChosen(idx)">✔✔</span>
         <!-- Просто правильна відповідь -->
-        <span v-else-if="a.correct">✔</span>
+        <span v-if="a.correct">✔</span>
         <!-- Вибрана неправильна відповідь -->
         <span v-else-if="isChosen(idx)">✖</span>
       </span>
@@ -18,7 +11,7 @@
       {{ a.text }}
 
       <!-- Підпис правильна, якщо учень не вибрав -->
-      <span v-if="a.correct && !isChosen(idx)" class="correct-label">(правильна)</span>
+      <span v-if="isChosen(idx)" class="correct-label">(Вибрано)</span>
     </div>
   </div>
 </template>
@@ -63,29 +56,38 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
+  border: 1px solid #949393;
+  background: #f7f5f5;
+
 }
 
 /* Правильна відповідь */
 .answer-item.right {
-  background: #e8f5e9;
+  background: #d2efd4;
   color: #2e7d32;
+}
+
+.answer-item.right.chosen {
+  background: #b0f6b6;
+
 }
 
 /* Вибрана неправильна відповідь */
 .answer-item.wrong {
-  background: #fdecea;
+  background: #f5cbc6;
   color: #c62828;
 }
 
 /* Вибрана відповідь (кордон) */
 .answer-item.chosen {
-  border: 1px solid #888;
+  border: 1px solid #626161;
 }
 
 .correct-label {
   font-size: 12px;
-  color: #2e7d32;
+  color: #3b3b3b;
   margin-left: 6px;
+  margin-left: auto;
 }
 
 .icon {

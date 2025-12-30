@@ -408,6 +408,7 @@ export const checkUserTest = async (req, res) => {
     res.json({
       name: childResult.name,
       score: childResult.scor,
+      leaveCount: childResult.leaveCount,
       results
     });
   } catch (err) {

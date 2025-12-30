@@ -107,7 +107,7 @@
         <div class="modal-content animated-modal" @click.stop>
             <h2>📊 Результати тесту</h2>
             <div class="results-list" v-if="test.childrens && test.childrens.length">
-                <div v-for="(child, idx) in test.childrens" :key="idx" class="result-card">
+                <div v-for="(child, idx) in test.childrens" :key="idx" class="result-card" @click="$router.push(`/test/${$route.params.id}/result/${child.slug}`)">
                     <div class="result-left">
                         <div class="avatar">
                             {{ child.name.charAt(0).toUpperCase() }}
@@ -311,6 +311,8 @@ export default {
 
 .icon {
     font-size: 18px;
+    transition: transform 0.3s ease;
+
 }
 
 /* Анімація для іконки share при наведенні */
