@@ -69,6 +69,21 @@
         </div>
     </div>
 
+    <!-- MODAL: TEST RESULT -->
+    <div v-if="result" class="modal-overlay">
+        <div class="modal-card">
+            <h2 class="modal-title">📊 Результат тесту</h2>
+
+            <p class="modal-text">
+                Ваш результат: {{result.score}} / {{result.max}}
+            </p>
+
+            <button class="modal-btn" @click="goBack">
+                ⬅ Повернутися назад
+            </button>
+        </div>
+    </div>
+
 </template>
 <script>
 import api from '@/services/api'
@@ -101,8 +116,12 @@ export default {
 
             test: {},
 
+            result: null,
+
             leaveCount: 0,
-            wasVisible: !document.hidden
+            wasVisible: !document.hidden,
+
+            
 
         }
 
@@ -146,8 +165,7 @@ export default {
         },
 
         goBack() {
-            this.$router.back();
-            // або: this.$router.push('/')
+            this.$router.push('/');
         },
         StartTest() {
             this.error = null
@@ -196,7 +214,8 @@ export default {
                     }
                 );
 
-                alert(`Ваш результат: ${res.data.score} / ${res.data.max}`);
+                this.result = res.data
+
                 console.log(res.data);
 
             } catch (err) {
