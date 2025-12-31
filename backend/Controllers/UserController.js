@@ -2,6 +2,7 @@ import UserModel from "../models/User.js";
 import TestModel from "../models/Test.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { sendVerificationCode } from "../middlewares/sendCode.js";
 import { validationResult } from 'express-validator'
 
 
@@ -36,12 +37,39 @@ export const register = async (req, res) => {
 
         const user = await doc.save()
 
+        await sendVerificationCode(email, user._id, UserModel);
+
+        res.json({ message: "Код надіслано на email" });
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: 'Не вдалося зареєструватися' })
+    }
+}
+
+export const verifyEmail = async (req, res) => {
+    try {
+        const { email, code } = req.body;
+
+        const user = await UserModel.findOne({ email });
+        if (!user) return res.status(400).json({ message: "Користувача не знайдено" });
+
+        if (!user.emailCodeExpires || user.emailCodeExpires < new Date())
+            return res.status(400).json({ message: "Код просрочений" });
+
+        const isValid = await bcrypt.compare(code, user.emailCodeHash);
+        if (!isValid) return res.status(400).json({ message: "Код неправильний" });
+
+        // підтверджуємо email
+        user.verified = true;
+        user.emailCodeHash = null; // можна видалити код після успішного підтвердження
+        user.emailCodeExpires = null;
+        const doc = await user.save();
+
         // Генеруємо токен
-        const token = jwt.sign({ _id: user._id }, 'TOKEN', { expiresIn: '30d' })
+        const token = jwt.sign({ _id: doc._id }, 'TOKEN', { expiresIn: '30d' })
 
-        const { passwordHash, ...userData } = user._doc
         res.json({ token })
-
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Не вдалося зареєструватися' })
@@ -82,8 +110,6 @@ export const login = async (req, res) => {
             expiresIn: '30d'
         })
 
-        const { passwordHash, ...userData } = user._doc
-
         res.json({
             token
         })
@@ -111,10 +137,10 @@ export const userProfile = async (req, res) => {
         const formattedTests = rawTests.map(test => ({
             id: test._id,
             title: test.title,
-            slug: test.slug, 
+            slug: test.slug,
             tasks: test.exercises.map(ex => ex.question), // створюємо масив тільки з текстів питань
             currentTaskIndex: 0
-        })); 
+        }));
 
         res.json({
             name: user.name,
