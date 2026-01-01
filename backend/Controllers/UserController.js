@@ -30,7 +30,7 @@ export const register = async (req, res) => {
         const hash = await bcrypt.hash(password, salt)
 
         let doc;
-        
+
         // Створюємо нового користувача
         if (existingUser) {
             existingUser.name = name
@@ -84,6 +84,25 @@ export const verifyEmail = async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Не вдалося зареєструватися' })
+    }
+}
+
+export const sendCode = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await UserModel.findOne({ email });
+        if (!user) return res.status(400).json({ message: "Користувача не знайдено" });
+
+        await sendVerificationCode(email, user._id, UserModel);
+
+        res.json({ message: "Код надіслано на email" });
+
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: 'Не вдалося надіслати код' })
+
     }
 }
 

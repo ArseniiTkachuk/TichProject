@@ -76,7 +76,7 @@ const hashFiles = (req, res, next) => {
 // AUTH
 app.post("/register", registerValidator, UserController.register);
 app.post("/verify-email", UserController.verifyEmail)
-
+app.post("/sendCode", UserController.sendCode)
 app.post("/login", loginValidator, UserController.login);
 app.get("/auth", checkAuth, UserController.userProfile);
 app.patch("/auth", checkAuth, uploadWithHash.single('avatar'), hashFiles, UserController.update);

@@ -23,6 +23,7 @@
             </svg>
           </span>
         </div>
+        <p class="forget">Забули пароль?</p>
 
         <p v-if="errors.password" class="error">{{ errors.password }}</p>
         <p v-if="result" class="error">{{ result }}</p>
@@ -39,7 +40,7 @@
 
 <script>
 import api from '@/services/api'
-  
+
 
 
 
@@ -66,6 +67,8 @@ export default {
         });
 
         localStorage.setItem("tokenAuthTeacher", res.data.token);
+
+        this.$root.showToast("Ви успішно ввійшли")
 
         this.$router.push('/home');
 
@@ -214,6 +217,20 @@ export default {
 
 
 .eye:hover {
+  color: #ff00b3;
+}
+
+.forget {
+  margin-top: 6px;
+  padding-right: 5px;
+  font-size: 14px;
+  color: #fff;
+  text-align: right;
+  cursor: pointer;
+}
+
+.forget:hover {
+  text-decoration: underline;
   color: #ff00b3;
 }
 

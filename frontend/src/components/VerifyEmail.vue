@@ -11,14 +11,14 @@
             <div class="code-input">
                 <input v-for="(digit, i) in code" :key="i" ref="inputs" v-model="code[i]" maxlength="1"
                     inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" @input="onInput(i, $event)"
-                    @keydown.backspace="onBackspace(i)" />
+                    @keydown.backspace="onBackspace(i)" @paste="onPaste" />
             </div>
 
             <p v-if="error" class="error">{{ error }}</p>
 
             <div class="btn">
-                <button @click="ChanchEmail">Змінити email</button>
-                <button>Надіслати код знову</button>
+                <button @click="ChanchEmail">⬅ Повернутися назад</button>
+                <button @click="sendCode">Надіслати код знову</button>
             </div>
 
 
@@ -49,7 +49,9 @@ export default {
     methods: {
         async Verify() {
             try {
-                if (this.code.join("").length < 6) {
+                const codeUser = this.code.join("")
+                console.log(codeUser)
+                if (codeUser.length < 6) {
                     this.error = "Код повинен складатися з 6 символів"
                     return
                 } else {
@@ -58,10 +60,12 @@ export default {
 
                 const res = await api.post('/verify-email', {
                     email: this.email,
-                    code: this.code
+                    code: codeUser
                 })
 
                 localStorage.setItem("tokenAuthTeacher", res.data.token)
+
+                this.$root.showToast("Ви успішно зареєстувалися")
 
                 this.$router.push("/home")
 
@@ -78,7 +82,7 @@ export default {
         },
 
         ChanchEmail() {
-            this.$emit('chanch', false );
+            this.$emit('chanch', false);
         },
 
         onInput(index, e) {
@@ -96,8 +100,48 @@ export default {
             }
         },
 
-        getCode() {
-            return this.code.join("")
+        onPaste(e) {
+            e.preventDefault()
+            const paste = (e.clipboardData || window.clipboardData).getData('text')
+            const digits = paste.replace(/\D/g, '').slice(0, 6) // тільки цифри, максимум 6
+
+            // Заповнюємо масив code
+            digits.split('').forEach((num, i) => {
+                this.code[i] = num
+            })
+
+            // Фокус на наступний порожній інпут
+            const firstEmpty = this.code.findIndex(c => c === "")
+            if (firstEmpty !== -1) {
+                this.$refs.inputs[firstEmpty].focus()
+            } else {
+                this.$refs.inputs[5].focus()
+            }
+        },
+
+
+        async sendCode() {
+            try {
+
+                const res = await api.post("/sendCode", {
+                    email: this.email,
+                })
+
+                this.$root.showToast("Код надіслано")
+
+
+            } catch (err) {
+
+                console.error(err)
+
+                this.$root.showToast("Помилка!", "error")
+
+                // Якщо backend повернув об'єкт виду { message: "..." }
+                if (err.response?.data?.message) {
+                    this.error = err.response.data.message
+                }
+
+            }
         }
     }
 }
