@@ -78,6 +78,7 @@ app.post("/register", registerValidator, UserController.register);
 app.post("/verify-email", UserController.verifyEmail)
 app.post("/sendCode", UserController.sendCode)
 app.post("/login", loginValidator, UserController.login);
+app.post("/sendLink", UserController.sendLink)
 app.get("/auth", checkAuth, UserController.userProfile);
 app.patch("/auth", checkAuth, uploadWithHash.single('avatar'), hashFiles, UserController.update);
 

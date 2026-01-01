@@ -79,3 +79,8 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
 
   });
 };
+
+
+export const sendLink = async (userEmail, userId, baseURL){
+
+}

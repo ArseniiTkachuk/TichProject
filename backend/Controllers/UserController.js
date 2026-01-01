@@ -150,6 +150,23 @@ export const login = async (req, res) => {
         })
     }
 }
+
+export const sendLink = async (req, res) => {
+    try {
+        const { link, email} = req.body;
+
+        
+
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'Не вдалося надіслати лист'
+        })
+    }
+}
+
+
 export const userProfile = async (req, res) => {
     try {
         //  Отримуємо дані користувача
