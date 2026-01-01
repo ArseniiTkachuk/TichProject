@@ -1,6 +1,7 @@
 <template>
     <div class="auth">
-        <div class="bg_gradient">
+        <VerifyEmail v-if="verify" />
+        <div v-else class="bg_gradient">
             <div class="background_reg">
                 <h2 class="text_reg">Register</h2>
 
@@ -38,13 +39,18 @@
                 <button class="login-btn" @click="$router.push('/login')">Вже є акаунт? Увійти</button>
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
 import api from '@/services/api'
+import VerifyEmail from '@/components/VerifyEmail.vue';
 
 export default {
+    components: {
+        VerifyEmail,
+    },
     data() {
         return {
             showPassword: false,
@@ -54,7 +60,10 @@ export default {
             avatar: null,
             avatarPreview: null,
             result: null,       // помилка сервера типу message
-            errors: {}          // помилки валідації express-validator
+            errors: {},          // помилки валідації 
+
+            verify: false,
+            code: "",
         }
     },
 
@@ -72,9 +81,9 @@ export default {
                     password: this.password
                 })
 
-                localStorage.setItem("tokenAuthTeacher", res.data.token)
 
-                this.$router.push('/home')
+
+                this.verify = true
 
             } catch (err) {
                 console.error(err)
@@ -87,6 +96,30 @@ export default {
                         this.errors[e.path] = e.msg
                     })
                 }
+
+                // Якщо backend повернув об'єкт виду { message: "..." }
+                if (err.response?.data?.message) {
+                    this.result = err.response.data.message
+                }
+            }
+        },
+
+        async Verify() {
+            try {
+
+                const res = api.post('/verify-email', {
+                    email: this.email,
+                    code: this.code
+                })
+
+                localStorage.setItem("tokenAuthTeacher", res.data.token)
+
+                this.$router.push("/home")
+
+            } catch (err) {
+                console.error(err)
+
+                this.$root.showToast("Помилка!", "error")
 
                 // Якщо backend повернув об'єкт виду { message: "..." }
                 if (err.response?.data?.message) {
