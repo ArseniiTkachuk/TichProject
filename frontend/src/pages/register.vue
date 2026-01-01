@@ -1,6 +1,6 @@
 <template>
     <div class="auth">
-        <VerifyEmail v-if="verify" />
+        <VerifyEmail v-if="verify" :email="email"/>
         <div v-else class="bg_gradient">
             <div class="background_reg">
                 <h2 class="text_reg">Register</h2>
@@ -63,7 +63,6 @@ export default {
             errors: {},          // помилки валідації 
 
             verify: false,
-            code: "",
         }
     },
 
@@ -104,29 +103,6 @@ export default {
             }
         },
 
-        async Verify() {
-            try {
-
-                const res = api.post('/verify-email', {
-                    email: this.email,
-                    code: this.code
-                })
-
-                localStorage.setItem("tokenAuthTeacher", res.data.token)
-
-                this.$router.push("/home")
-
-            } catch (err) {
-                console.error(err)
-
-                this.$root.showToast("Помилка!", "error")
-
-                // Якщо backend повернув об'єкт виду { message: "..." }
-                if (err.response?.data?.message) {
-                    this.result = err.response.data.message
-                }
-            }
-        }
     }
 }
 </script>
@@ -158,7 +134,6 @@ export default {
 
 /* === та сама glass-card що modal-card === */
 .background_reg {
-    /* background: rgba(255, 255, 255, 0.25); */
     backdrop-filter: blur(14px);
     padding: 32px 36px;
     border-radius: 22px;

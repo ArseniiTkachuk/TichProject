@@ -67,9 +67,9 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
       Код дійсний <strong>10 хвилин</strong>.
     </p>
 
-    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 24px 0;">
+    <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 24px 0;">
 
-    <p style="font-size: 12px; color: #999;">
+    <p style="font-size: 14px; color: #999;">
       Якщо ви не реєструвалися — просто проігноруйте цей лист.
     </p>
 
