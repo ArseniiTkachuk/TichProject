@@ -2,7 +2,7 @@ import UserModel from "../models/User.js";
 import TestModel from "../models/Test.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { sendVerificationCode } from "../middlewares/sendCode.js";
+import { sendVerificationCode, sendLinkForgot } from "../middlewares/sendCode.js";
 import { validationResult } from 'express-validator'
 
 
@@ -74,6 +74,8 @@ export const verifyEmail = async (req, res) => {
         user.verified = true;
         user.emailCodeHash = null; // можна видалити код після успішного підтвердження
         user.emailCodeExpires = null;
+        // Вимикаємо авто-видалення
+        user.deleteAt = null;
         const doc = await user.save();
 
         // Генеруємо токен
@@ -153,15 +155,56 @@ export const login = async (req, res) => {
 
 export const sendLink = async (req, res) => {
     try {
-        const { link, email} = req.body;
+        const { link, email } = req.body;
 
-        
+
+        const user = await UserModel.findOne({ email })
+
+        await sendLinkForgot(email, user._id, link, UserModel)
+
+        res.json({ seccess: true })
 
 
     } catch (err) {
         console.log(err)
         res.status(500).json({
             message: 'Не вдалося надіслати лист'
+        })
+    }
+}
+
+export const resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body
+        const user = await UserModel.findOne({
+            emailCodeExpires: { $gt: new Date() } // перевіряємо, що токен ще дійсний
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "Посилання недійсне або прострочене" });
+        }
+
+        const isValid = await bcrypt.compare(token, user.emailCodeHash);
+
+        if (!isValid) {
+            return res.status(400).json({ message: "Посилання недійсне або прострочене" });
+        }
+
+        // токен валідний, можна міняти пароль
+
+
+        user.passwordHash = await bcrypt.hash(newPassword, 10);
+        user.passwordResetTokenHash = null;
+        user.passwordResetTokenExpires = null;
+
+        await user.save();
+
+        res.json({ message: "Пароль змінений" })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: 'Не вдалося змінити пароль'
         })
     }
 }

@@ -15,7 +15,7 @@
         <input type="email" v-model="email" placeholder="Email">
         <p v-if="errors.email" class="error">{{ errors.email }}</p>
 
-        <button class="btn" @click="">Продовжити</button>
+        <button class="btn" @click="sendLink">Продовжити</button>
 
       </div>
 
@@ -110,6 +110,17 @@ export default {
 
     async sendLink() {
       try {
+
+        const link = window.location.origin + window.location.pathname + "#/reset-password"
+
+        const res = await api.post("/sendLink", {
+          email: this.email,
+          link
+        })
+
+
+        this.$root.showToast("Посилання надіслано")
+
 
       } catch (err) {
         console.error(err);

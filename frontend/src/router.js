@@ -13,6 +13,7 @@ import LoockTest from './pages/loockTest.vue'
 import EditProfile from './pages/editProfile.vue'
 import EditTest from './pages/editTest.vue'
 import StudentTestResult from './pages/studentTestResult.vue'
+import ResetPassword from './pages/resetPassword.vue'
 
 import testMsg from './pages/Tests/testMsg.vue'
 
@@ -93,6 +94,13 @@ const routes = [
     name: 'StudentTestResult',
     component: StudentTestResult,
     meta: { gradientBg: true }
+  },
+
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: ResetPassword,
+    meta: { gradientBg: true }
   }
 
 ]
@@ -109,7 +117,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("tokenAuthTeacher")
 
-  const publicPages = ['Home', 'Register', 'Login', 'Test']
+  const publicPages = ['Home', 'Register', 'Login', 'Test', 'ResetPassword']
   const authRequired = !publicPages.includes(to.name)
 
   if (authRequired && !token) {
