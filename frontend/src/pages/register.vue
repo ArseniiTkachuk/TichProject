@@ -1,6 +1,6 @@
 <template>
     <div class="auth">
-        <VerifyEmail v-if="verify" :email="email"/>
+        <VerifyEmail v-if="verify" :email="email" @chanch="verify = $event"/>
         <div v-else class="bg_gradient">
             <div class="background_reg">
                 <h2 class="text_reg">Register</h2>

@@ -20,7 +20,8 @@ export const register = async (req, res) => {
         // Перевірка, чи існує користувач з таким email
         const existingUser = await UserModel.findOne({ email })
         if (existingUser) {
-            return res.status(400).json({ message: 'Користувач з таким email вже існує' })
+            if (existingUser.verified)
+                return res.status(400).json({ message: 'Користувач з таким email вже існує' })
         }
 
 
@@ -28,13 +29,22 @@ export const register = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
 
+        let doc;
+        
         // Створюємо нового користувача
-        const doc = new UserModel({
-            name,
-            email,
-            passwordHash: hash,
-        })
+        if (existingUser) {
+            existingUser.name = name
+            existingUser.passwordHash = hash
 
+            doc = existingUser
+
+        } else {
+            doc = new UserModel({
+                name,
+                email,
+                passwordHash: hash,
+            })
+        }
         const user = await doc.save()
 
         await sendVerificationCode(email, user._id, UserModel);
@@ -70,6 +80,7 @@ export const verifyEmail = async (req, res) => {
         const token = jwt.sign({ _id: doc._id }, 'TOKEN', { expiresIn: '30d' })
 
         res.json({ token })
+
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Не вдалося зареєструватися' })
