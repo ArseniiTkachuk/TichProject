@@ -1,5 +1,78 @@
 <template>
-  <section class="profile-settings">
+  <section v-if="isEditPassword" class="profile-settings">
+    <button class="btn-back" @click="isEditPassword = false">⬅ Назад</button>
+
+    <header class="profile-header">
+      <h1>🔐 Зміна паролю</h1>
+    </header>
+
+
+    <h3 class="h3-newPasswerd">Старий пароль</h3>
+
+    <div class="password-wrapper">
+      <input class="input" :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Старий пароль">
+      <span class="eye" @click="showPassword = !showPassword">
+        <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+          <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" />
+        </svg>
+      </span>
+    </div>
+
+    <h3 class="h3-newPasswerd">Новий пароль</h3>
+
+
+    <div class="password-wrapper">
+      <input class="input" :type="showPassword1 ? 'text' : 'password'" v-model="newPassword" placeholder="Новий пароль">
+      <span class="eye" @click="showPassword1 = !showPassword1">
+        <svg v-if="!showPassword1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+          <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" />
+        </svg>
+      </span>
+    </div>
+
+
+    <div class="password-wrapper">
+      <input class="input" :type="showPassword2 ? 'text' : 'password'" v-model="confirmPassword"
+        placeholder="Повторіть новий пароль">
+      <span class="eye" @click="showPassword2 = !showPassword2">
+        <svg v-if="!showPassword2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path
+            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13a5.5 5.5 0 110-11 5.5 5.5 0 010 11zm0-9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+          <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" />
+        </svg>
+      </span>
+    </div>
+
+
+    <p v-if="error" class="error">{{ error }}</p>
+
+
+    <button class="btn" @click="submit" :disabled="false">
+      Змінити пароль
+    </button>
+
+
+  </section>
+  <section v-else class="profile-settings">
     <!-- Кнопка назад -->
     <button class="btn-back" @click="$router.back()">⬅ Назад</button>
 
@@ -24,6 +97,9 @@
         <input v-model="user.name" placeholder="Введіть ім’я" />
       </div>
 
+      <button class="btn-upload" @click="isEditPassword = true">Змінити пароль</button>
+
+
       <!-- Кнопка збереження -->
       <div class="profile-actions">
         <button class="btn-save" @click="saveProfile">💾 Зберегти</button>
@@ -41,9 +117,22 @@ export default {
   name: "ProfileSettings",
   data() {
     return {
+      showPassword: false,
+      showPassword1: false,
+      showPassword2: false,
+
+      error: "",
+
+
+      password: '',
+      newPassword: '',
+      confirmPassword: "",
+
+
       user: { name: "", imageUrl: "" },
       preview: null,
       avatarFile: null,
+      isEditPassword: false,
     };
   },
   mounted() {
@@ -93,6 +182,41 @@ export default {
       } catch (err) {
         console.error(err);
         this.$root.showToast("Помилка при збереженні профілю", "error");
+      }
+    },
+
+    async submit() {
+      this.error = "";
+      if (!this.newPassword || !this.confirmPassword || !this.password) {
+        this.error = "Заповніть усі поля";
+        return;
+      }
+
+      if (this.newPassword.length < 6) {
+        this.error = "Пароль має містити мінімум 6 символів";
+        return;
+      }
+
+      if (this.newPassword !== this.confirmPassword) {
+        this.error = "Паролі не співпадають";
+        return;
+      }
+
+      try {
+
+        await api.patch("/editPassword", {
+          password: this.password,
+          newPassword: this.newPassword,
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("tokenAuthTeacher")}` }
+        });
+
+        this.$root.showToast("Пароль успішно оновлено")
+        this.isEditPassword = false
+      } catch (e) {
+        this.error = e.response?.data?.message || "Не вдалося змінити пароль";
+        this.$root.showToast("Помилка!", "error")
+
       }
     },
   },
@@ -233,5 +357,107 @@ export default {
 .btn-save:hover {
   transform: scale(1.05);
   box-shadow: 0 8px 25px rgba(77, 12, 255, 0.6);
+}
+
+
+
+/* === password === */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  margin-top: 12px;
+  position: relative;
+}
+
+
+.password-wrapper input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(246, 186, 212, 0.6);
+  font-size: 16px;
+  margin-top: 0;
+  background: rgba(255, 255, 255, 0.85);
+  padding-right: 46px;
+}
+
+.password-wrapper input:focus {
+  outline: none;
+  border: 1px solid #ff00b3;
+  box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
+}
+
+.h3-newPasswerd {
+  margin-top: 20px;
+}
+
+
+.eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.eye svg {
+  display: block;
+}
+
+
+.eye:hover {
+  color: #ff00b3;
+}
+
+.forget {
+  margin-top: 6px;
+  padding-right: 5px;
+  font-size: 14px;
+  color: #fff;
+  text-align: right;
+  cursor: pointer;
+}
+
+.forget:hover {
+  text-decoration: underline;
+  color: #ff00b3;
+}
+
+
+/* primary button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  margin-top: 30px;
+  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  color: white;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.error {
+  margin-top: 12px;
+  color: #ff6b6b;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
 }
 </style>

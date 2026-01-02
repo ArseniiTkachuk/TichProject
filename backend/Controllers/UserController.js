@@ -192,7 +192,6 @@ export const resetPassword = async (req, res) => {
 
         // токен валідний, можна міняти пароль
 
-
         user.passwordHash = await bcrypt.hash(newPassword, 10);
         user.passwordResetTokenHash = null;
         user.passwordResetTokenExpires = null;
@@ -264,6 +263,31 @@ export const update = async (req, res) => {
         console.log(err);
         res.status(500).json({ message: "Не вдалося обновити профіль" });
     }
+}
 
+export const editPassword = async (req, res) => {
+    try {
+        const { password, newPassword } = req.body;
 
+        const user = await UserModel.findById(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: "Користувача не знайдено" });
+        }
+
+        const isValid = await bcrypt.compare(password, user.passwordHash);
+
+        if (!isValid) {
+            return res.status(400).json({ message: "Старий пароль не вірний" });
+        }
+
+        await UserModel.findByIdAndUpdate(req.userId, {
+            passwordHash: await bcrypt.hash(newPassword, 10)
+        })
+
+        res.json({ seccess: true })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Не вдалося змінити пароль" });
+    }
 }

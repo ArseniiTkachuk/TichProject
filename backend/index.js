@@ -82,6 +82,7 @@ app.post("/sendLink", UserController.sendLink)
 app.post("/auth/reset-password", UserController.resetPassword)
 app.get("/auth", checkAuth, UserController.userProfile);
 app.patch("/auth", checkAuth, uploadWithHash.single('avatar'), hashFiles, UserController.update);
+app.patch("/editPassword", checkAuth, UserController.editPassword)
 
 // TESTS
 app.post("/test", checkAuth, uploadWithHash.any(), hashFiles, TestController.createTest);
