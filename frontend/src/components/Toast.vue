@@ -7,28 +7,39 @@
         </transition-group>
     </div>
 </template>
-
 <script>
+import { subscribe, unsubscribe } from '@/services/toastService'
+
 export default {
     name: "Toast",
     data() {
         return {
             toasts: [],
             toastIdCounter: 0,
-        };
+        }
     },
     methods: {
         showToast(text, type = "success", duration = 3000) {
-            const id = this.toastIdCounter++;
-            this.toasts.push({ id, text, type });
+            const id = this.toastIdCounter++
+            this.toasts.push({ id, text, type })
 
             setTimeout(() => {
-                const index = this.toasts.findIndex(t => t.id === id);
-                if (index !== -1) this.toasts.splice(index, 1);
-            }, duration);
+                const index = this.toasts.findIndex(t => t.id === id)
+                if (index !== -1) this.toasts.splice(index, 1)
+            }, duration)
+        },
+
+        handleServiceToast({ text, type, duration }) {
+            this.showToast(text, type, duration)
         }
+    },
+    mounted() {
+        subscribe(this.handleServiceToast)
+    },
+    beforeUnmount() {
+        unsubscribe(this.handleServiceToast)
     }
-};
+}
 </script>
 
 <style scoped>
