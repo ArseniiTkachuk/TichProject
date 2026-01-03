@@ -190,7 +190,6 @@ export default {
                 this.testLink = window.location.origin + window.location.pathname + `#/test/${testId}`;
             } catch (err) {
                 console.error(err);
-                this.$root.showToast("Помилка при завантаженні тесту", "error");
             }
         },
         copyToClipboard(text) {
@@ -209,7 +208,6 @@ export default {
                 this.$router.back();
             } catch (err) {
                 console.error(err);
-                this.$root.showToast('Помилка при видаленні тесту', 'error');
             }
         }
     }

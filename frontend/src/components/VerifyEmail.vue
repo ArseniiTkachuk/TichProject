@@ -71,9 +71,6 @@ export default {
 
             } catch (err) {
                 console.error(err)
-
-                this.$root.showToast("Помилка!", "error")
-
                 // Якщо backend повернув об'єкт виду { message: "..." }
                 if (err.response?.data?.message) {
                     this.error = err.response.data.message
@@ -133,8 +130,6 @@ export default {
             } catch (err) {
 
                 console.error(err)
-
-                this.$root.showToast("Помилка!", "error")
 
                 // Якщо backend повернув об'єкт виду { message: "..." }
                 if (err.response?.data?.message) {

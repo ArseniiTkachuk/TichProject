@@ -86,7 +86,6 @@ export default {
 
             } catch (err) {
                 console.error(err)
-                this.$root.showToast("Помилка!", "error")
 
 
                 // Якщо backend повернув масив помилок валідації

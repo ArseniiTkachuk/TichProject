@@ -183,12 +183,10 @@ export default {
             try {
                 this.testId = this.$route.params.id;
                 const res = await api.get(`/test/${this.testId}`);
-                console.log(res.data); // <-- перевір, що реально повертає бекенд
                 this.test = res.data;
                 this.correctTestCode = true;
             } catch (err) {
                 console.error(err);
-                this.$root.showToast("Помилка!", "error")
                 this.correctTestCode = false;
             }
         },
@@ -215,12 +213,10 @@ export default {
                 );
 
                 this.result = res.data
-
-                console.log(res.data);
+                this.$root.showToast("Тест успішно пройдено")
 
             } catch (err) {
                 console.error(err);
-                this.$root.showToast("Помилка при перевірці тесту", "error")
             }
         }
 

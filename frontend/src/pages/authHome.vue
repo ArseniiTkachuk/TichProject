@@ -95,7 +95,6 @@ export default {
         this.userTests = res.data.tests;
       } catch (err) {
         console.error(err);
-        this.$root.showToast("Помилка при завантаженні даних користувача", "error")
       }
     },
     updateTasks() {

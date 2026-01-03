@@ -221,7 +221,6 @@ export default {
                 });
             } catch (err) {
                 console.error(err);
-                this.$root.showToast("Помилка завантаження тесту", "error")
                 this.message = "Помилка завантаження тесту";
             }
         },
@@ -264,12 +263,11 @@ export default {
                 this.testCode = res.data.id;
                 this.testLink = window.location.origin + window.location.pathname + `#/test/${res.data.id}`
                 this.showModal = true;
-                this.$root.showToast('Тест створено');
+                this.$root.showToast('Тест оновлено');
 
             } catch (err) {
                 console.error(err);
                 this.message = "Помилка при оновленні тесту: " + (err.response?.data?.message || err.message);
-                this.$root.showToast("Помилка!", "error")
             }
         },
 

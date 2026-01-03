@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useLoadingStore } from '@/stores/loading'
 import { showToast } from '@/services/toastService'
+import router from '@/router'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACK_URL
@@ -18,10 +19,41 @@ api.interceptors.response.use(
     loading.stop()
     return response
   },
-  error => {
+  err => {
     const loading = useLoadingStore()
     loading.stop()
-    return Promise.reject(error)
+
+    if (err.response) {
+      const status = err.response.status;
+      const message = err.response?.data?.message || err.message;
+
+      switch (status) {
+        case 400:
+          showToast(`Помилка: ${message}`, 'error')
+          break
+        case 401:
+          showToast('Потрібна авторизація', 'error')
+          router.push("/register")
+          break
+        case 403:
+          showToast('Недостатньо прав', 'error')
+          break
+        case 404:
+          showToast(`Помилка: ${message}`, 'error')
+          break
+        case 500:
+          showToast('Помилка сервера', 'error')
+          break
+        default:
+          showToast('Помилка!', 'error')
+      }
+    } else {
+      // сервер недоступний / немає інтернету
+      showToast('Немає зʼєднання з сервером', 'error')
+    }
+
+
+    return Promise.reject(err)
   }
 )
 

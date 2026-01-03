@@ -147,7 +147,6 @@ export default {
         this.user = { name: res.data.name, imageUrl: BACK_URL + res.data.imageUrl };
       } catch (err) {
         console.error(err);
-        this.$root.showToast("Не вдалося завантажити профіль", "error");
       }
     },
     triggerFileInput() {
@@ -181,7 +180,6 @@ export default {
         this.$root.showToast("Профіль успішно оновлено!", "success");
       } catch (err) {
         console.error(err);
-        this.$root.showToast("Помилка при збереженні профілю", "error");
       }
     },
 
@@ -215,8 +213,6 @@ export default {
         this.isEditPassword = false
       } catch (e) {
         this.error = e.response?.data?.message || "Не вдалося змінити пароль";
-        this.$root.showToast("Помилка!", "error")
-
       }
     },
   },

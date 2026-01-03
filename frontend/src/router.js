@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import { showToast } from '@/services/toastService'
+
 import Register from './pages/register.vue' //сторінка реєстрації
 import Login from './pages/login.vue' // сторінка входу
 
@@ -121,7 +123,7 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.name)
 
   if (authRequired && !token) {
-    alert("Спочатку авторизуйтеся")
+    showToast('Потрібна авторизація', 'error')
     return next({ name: 'Register' })
   }
 

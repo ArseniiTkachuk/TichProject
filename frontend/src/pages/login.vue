@@ -94,7 +94,6 @@ export default {
 
       } catch (err) {
         console.error(err);
-        this.$root.showToast("Помилка!", "error")
 
         if (Array.isArray(err.response?.data)) {
           err.response.data.forEach(e => {
@@ -124,7 +123,6 @@ export default {
 
       } catch (err) {
         console.error(err);
-        this.$root.showToast("Помилка!", "error")
       }
     }
   }
