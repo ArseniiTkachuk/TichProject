@@ -7,6 +7,7 @@
 <script>
 import Toast from "@/components/Toast.vue";
 import AppLoader from '@/components/AppLoader.vue'
+import { showToast as toast } from '@/services/toastService'
 
 export default {
   name: "App",
@@ -31,7 +32,7 @@ export default {
 
   methods: {
     showToast(message, type = "success", duration = 3000) {
-      this.$refs.toast.showToast(message, type, duration);
+      toast(message, type, duration);
     }
   }
 

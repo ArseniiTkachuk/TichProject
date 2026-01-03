@@ -304,7 +304,7 @@ export default {
       } catch (err) {
         console.error("AxiosError", err);
         this.message = "Помилка при створенні тесту: " + (err.response?.data?.message || err.message);
-        this.$root.showToast("Помилка при створенні тесту", "error")
+        this.$root.showToast("Помилка!", "error")
       }
     }
   }
