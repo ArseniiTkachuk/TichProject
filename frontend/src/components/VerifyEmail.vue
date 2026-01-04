@@ -3,7 +3,7 @@
         <div class="background_reg">
             <h2 class="title">Код надіслани</h2>
             <div class="description">
-                <p>Ми надіслали код підтвердження на email: <strong>{{ email }}</strong>. </p>
+                <p>Ми надіслали код підтвердження на email: <strong>{{ email }}</strong> </p>
                 <p>Введіть код підтвердження нище.</p>
             </div>
 

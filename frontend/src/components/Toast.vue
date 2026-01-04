@@ -109,18 +109,13 @@ export default {
 /* Мобільні */
 @media (max-width: 480px) {
     .toast-container {
-        bottom: 10%;
-        left: 100%;
+        bottom: 20%;
+        left: 90%;
         right: auto;
         transform: translateX(-50%);
-        width: 50%;
+        width: 60%;
         padding: 0 10px;
     }
 
-    .toast {
-        width: 100%;
-        font-size: 14px;
-        padding: 10px 12px;
-    }
 }
 </style>
