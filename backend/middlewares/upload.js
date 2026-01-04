@@ -24,9 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/**
- * 🔥 МАГІЯ ПІСЛЯ MULTER
- */
+
 export const uploadWithHash = async (req, res, next) => {
     upload.any()
         (req, res, async (err) => {

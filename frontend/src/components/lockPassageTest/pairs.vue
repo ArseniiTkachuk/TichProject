@@ -48,7 +48,7 @@
             <div class="line"></div>
           </div>
 
-          <div v-else :class="isCorrect" class="connector noCorrect">
+          <div v-else class="connector noCorrect">
             <div class="line"></div>
             <strong class="icon"> ✖ </strong>
             <div class="line"></div>
@@ -114,9 +114,9 @@ export default {
       const leftIndex = this.ex.answers.pairs.left.findIndex(l => l.slug === lSlug);
       const rightIndex = this.ex.answers.pairs.right.findIndex(r => r.slug === rSlug);
       if (this.ex.answers.pairs.correctMap[String(leftIndex)] === rightIndex) {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
 
