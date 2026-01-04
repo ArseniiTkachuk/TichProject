@@ -1,17 +1,15 @@
-import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import crypto from "crypto";
+import sendpulse from "sendpulse-api";
 dotenv.config();
 
-// створюємо транспортер один раз
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
-  }
-});
+
+sendpulse.init(
+  process.env.SENDPULSE_API_ID,
+  process.env.SENDPULSE_API_SECRET,
+  "/tmp/" // тимчасова папка для зберігання токена
+);
 
 // функція для відправки коду
 export const sendVerificationCode = async (userEmail, userId, UserModel) => {
@@ -29,11 +27,20 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
   });
 
   // 4. Відправляємо лист
-  await transporter.sendMail({
-    from: process.env.MAIL_USER,
-    to: userEmail,
-    subject: "Підтвердження email",
-    html: `
+  return new Promise((resolve, reject) => {
+    sendpulse.smtpSendMail((response) => {
+      if (response && response.result) {
+        console.log("📧 Email sent successfully");
+        resolve(true);
+      } else {
+        console.error("❌ Email failed:", response);
+        reject(response);
+      }
+    }, {
+      from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
+      to: [{ email: userEmail }],
+      subject: "Підтвердження email",
+      html: `
   <div style="
     font-family: Arial, Helvetica, sans-serif;
     color: #333;
@@ -78,7 +85,10 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
 `
 
 
+    });
   });
+
+
 };
 
 
@@ -101,11 +111,21 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
 
 
   // 4. Відправляємо лист
-  await transporter.sendMail({
-    from: process.env.MAIL_USER,
-    to: userEmail,
-    subject: "Відновлення паролю",
-    html: `
+
+  return new Promise((resolve, reject) => {
+    sendpulse.smtpSendMail((response) => {
+      if (response && response.result) {
+        console.log("📧 Email sent successfully");
+        resolve(true);
+      } else {
+        console.error("❌ Email failed:", response);
+        reject(response);
+      }
+    }, {
+      from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
+      to: [{ email: userEmail }],
+      subject: "Відновлення паролю",
+      html: `
   <div style="
     font-family: Arial, Helvetica, sans-serif;
     color: #333;
@@ -154,6 +174,7 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
 
   </div>
 `
-  });
+    });
 
+  })
 }
