@@ -35,7 +35,7 @@
                 @change="onAnswerImageChange($event, qIndex, aIndex)" :ref="'fileInput-' + qIndex + '-' + aIndex">
             </label>
             <label v-else class="upload-label">
-              <span>Select image</span>
+              <span>Вибрати зображення</span>
               <input class="upload-label-input" type="file" accept="image/*"
                 @change="onAnswerImageChange($event, qIndex, aIndex)" :ref="'fileInput-' + qIndex + '-' + aIndex">
             </label>
@@ -84,7 +84,7 @@
                     @change="onPairLeftImageChange($event, qIndex, lIndex)" :ref="'leftFile-' + qIndex + '-' + lIndex">
                 </label>
                 <label v-else class="upload-label">
-                  <span>Select image</span>
+                  <span>Вибрати зображення</span>
                   <input class="upload-label-input" type="file" accept="image/*"
                     @change="onPairLeftImageChange($event, qIndex, lIndex)" :ref="'leftFile-' + qIndex + '-' + lIndex">
                 </label>
@@ -119,7 +119,7 @@
                     :ref="'rightFile-' + qIndex + '-' + rIndex">
                 </label>
                 <label v-else class="upload-label">
-                  <span>Select image</span>
+                  <span>Вибрати зображення</span>
                   <input class="upload-label-input" type="file" accept="image/*"
                     @change="onPairRightImageChange($event, qIndex, rIndex)"
                     :ref="'rightFile-' + qIndex + '-' + rIndex">

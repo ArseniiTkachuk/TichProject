@@ -35,7 +35,7 @@
   <div v-if="enterCode" class="modal-overlay" @click="enterCode = false">
     <div class="modal-card" @click.stop>
 
-      <h2 class="modal-title">Enter code for test</h2>
+      <h2 class="modal-title">Введіть код тесту</h2>
 
       <input v-model="testCode" placeholder="Enter code" class="modal-input">
 
