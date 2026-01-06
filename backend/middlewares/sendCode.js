@@ -13,20 +13,20 @@ sendpulse.init(
 
 // функція для відправки коду
 export const sendVerificationCode = async (userEmail, userId, UserModel) => {
-  // 1. Генеруємо код
+  //  Генеруємо код
   const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // 2. Хешуємо код
+  //  Хешуємо код
   const codeHash = await bcrypt.hash(code, 10);
 
-  // 3. Зберігаємо хеш та час закінчення дії в базі
+  //  Зберігаємо хеш та час закінчення дії в базі
   const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 хв
   await UserModel.findByIdAndUpdate(userId, {
     emailCodeHash: codeHash,
     emailCodeExpires: expires
   });
 
-  // 4. Відправляємо лист
+  //  Відправляємо лист
   return new Promise((resolve, reject) => {
     sendpulse.smtpSendMail((response) => {
       if (response && response.result) {
@@ -91,15 +91,15 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
 
 };
 
-
+// функція відправки листа з посиланням для відновлення паролю
 export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
-  // 1. Генеруємо код
+  //  Генеруємо код
   const resetToken = crypto.randomBytes(32).toString("hex");
 
-  // 2. Хешуємо код
+  //  Хешуємо код
   const hash = await bcrypt.hash(resetToken, 10);
 
-  // 3. Зберігаємо хеш та час закінчення дії в базі
+  //  Зберігаємо хеш та час закінчення дії в базі
   const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 хв
   await UserModel.findByIdAndUpdate(userId, {
     emailCodeHash: hash,
@@ -110,7 +110,7 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
   const resetUrl = `${baseURL}?token=${resetToken}&email=${userEmail}`;
 
 
-  // 4. Відправляємо лист
+  //  Відправляємо лист
 
   return new Promise((resolve, reject) => {
     sendpulse.smtpSendMail((response) => {

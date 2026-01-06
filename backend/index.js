@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 2222;
 
 // Підключення до Mongo
 mongoose
-  .connect('mongodb+srv://arseniitkachuk_db_user:rashamon2009@cluster0.dcqg0py.mongodb.net/tichProject?appName=Cluster0')
+  .connect(process.env.MONGO_DB)
   .then(() => console.log('DB OK'))
   .catch(err => console.log('DB error:', err));
 
@@ -36,7 +36,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 app.use('/uploads', express.static(uploadDir));
 app.use('/utils', express.static(path.join(__dirname, 'utils')));
 
-// --- MULTER ---
+// мультер
 const uploadWithHash = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
@@ -71,7 +71,7 @@ const hashFiles = (req, res, next) => {
   next();
 };
 
-// --- РОУТИ ---
+//  РОУТИ 
 
 // AUTH
 app.post("/register", registerValidator, UserController.register);

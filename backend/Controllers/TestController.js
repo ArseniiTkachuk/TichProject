@@ -1,63 +1,7 @@
 import Test from '../models/Test.js';
 import mongoose from 'mongoose';
+import { validateExercise } from '../validations.js'
 
-/*  HELPERS  */
-
-const isValidIndex = (index, arr) =>
-  Number.isInteger(index) && index >= 0 && index < arr.length;
-
-const validateExercise = (ex) => {
-  if (!ex.type || !ex.question) {
-    return 'Кожне питання повинно мати тип і текст';
-  }
-
-  /*  ONE  */
-  if (ex.type === 'one') {
-    const correctCount = ex.answers?.filter(a => a.correct).length || 0;
-    if (correctCount !== 1) {
-      return 'Питання з однією відповіддю повинно мати рівно одну правильну';
-    }
-  }
-
-  /*  MANY  */
-  if (ex.type === 'many') {
-    const correctCount = ex.answers?.filter(a => a.correct).length || 0;
-    if (correctCount < 1) {
-      return 'Питання з кількома відповідями повинно мати хоча б одну правильну';
-    }
-  }
-
-  /*  ENTER  */
-  if (ex.type === 'enter') {
-    if (!ex.correctAnswers || ex.correctAnswers.length === 0) {
-      return 'Питання з введенням повинно мати правильну відповідь';
-    }
-  }
-
-  /*  PAIR  */
-  if (ex.type === 'pair') {
-    const { left, right, correctMap } = ex.pairs || {};
-
-    if (!left?.length || !right?.length) {
-      return 'Пари повинні мати ліву і праву колонки';
-    }
-
-    if (right.length < left.length) {
-      return 'Правих варіантів повинно бути не менше ніж лівих';
-    }
-
-    const values = Object.values(correctMap);
-    const hasDuplicates = values.some((v, i) => values.indexOf(v) !== i);
-    if (hasDuplicates) {
-      return 'Некоректна відповідність між парами'
-    }
-
-  }
-
-  return null;
-};
-
-/*  CONTROLLER  */
 
 export const createTest = async (req, res) => {
   try {
@@ -339,7 +283,7 @@ export const checkTest = async (req, res) => {
 
 export const checkUserTest = async (req, res) => {
   try {
-    const { testId, childSlug } = req.params; // childSlug — це унікальний запис учня в test.childrens
+    const { testId, childSlug } = req.params; 
 
     if (!mongoose.Types.ObjectId.isValid(testId)) {
       return res.status(400).json({ message: "Невірний код тесту" });

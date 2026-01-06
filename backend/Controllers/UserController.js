@@ -31,7 +31,6 @@ export const register = async (req, res) => {
 
         let doc;
 
-        // Створюємо нового користувача
         if (existingUser) {
             existingUser.name = name
             existingUser.passwordHash = hash
@@ -39,6 +38,7 @@ export const register = async (req, res) => {
             doc = existingUser
 
         } else {
+
             doc = new UserModel({
                 name,
                 email,
@@ -72,8 +72,9 @@ export const verifyEmail = async (req, res) => {
 
         // підтверджуємо email
         user.verified = true;
-        user.emailCodeHash = null; // можна видалити код після успішного підтвердження
+        user.emailCodeHash = null;
         user.emailCodeExpires = null;
+
         // Вимикаємо авто-видалення
         user.deleteAt = null;
         const doc = await user.save();
@@ -136,11 +137,7 @@ export const login = async (req, res) => {
 
 
         // Генеруємо токен
-        const token = jwt.sign({
-            _id: user._id
-        }, 'TOKEN', {
-            expiresIn: '30d'
-        })
+        const token = jwt.sign({ _id: user._id }, 'TOKEN', { expiresIn: '30d' })
 
         res.json({
             token
@@ -222,7 +219,7 @@ export const userProfile = async (req, res) => {
             .select('title slug exercises.question') // беремо тільки потрібне
             .lean();
 
-        //  Трансформуємо дані у потрібний вам формат
+        //  Трансформуємо дані у потрібний формат
         const formattedTests = rawTests.map(test => ({
             id: test._id,
             title: test.title,
