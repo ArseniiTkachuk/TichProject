@@ -42,7 +42,7 @@
             <span v-else>{{ findleft(uPair[0]).text }}</span>
           </div>
 
-          <div v-if="isCorrectAnswer(uPair)" class="connector">
+          <div v-if="!isCorrectAnswer(uPair)" class="connector">
             <div class="line"></div>
             <strong class="icon"> ✔ </strong>
             <div class="line"></div>
@@ -57,9 +57,9 @@
 
 
           <div class="pair-card right">
-            <img v-if="findright(uPair[0]).isImage" :src="`${BackURL}${findright(uPair[0]).imageUrl}`"
+            <img v-if="findright(uPair[1]).isImage" :src="`${BackURL}${findright(uPair[1]).imageUrl}`"
               class="preview-img" />
-            <span v-else>{{ findright(uPair[0]).text }}</span>
+            <span v-else>{{ findright(uPair[1]).text }}</span>
           </div>
 
         </div>
