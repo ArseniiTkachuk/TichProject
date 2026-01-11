@@ -5,8 +5,16 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-content">
-        <h1>Створюй тести. Проходь. Розвивайся.</h1>
-        <p>Платформа для навчання та перевірки знань</p>
+        <h1>{{ displayText[0] }}
+          <span v-if="textIndex === 0" class="cursor">|</span>
+        </h1>
+        
+
+        <p>{{ displayText[1] }}
+          <span v-if="textIndex === 1" class="cursor">|</span>
+        </p>
+        
+
         <div class="actions">
           <button class="primary" @click="enterCode = true">Я студент</button>
           <button class="secondary" @click="$router.push('/home')">Я викладач</button>
@@ -16,7 +24,7 @@
 
     <!-- SVG WAVE -->
     <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none">
-      <path d="M0,80 C240,140 480,20 720,40 960,60 1200,120 1440,80 L1440,0 L0,0 Z" fill="#f6f4ff" />
+      <path d="M0,80 C240,140 480,20 720,40 960,60 1200,120 1440,80 L1440,0 L0,0 Z" fill="#f4f2f2" />
     </svg>
 
     <!-- HOW IT WORKS -->
@@ -48,16 +56,44 @@
 <script>
 
 export default {
-
   data() {
     return {
       enterCode: false,
-      testCode: ''
+      testCode: '',
+
+      texts: [
+        "Створюй тести. Проходь. Розвивайся.",
+        "Платформа для навчання та перевірки знань"
+      ],
+      displayText: ["", ""], // окремо для h1 і p
+      textIndex: 0,
+      charIndex: 0,
+      typeSpeed: 55
     }
   },
 
-  methods: {
+  mounted() {
+    this.type();
+  },
 
+  methods: {
+    type() {
+      if (this.textIndex >= this.texts.length) return;
+
+      this.displayText[this.textIndex] +=
+        this.texts[this.textIndex][this.charIndex];
+
+      this.charIndex++;
+
+      if (this.charIndex < this.texts[this.textIndex].length) {
+        setTimeout(this.type, this.typeSpeed);
+      } else {
+        // переходимо до наступного тексту
+        this.textIndex++;
+        this.charIndex = 0;
+        setTimeout(this.type, 400);
+      }
+    }
   }
 }
 
@@ -72,6 +108,18 @@ export default {
 
 }
 
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 400;
+  animation: blink 1.5s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 
 
@@ -170,7 +218,7 @@ export default {
 
 /*  GLOBAL  */
 .home {
-  background: #f6f4ff;
+  background: #f4f2f2;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
@@ -178,8 +226,15 @@ export default {
 /* HERO */
 .hero {
   min-height: 85vh;
-  background: linear-gradient(135deg, #6a00ff, #ff5fd7);
-  display: flex;
+  background: #222223;
+background: linear-gradient(
+  160deg, 
+  rgba(34, 34, 35, 1) 8%, 
+  rgba(44, 44, 48, 1) 35%, 
+  rgba(56, 56, 61, 1) 76%, 
+  rgba(75, 75, 82, 1) 100%
+);
+ display: flex;
   align-items: center;
   padding: 80px;
   color: white;
@@ -188,6 +243,7 @@ export default {
   border-bottom-right-radius: 60px;
   position: relative;
   overflow: hidden;
+  box-shadow: 3px 5px 6px rgba(69, 68, 68, 0.5);
 }
 
 
@@ -202,10 +258,12 @@ export default {
 .hero h1 {
   font-size: 52px;
   margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(243, 242, 242, 0.5);
 }
 
 .hero p {
   font-size: 18px;
+  text-shadow: 1px 1px 2px rgba(243, 242, 242, 0.5);
 }
 
 /* Buttons */
@@ -236,10 +294,11 @@ export default {
 
 /*  SVG WAVE  */
 .hero-wave {
+  background-color: #f4f2f2;
   display: block;
   width: 100%;
   height: 120px;
-  margin-top: -1px;
+
 }
 
 /* WHITE SECTION  */
@@ -249,9 +308,10 @@ export default {
   max-width: 1200px;
   padding: 60px;
   border-radius: 40px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, .1);
+  box-shadow: 1px 3px 7px rgba(151, 149, 149, 0.5);
   position: relative;
   z-index: 2;
+  
 }
 
 .steps {

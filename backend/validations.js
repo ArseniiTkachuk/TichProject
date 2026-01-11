@@ -14,7 +14,7 @@ export const loginValidator = [
 ]
 
 // валідація створення на редагування тесту
-const validateExercise = (ex) => {
+export const validateExercise = (ex) => {
   if (!ex.type || !ex.question) {
     return 'Кожне питання повинно мати тип і текст';
   }
