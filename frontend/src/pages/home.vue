@@ -16,8 +16,8 @@
         
 
         <div class="actions">
-          <button class="primary" @click="enterCode = true">Я студент</button>
-          <button class="secondary" @click="$router.push('/home')">Я викладач</button>
+          <button class="primary" @click="enterCode = true"><span>Я студент</span></button>
+          <button class="secondary" @click="$router.push('/home')"><span>Я викладач</span></button>
         </div>
       </div>
     </section>
@@ -31,7 +31,7 @@
     <section class="white">
       <h2>Як це працює?</h2>
       <div class="steps">
-        <div class="step">✍️ Створи тест</div>
+        <div class="step1">✍️ Створи тест</div>
         <div class="step">🎯 Поділись посиланням</div>
         <div class="step">🏆 Отримай результат</div>
       </div>
@@ -259,10 +259,12 @@ background: linear-gradient(
   font-size: 52px;
   margin-bottom: 20px;
   text-shadow: 1px 1px 2px rgba(243, 242, 242, 0.5);
+  min-height: 130px;
 }
 
 .hero p {
   font-size: 18px;
+  min-height: 26px;
   text-shadow: 1px 1px 2px rgba(243, 242, 242, 0.5);
 }
 
@@ -274,22 +276,87 @@ background: linear-gradient(
 }
 
 .primary {
+  width: 250px;
+  position: relative;
+  overflow: hidden;
+  color: black;
+  border: 1px solid rgba(107, 255, 179, 0.4);
   background: white;
-  color: #6a00ff;
   padding: 14px 32px;
   border-radius: 30px;
-  border: none;
   font-weight: 600;
   cursor: pointer;
+   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+.primary:hover {
+   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
+}
+
+.primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #6bffb3, #3fdc8c);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+  
+}
+
+.primary:hover::before {
+  opacity: 1;
+  
+}
+
+.primary span {
+  position: relative;
+  z-index: 1;
+}
+
+
 .secondary {
+  width: 250px;
   background: transparent;
   border: 2px solid white;
   color: white;
   padding: 14px 32px;
   border-radius: 30px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: rgb(240, 238, 238);
+  font-weight: 600;
+   transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.secondary:hover {
+   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  color: #222223;
+}
+
+.secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #6bffb3, #3fdc8c);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+  
+}
+
+.secondary:hover::before {
+  opacity: 1;
+  
+}
+
+.secondary span {
+  position: relative;
+  z-index: 1;
 }
 
 /*  SVG WAVE  */
@@ -319,6 +386,29 @@ background: linear-gradient(
   gap: 30px;
   margin-top: 40px;
 }
+
+.step1 {
+  flex: 1;
+ background: linear-gradient(135deg, #fff7c9, #ffe49e);
+color: #4f3a00;
+
+  padding: 30px;
+  border-radius: 25px;
+  font-size: 20px;
+
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  background-clip: padding-box;
+   transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.step1:hover {
+  background: linear-gradient(135deg, #ffe08a, #ffc857);
+   transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(189, 140, 5, 0.25);
+}
+
 
 .step {
   flex: 1;
