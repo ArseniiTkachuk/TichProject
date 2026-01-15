@@ -32,8 +32,8 @@
       <h2>Як це працює?</h2>
       <div class="steps">
         <div class="step1">✍️ Створи тест</div>
-        <div class="step">🎯 Поділись посиланням</div>
-        <div class="step">🏆 Отримай результат</div>
+        <div class="step2">🎯 Поділись посиланням</div>
+        <div class="step3">🏆 Отримай результат</div>
       </div>
     </section>
 
@@ -409,6 +409,49 @@ color: #4f3a00;
   box-shadow: 0 8px 20px rgba(189, 140, 5, 0.25);
 }
 
+.step2 {
+  flex: 1;
+  background: linear-gradient(135deg, #ffd6d6, #ffbcbc);
+  color: #5a1f1f;
+
+
+  padding: 30px;
+  border-radius: 25px;
+  font-size: 20px;
+
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  background-clip: padding-box;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.step2:hover {
+  background: linear-gradient(135deg, #ff9a9a, #ff8080);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(189, 26, 5, 0.25);
+}
+
+.step3 {
+  flex: 1;
+  background: linear-gradient(135deg, #f9e0ad, #f5cb83);
+  color: #6b4720;
+  padding: 30px;
+  border-radius: 25px;
+  font-size: 20px;
+
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  background-clip: padding-box;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.step3:hover {
+  background: linear-gradient(135deg, #f7d88c, #eeb55f);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(166, 117, 18, 0.35);
+}
 
 .step {
   flex: 1;
