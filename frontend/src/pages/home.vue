@@ -22,10 +22,7 @@
       </div>
     </section>
 
-    <!-- SVG WAVE -->
-    <svg class="hero-wave" viewBox="0 0 1440 120" preserveAspectRatio="none">
-      <path d="M0,80 C240,140 480,20 720,40 960,60 1200,120 1440,80 L1440,0 L0,0 Z" fill="#f4f2f2" />
-    </svg>
+
 
     <!-- HOW IT WORKS -->
     <section class="white">
@@ -47,7 +44,7 @@
 
       <input v-model="testCode" placeholder="Enter code" class="modal-input">
 
-      <button class="modal-btn" @click="$router.push(`/test/${testCode}`)"> Go </button>
+      <button class="modal-btn" @click="$router.push(`/test/${testCode}`)"><span>Go</span></button>
 
     </div>
   </div>
@@ -148,7 +145,7 @@ export default {
 .modal-card {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(14px);
-  padding: 30px 35px;
+  padding: 30px 35px 25px;
   border-radius: 22px;
   width: 90%;
   max-width: 360px;
@@ -174,13 +171,15 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.6);
   font-size: 16px;
   margin-bottom: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .modal-input:focus {
   outline: none;
-  border: 1px solid #ff00b3;
-  box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
-}
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
+}   
 
 /* ===== ERROR ===== */
 .modal-error {
@@ -191,26 +190,47 @@ export default {
 
 /* ===== BUTTON ===== */
 .modal-btn {
+  margin-top: 10px;
   width: 100%;
   padding: 12px;
   font-size: 17px;
   border-radius: 12px;
   cursor: pointer;
-  border: none;
-  background: linear-gradient(135deg,
-      #4d0cff,
-      #b000f8,
-      #ff00b3);
-  color: white;
-  transition: transform 0.3s, box-shadow 0.3s;
+  border: solid 1px #fafafa;
+  background: none;
+  color: #fafafa;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.4s ease, transform 0.3s ease;
+}
+
+.modal-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #5fe6a0, #34c987);
+  opacity: 0;
+  transition: opacity 0.8s ease; /* <- повільніше і плавніше */
+  z-index: 0;
+  border-radius: 12px;
+}
+
+.modal-btn span {
+  position: relative;
+  z-index: 1;
 }
 
 .modal-btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+  border: none;
+  transform: scale(1.03) translateY(-1px);
+  color: #000;
+  box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
 }
 
-
+.modal-btn:hover::before {
+  opacity: 1; /* фон плавно з’являється */
+  
+}
 
 :global(body) {
   margin: 0;
@@ -226,14 +246,14 @@ export default {
 /* HERO */
 .hero {
   min-height: 85vh;
-  background: #222223;
-background: linear-gradient(
-  160deg, 
-  rgba(34, 34, 35, 1) 8%, 
-  rgba(44, 44, 48, 1) 35%, 
-  rgba(56, 56, 61, 1) 76%, 
-  rgba(75, 75, 82, 1) 100%
-);
+  background: #4b4b52;
+  background: linear-gradient(
+    180deg,
+    #1f2423 0%,
+    #242d2b 40%,
+    #2e3b38 70%,
+    #465c57 100% /* <-- світліше і тепліше */
+  );
  display: flex;
   align-items: center;
   padding: 80px;
@@ -244,6 +264,18 @@ background: linear-gradient(
   position: relative;
   overflow: hidden;
   box-shadow: 3px 5px 6px rgba(69, 68, 68, 0.5);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(107, 255, 179, 0.08),
+    transparent 60%
+  );
+  z-index: 0;
 }
 
 
@@ -365,17 +397,21 @@ background: linear-gradient(
   display: block;
   width: 100%;
   height: 120px;
-
+  
+  
 }
+
 
 /* WHITE SECTION  */
 .white {
-  background: white;
-  margin: -60px auto 80px;
-  max-width: 1200px;
+  background: #fafafa;
+  margin: 60px auto 60px;
+  max-width: 1300px;
   padding: 60px;
   border-radius: 40px;
-  box-shadow: 1px 3px 7px rgba(151, 149, 149, 0.5);
+  box-shadow:
+    0 -20px 40px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.12);
   position: relative;
   z-index: 2;
   

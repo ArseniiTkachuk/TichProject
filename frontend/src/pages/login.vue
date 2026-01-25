@@ -158,7 +158,14 @@ export default {
   align-items: center;
   padding: 20px;
   border: white;
-  background: linear-gradient(135deg, #51ff0c, #0c00f8, #ff0000);
+  background: #4b4b52;
+  background: linear-gradient(
+    180deg,
+    #1f2423 0%,
+    #242d2b 40%,
+    #2e3b38 70%,
+    #465c57 100% /* <-- світліше і тепліше */
+  );
   height: 100vh;
 }
 
@@ -179,30 +186,10 @@ export default {
 
 .bg_gradient {
   border-radius: 22px;
-
-  background: linear-gradient(135deg,
-      #0088ff,
-      #4d0cff,
-      #b000f8);
-  background-size: 200% 200%;
-  animation: gradientMove 10s ease infinite;
+  border: solid 1px #fafafa;
   font-family: "Roboto Slab", serif;
 }
 
-/* Анімація градієнта */
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
 /* === title === */
 .text_reg {
