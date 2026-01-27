@@ -204,16 +204,23 @@ export default {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+   border: 1px solid transparent;
   font-size: 16px;
   margin-top: 12px;
   background: rgba(255, 255, 255, 0.85);
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
 
 .background_reg input:focus {
   outline: none;
-  border: 1px solid #ff00b3;
-  box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
 }
 
 /* === password === */
@@ -258,14 +265,15 @@ export default {
   margin-top: 6px;
   padding-right: 5px;
   font-size: 14px;
-  color: #fff;
+  color: #fafafa;
   text-align: right;
   cursor: pointer;
 }
 
 .forget:hover {
   text-decoration: underline;
-  color: #ff00b3;
+  color: #fafafa;
+  text-shadow: 0px 0px 0px#fafafa;
 }
 
 /* === errors (як modal-error) === */
@@ -286,18 +294,18 @@ export default {
   border: none;
   margin-top: 18px;
 
-  background: linear-gradient(135deg,
-      #4d0cff,
-      #b000f8,
-      #ff00b3);
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  
   color: white;
 
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+  transform: scale(1.02);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
 }
 
 /* === secondary button === */
