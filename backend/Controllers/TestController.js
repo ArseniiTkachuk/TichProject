@@ -1,0 +1,505 @@
+import Test from '../models/Test.js';
+import mongoose from 'mongoose';
+import { validateExercise } from '../validations.js'
+
+
+export const createTest = async (req, res) => {
+  try {
+    const { title, exercises } = req.body;
+
+    if (!title || !exercises) {
+      return res.status(400).json({ message: 'Невалідні дані' });
+    }
+
+    let parsedExercises;
+    try {
+      parsedExercises = JSON.parse(exercises);
+      parsedExercises.forEach((ex, index) => {
+        ex.slug = `${index}`;
+        if (ex.type === "pair") {
+          ex.pairs.left.forEach((l, lIndex) => {
+            l.slug = `${lIndex}`;
+          })
+          ex.pairs.right.forEach((r, rIndex) => {
+            r.slug = `${rIndex}`;
+          })
+        }
+
+        if (ex.type === "enter") {
+          ex.correctAnswers = ex.correctAnswers.map(str => str.trim());
+        }
+      })
+
+    } catch (err) {
+      return res.status(400).json({
+        message: 'Некоректний формат завдань'
+      });
+    }
+
+    /*  VALIDATION  */
+    for (const ex of parsedExercises) {
+      const error = validateExercise(ex);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+    }
+
+    if (req.files?.length) {
+      req.files.forEach(file => {
+
+        /* ANSWER IMAGE */
+        const answerMatch = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        if (answerMatch) {
+          const q = Number(answerMatch[1]);
+          const a = Number(answerMatch[2]);
+
+          const answer = parsedExercises[q]?.answers?.[a];
+          if (answer) {
+            answer.isImage = true;
+            answer.imageUrl = file.url;
+          }
+          return;
+        }
+
+        /* PAIR RIGHT IMAGE */
+        const pairRightMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+        if (pairRightMatch) {
+          const q = Number(pairRightMatch[1]);
+          const r = Number(pairRightMatch[2]);
+
+          const right = parsedExercises[q]?.pairs?.right?.[r];
+          if (right) {
+            right.imageUrl = file.url;
+          }
+          return;
+        }
+
+        /* PAIR LEFT IMAGE */
+        const pairLeftMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[l(\d+)/);
+        if (pairLeftMatch) {
+          const q = Number(pairLeftMatch[1]);
+          const l = Number(pairLeftMatch[2]);
+
+          const left = parsedExercises[q]?.pairs?.left?.[l];
+          if (left) {
+            left.imageUrl = file.url;
+          }
+        }
+
+      });
+    }
+
+
+    /*  SAVE  */
+    const test = new Test({
+      title,
+      author: new mongoose.Types.ObjectId(req.userId),
+      exercises: parsedExercises
+    });
+
+    await test.save();
+
+    res.json({
+      success: true,
+      id: test._id
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Помилка при створенні тесту',
+      error: err.message
+    });
+  }
+};
+
+export const getTest = async (req, res) => {
+  try {
+    const testid = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(testid)) {
+      return res.status(400).json({ message: "Невірний ID тесту" });
+    }
+
+    const test = await Test.findById(testid).lean();
+
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    // Перемішуємо масив exercises
+    const shuffledExercises = test.exercises
+      .map(ex => ({ ...ex })) // створюємо копії, щоб не змінювати оригінал
+      .sort(() => Math.random() - 0.5);
+
+    // Приховуємо правильні відповіді
+    const sanitizedExercises = shuffledExercises.map(ex => {
+      const newEx = { ...ex };
+
+      // Для типу one/many
+      if (newEx.answers) {
+        newEx.answers = newEx.answers.map(a => {
+          const { correct, ...rest } = a; // видаляємо correct
+          return rest;
+        });
+      }
+
+      // Для пар
+      if (newEx.pairs) {
+        const { correctMap, ...pairsRest } = newEx.pairs;
+        newEx.pairs = pairsRest;
+      }
+
+      // Для введення
+      if (newEx.correctAnswers) {
+        newEx.correctAnswers = []; // очищаємо correctAnswers
+      }
+
+      // Якщо є поле correctAnswerIndex для one-відповіді
+      if ('correctAnswerIndex' in newEx) {
+        delete newEx.correctAnswerIndex;
+      }
+
+      return newEx;
+    });
+
+    res.json({
+      ...test,
+      exercises: sanitizedExercises
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+};
+
+export const checkTest = async (req, res) => {
+  try {
+    let scor = 0;
+    const { userAnswers, name, leaveCount } = req.body;
+    const testid = req.params.id;
+
+    if (!name) {
+      return res.status(400).json({ message: "Невірно вказане ім'я" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(testid)) {
+      return res.status(400).json({ message: "Невірний код тесту" });
+    }
+
+    const test = await Test.findById(testid);
+
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    const exBal = 100 / test.exercises.length;
+
+    /*  ПЕРЕВІРКА ВІДПОВІДЕЙ  */
+    test.exercises.forEach((ex) => {
+      const userAnsw = userAnswers.find(a => a.slug === ex.slug);
+      if (!userAnsw) return;
+
+      // ONE
+      if (ex.type === "one") {
+        if (ex.answers[userAnsw.value]?.correct) {
+          scor += exBal;
+        }
+      }
+
+      // MANY
+      if (ex.type === "many") {
+        const correctIndexes = ex.answers
+          .map((a, i) => a.correct ? i : null)
+          .filter(i => i !== null);
+
+        const part = exBal / correctIndexes.length;
+
+        userAnsw.value.forEach(i => {
+          if (correctIndexes.includes(i)) {
+            scor += part;
+          }
+        });
+      }
+
+      // ENTER
+      if (ex.type === "enter") {
+        if (ex.correctAnswers.includes(userAnsw.value.trim())) {
+          scor += exBal;
+        }
+      }
+
+      // PAIR
+      if (ex.type === "pair") {
+        let correctCount = 0;
+        const total = ex.pairs.left.length; // кількість лівих елементів
+
+        userAnsw.value.forEach(([lSlug, rSlug]) => {
+          const leftIndex = ex.pairs.left.findIndex(l => l.slug === lSlug);
+          const rightIndex = ex.pairs.right.findIndex(r => r.slug === rSlug);
+
+          // Для Map ключі автоматично зберігаються як рядки
+          if (ex.pairs.correctMap.get(String(leftIndex)) === rightIndex) {
+            correctCount++;
+          }
+        });
+
+        scor += (exBal / total) * correctCount;
+      }
+
+    });
+
+    /*  ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ  */
+    const finalScore = Number(scor.toFixed(2));
+
+    test.childrens.push({
+      slug: `child${test.childrens.length}`,
+      name,
+      scor: finalScore,
+      leaveCount,
+      userAnswer: userAnswers
+    });
+
+    await test.save();
+
+    res.json({
+      success: true,
+      score: finalScore,
+      max: 100
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+};
+
+export const checkUserTest = async (req, res) => {
+  try {
+    const { testId, childSlug } = req.params; 
+
+    if (!mongoose.Types.ObjectId.isValid(testId)) {
+      return res.status(400).json({ message: "Невірний код тесту" });
+    }
+
+    const test = await Test.findById(testId).lean();
+    if (!test) return res.status(404).json({ message: "Тест не знайдено" });
+
+    const childResult = test.childrens.find(c => String(c.slug) === childSlug);
+    if (!childResult) return res.status(404).json({ message: "Результат учня не знайдено" });
+
+    const userAnswers = childResult.userAnswer;
+
+    const results = test.exercises.map(ex => {
+      const userAnsw = userAnswers.find(a => a.slug === ex.slug);
+      let isCorrect = false;
+      let userValue = userAnsw ? userAnsw.value : null;
+
+      switch (ex.type) {
+        case "one":
+          isCorrect = ex.answers[userValue]?.correct || false;
+          break;
+        case "many":
+          const correctIndexes = ex.answers.map((a, i) => a.correct ? i : null).filter(i => i !== null);
+          isCorrect = userValue
+            ? correctIndexes.every(idx => userValue.includes(idx)) &&
+            userValue.length === correctIndexes.length
+            : false;
+          break;
+        case "enter":
+          isCorrect = userValue
+            ? ex.correctAnswers.some(ans => ans.trim().toLowerCase() === userValue?.trim().toLowerCase())
+            : false;
+          break;
+        case "pair":
+          if (userValue) {
+            let correctCount = 0;
+
+            userValue.forEach(([lSlug, rSlug]) => {
+              const leftIndex = ex.pairs.left.findIndex(l => l.slug === lSlug);
+              const rightIndex = ex.pairs.right.findIndex(r => r.slug === rSlug);
+              if (ex.pairs.correctMap[String(leftIndex)] === rightIndex) {
+                correctCount++;
+              }
+            });
+
+            isCorrect = correctCount === ex.pairs.left.length;
+          }
+          break;
+      }
+
+      return {
+        question: ex.question,
+        type: ex.type,
+        answers: {
+          answer: ex.answers,
+          correctAnswers: ex.correctAnswers,
+          pairs: ex.pairs
+        },
+        userAnswer: userValue,
+        isCorrect
+      };
+    });
+
+    res.json({
+      name: childResult.name,
+      score: childResult.scor,
+      leaveCount: childResult.leaveCount,
+      results
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+};
+
+export const getOneTest = async (req, res) => {
+  try {
+    const testid = req.params.id;
+
+    const test = await Test.findById(testid).lean();
+
+    if (!test) {
+      return res.status(404).json({ message: "Тест не знайдено" });
+    }
+
+    res.json({
+      test
+    })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Помилка сервера",
+      error: err.message
+    });
+  }
+
+}
+
+export const remove = async (req, res) => {
+  try {
+    const testId = req.params.id;
+
+    const doc = await Test.findByIdAndDelete(testId);
+
+    if (!doc) {
+      return res.status(404).json({
+        message: 'Тест не знайдений'
+      });
+    }
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не вдалося видалити тест'
+    });
+  }
+}
+
+export const update = async (req, res) => {
+  try {
+    const { title, exercises } = req.body;
+    const { id } = req.params; // id тесту з маршруту
+
+    if (!title || !exercises) {
+      return res.status(400).json({ message: 'Невалідні дані' });
+    }
+
+    let parsedExercises;
+    try {
+      parsedExercises = JSON.parse(exercises);
+
+      parsedExercises.forEach((ex, index) => {
+        ex.slug = `${index}`;
+        if (ex.type === "pair") {
+          ex.pairs.left.forEach((l, lIndex) => l.slug = `${lIndex}`);
+          ex.pairs.right.forEach((r, rIndex) => r.slug = `${rIndex}`);
+        }
+        if (ex.type === "enter") {
+          ex.correctAnswers = ex.correctAnswers.map(str => str.trim());
+        }
+      });
+
+    } catch (err) {
+      return res.status(400).json({ message: 'Некоректний формат завдань' });
+    }
+
+    /*  VALIDATION  */
+    for (const ex of parsedExercises) {
+      const error = validateExercise(ex);
+      if (error) {
+        return res.status(400).json({ message: error });
+      }
+    }
+
+    /*  PROCESS FILES  */
+    if (req.files?.length) {
+      req.files.forEach(file => {
+
+        /* ANSWER IMAGE */
+        const answerMatch = file.fieldname.match(/q(\d+)\]\[a(\d+)/);
+        if (answerMatch) {
+          const q = Number(answerMatch[1]);
+          const a = Number(answerMatch[2]);
+          const answer = parsedExercises[q]?.answers?.[a];
+          if (answer) {
+            answer.isImage = true;
+            answer.imageUrl = file.url;
+          }
+          return;
+        }
+
+        /* PAIR RIGHT IMAGE */
+        const pairRightMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[r(\d+)/);
+        if (pairRightMatch) {
+          const q = Number(pairRightMatch[1]);
+          const r = Number(pairRightMatch[2]);
+          const right = parsedExercises[q]?.pairs?.right?.[r];
+          if (right) right.imageUrl = file.url;
+          return;
+        }
+
+        /* PAIR LEFT IMAGE */
+        const pairLeftMatch = file.fieldname.match(/pairImages\[q(\d+)\]\[l(\d+)/);
+        if (pairLeftMatch) {
+          const q = Number(pairLeftMatch[1]);
+          const l = Number(pairLeftMatch[2]);
+          const left = parsedExercises[q]?.pairs?.left?.[l];
+          if (left) left.imageUrl = file.url;
+        }
+
+      });
+    }
+
+    /*  UPDATE TEST  */
+    const updatedTest = await Test.findByIdAndUpdate(
+      id,
+      { title, exercises: parsedExercises },
+      { new: true } // повертає оновлений документ
+    );
+
+    if (!updatedTest) {
+      return res.status(404).json({ message: 'Тест не знайдено' });
+    }
+
+    res.json({ success: true, id: updatedTest._id });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Помилка при оновленні тесту', error: err.message });
+  }
+}
