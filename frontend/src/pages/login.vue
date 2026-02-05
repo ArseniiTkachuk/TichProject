@@ -149,10 +149,9 @@ export default {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* === wrapper === */
+/* задній фон */
 .auth {
   min-height: calc(100vh - 60px);
-  /* не ламає header */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,7 +163,7 @@ export default {
     #1f2423 0%,
     #242d2b 40%,
     #2e3b38 70%,
-    #465c57 100% /* <-- світліше і тепліше */
+    #465c57 100% 
   );
   height: 100vh;
 }
@@ -174,40 +173,26 @@ export default {
 .background_reg {
   /* background: rgba(255, 255, 255, 0.25); */
   backdrop-filter: blur(14px);
-  padding: 32px 36px;
+  padding: 12px 36px 32px;
   border-radius: 22px;
   width: 100%;
   max-width: 380px;
   text-align: center;
-
+  background: rgba(200, 200, 200, 0.073);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-.bg_gradient {
-  border-radius: 22px;
-  border: solid 1px #fafafa;
-  font-family: "Roboto Slab", serif;
-}
-
-
-/* === title === */
-.text_reg {
-  color: white;
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* === inputs (як у modal-input) === */
 .background_reg input {
   width: 100%;
   padding: 12px;
+  margin: auto;
   border-radius: 10px;
-   border: 1px solid transparent;
+  border: 1px solid transparent;
   font-size: 16px;
   margin-top: 12px;
-  background: rgba(255, 255, 255, 0.85);
+  background: #fafafa;
   transition:
     border 0.25s ease,
     box-shadow 0.25s ease,
@@ -221,7 +206,19 @@ export default {
     0 0 0 1px rgba(107, 255, 179, 0.4),
     0 8px 20px rgba(93, 255, 154, 0.35);
   transform: scale(1.02);
+  
 }
+
+
+/* === title === */
+.text_reg {
+  color: #fafafa;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+
 
 /* === password === */
 .password-wrapper {
@@ -258,7 +255,7 @@ export default {
 
 
 .eye:hover {
-  color: #ff00b3;
+  color: #3daa80de;
 }
 
 .forget {
@@ -293,19 +290,20 @@ export default {
   cursor: pointer;
   border: none;
   margin-top: 18px;
-
   border: 1px solid rgba(107, 255, 179, 0.4);
-  
-  color: white;
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
+  color: #fafafa;
 
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn:hover {
   transform: scale(1.02);
-  box-shadow:
-    0 0 0 1px rgba(107, 255, 179, 0.4),
-    0 8px 20px rgba(93, 255, 154, 0.35);
+ box-shadow:
+  0 8px 20px rgba(63, 220, 140, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
 }
 
 /* === secondary button === */
@@ -316,7 +314,10 @@ export default {
 }
 
 .register-btn:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(236, 235, 235, 0.15) !important;
+  box-shadow:
+  0 8px 20px rgba(177, 202, 189, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 
@@ -325,19 +326,26 @@ export default {
   top: 10px;
   left: 20px;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8);
-  color: white;
+  background: transparent;
+  color: #fafafa;
   font-weight: 600;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(77, 12, 255, 0.3);
+   box-shadow:
+  0 1px 9px rgba(177, 202, 189, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-back:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(77, 12, 255, 0.5);
+  background: #fafafa;
+  color: #161817;
+  transform: translateY(-1.5px);
+/*  background: rgba(224, 224, 224, 0.09);*/
+  box-shadow:
+  0 6px 17px rgba(206, 224, 215, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 

@@ -127,42 +127,51 @@ export default {
     font-family: 'Roboto Slab', serif;
 }
 
-/* === wrapper === */
+/* задній фон */
 .auth {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, #51ff0c, #0c00f8, #ff0000);
+    border: white;
+    background: #4b4b52;
+  background: linear-gradient(
+    180deg,
+    #1f2423 0%,
+    #242d2b 40%,
+    #2e3b38 70%,
+    #465c57 100% 
+  );
 }
 
 /* === gradient card === */
 .bg_gradient {
     border-radius: 22px;
-    background: linear-gradient(135deg, #0088ff, #4d0cff, #b000f8);
+    border: solid 1px #fafafa;
     background-size: 200% 200%;
-    animation: gradientMove 10s ease infinite;
+    font-family: "Roboto Slab", serif;
 }
 
 /* === glass card === */
 .background_reg {
     backdrop-filter: blur(14px);
-    padding: 32px 36px;
+    padding: 12px 36px 32px;
     border-radius: 22px;
     width: 100%;
     max-width: 380px;
     text-align: center;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(215, 215, 215, 0.073);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 /* title */
 .text_reg {
-    color: white;
-    font-size: 24px;
-    margin-bottom: 12px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    color: #fafafa;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .subtitle {
@@ -174,18 +183,26 @@ export default {
 /* inputs */
 .input {
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    font-size: 16px;
-    margin-top: 12px;
-    background: rgba(255, 255, 255, 0.85);
+  padding: 12px;
+  margin: auto;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 16px;
+  margin-top: 12px;
+  background: #fafafa;
+  transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
 
 .input:focus {
-    outline: none;
-    border: 1px solid #ff00b3;
-    box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
+   outline: none;
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
 }
 
 
@@ -225,21 +242,22 @@ export default {
 
 
 .eye:hover {
-    color: #ff00b3;
+    color: #3daa80de;
 }
 
 .forget {
     margin-top: 6px;
     padding-right: 5px;
     font-size: 14px;
-    color: #fff;
+    color: #fafafa;
     text-align: right;
     cursor: pointer;
 }
 
 .forget:hover {
     text-decoration: underline;
-    color: #ff00b3;
+    color: #fafafa;
+    text-shadow: 0px 0px 0px#fafafa;
 }
 
 
@@ -252,14 +270,19 @@ export default {
     cursor: pointer;
     border: none;
     margin-top: 18px;
-    background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-    color: white;
+    border: 1px solid rgba(107, 255, 179, 0.4);
+    background: linear-gradient(135deg, #34c98a, #1e6f50);
+    color: #fafafa;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+    transform: scale(1.02);
+    box-shadow:
+    0 8px 20px rgba(63, 220, 140, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: all 0.25s ease;
+    background: linear-gradient(135deg, #34c98a, #1e6f50);
 }
 
 .btn:disabled {
@@ -270,7 +293,7 @@ export default {
 /* errors & success */
 .error {
     margin-top: 12px;
-    color: #ff6b6b;
+    color: #fb6262;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
     font-size: 14px;
 }
@@ -284,31 +307,27 @@ export default {
 
 /* secondary link button */
 .login-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
     display: block;
-    margin-top: 20px;
+    margin-top: 11px;
     text-align: center;
-    color: #9bb0c9;
+    color: #fafafa;
     text-decoration: none;
-    font-size: 14px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
 }
 
 .login-btn:hover {
-    color: #ffffff;
-}
-
-/* gradient animation */
-@keyframes gradientMove {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 8px 20px rgba(177, 202, 189, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: all 0.25s ease;
 }
 
 /* mobile */
