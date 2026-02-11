@@ -273,7 +273,7 @@ export default {
   text-shadow: 0px 0px 0px#fafafa;
 }
 
-/* === errors (як modal-error) === */
+/* errors (як modal-error) */
 .error {
   margin-top: 6px;
   font-size: 14px;
@@ -281,7 +281,7 @@ export default {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-/* === primary button (modal-btn) === */
+/* primary button (modal-btn)  */
 .btn {
   width: 100%;
   padding: 12px;
