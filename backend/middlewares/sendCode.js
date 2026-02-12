@@ -163,7 +163,7 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
     </div>
 
     <p style="font-size: 14px; color: #666;">
-      Код дійсний <strong>10 хвилин</strong>.
+      Посилання дійсне <strong>10 хвилин</strong>.
     </p>
 
     <hr style="border: none; border-top: 2px solid #e0e0e0; margin: 24px 0;">

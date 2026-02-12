@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import passport from './utils/passport.js';
 import checkAuth from './checkAuth.js';
 import { registerValidator, loginValidator } from './validations.js';
 import * as UserController from './Controllers/UserController.js';
@@ -22,11 +23,13 @@ const PORT = process.env.PORT || 2222;
 // Підключення до Mongo
 mongoose
   .connect(process.env.MONGO_DB)
+//  .connect('mongodb://localhost:27017/TichPrj')
   .then(() => console.log('DB OK'))
   .catch(err => console.log('DB error:', err));
 
 const app = express();
 app.use(cors());
+app.use(passport.initialize());
 app.use(express.json());
 
 // Статика
@@ -74,6 +77,12 @@ const hashFiles = (req, res, next) => {
 //  РОУТИ 
 
 // AUTH
+
+app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/google/callback', 
+  passport.authenticate('google', 
+    { session: false, failureRedirect: `${process.env.FRONTEND_URL}/#/register` }), 
+  UserController.authGoogl);
 app.post("/register", registerValidator, UserController.register);
 app.post("/verify-email", UserController.verifyEmail)
 app.post("/sendCode", UserController.sendCode)

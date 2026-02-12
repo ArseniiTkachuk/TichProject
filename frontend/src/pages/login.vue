@@ -51,6 +51,7 @@
 
         <!-- Кнопка для переходу на реєстрацію -->
         <button class=" btn register-btn" @click="$router.push('/register')">Немає акаунту? Зареєструватися</button>
+        <GoogleBtn/>
       </div>
     </div>
   </div>
@@ -58,11 +59,17 @@
 
 <script>
 import api from '@/services/api'
-
+import GoogleBtn from '@/components/GoogleBtn.vue'
 
 
 
 export default {
+
+    components: {
+      GoogleBtn
+    },
+
+
   data() {
     return {
       showPassword: false,

@@ -4,6 +4,7 @@ import { showToast } from '@/services/toastService'
 
 import Register from './pages/register.vue' //сторінка реєстрації
 import Login from './pages/login.vue' // сторінка входу
+import authSucces from './pages/authSuccess.vue' 
 
 import Test from './pages/test.vue' // сторінка проходження тесту
 
@@ -46,6 +47,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+    meta: { gradientBg: false }
+  },
+
+  {
+    path: '/authSuccess',
+    name: 'AuthSucces',
+    component: authSucces,
     meta: { gradientBg: false }
   },
 
@@ -119,7 +127,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("tokenAuthTeacher")
 
-  const publicPages = ['Home', 'Register', 'Login', 'Test', 'ResetPassword']
+  const publicPages = ['Home', 'Register', 'Login', 'Test', 'ResetPassword', 'AuthSucces']
   const authRequired = !publicPages.includes(to.name)
 
   if (authRequired && !token) {
@@ -132,3 +140,4 @@ router.beforeEach((to, from, next) => {
 
 
 export default router
+

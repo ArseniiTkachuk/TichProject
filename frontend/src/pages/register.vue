@@ -37,6 +37,7 @@
 
                 <!-- Кнопка для переходу на логін -->
                 <button class="login-btn" @click="$router.push('/login')">Вже є акаунт? Увійти</button>
+                <GoogleBtn/>
             </div>
         </div>
 
@@ -46,10 +47,12 @@
 <script>
 import api from '@/services/api'
 import VerifyEmail from '@/components/VerifyEmail.vue';
+import GoogleBtn from '@/components/GoogleBtn.vue'
 
 export default {
     components: {
         VerifyEmail,
+        GoogleBtn,
     },
     data() {
         return {

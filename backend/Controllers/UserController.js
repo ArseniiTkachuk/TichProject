@@ -6,6 +6,22 @@ import { sendVerificationCode, sendLinkForgot } from "../middlewares/sendCode.js
 import { validationResult } from 'express-validator'
 
 
+export const authGoogl = (req, res) => {
+  try{
+    const token = jwt.sign(
+        { _id: req.user._id },
+        process.env.TOKEN_KEY || 'TOKEN',
+        { expiresIn: '30d' }
+      );
+
+      // ПЕРЕНАПРАВЛЕННЯ НА ФРОНТЕНД
+      const frontendUrl = process.env.FRONTEND_URL; 
+      res.redirect(`${frontendUrl}/#/authSuccess?token=${token}`);
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ message: 'Не вдалося зареєструватися' })
+    }
+} 
 
 export const register = async (req, res) => {
     try {
@@ -80,7 +96,7 @@ export const verifyEmail = async (req, res) => {
         const doc = await user.save();
 
         // Генеруємо токен
-        const token = jwt.sign({ _id: doc._id }, 'TOKEN', { expiresIn: '30d' })
+        const token = jwt.sign({ _id: doc._id }, process.env.TOKEN_KEY, { expiresIn: '30d' })
 
         res.json({ token })
 
@@ -137,7 +153,7 @@ export const login = async (req, res) => {
 
 
         // Генеруємо токен
-        const token = jwt.sign({ _id: user._id }, 'TOKEN', { expiresIn: '30d' })
+        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_KEY, { expiresIn: '30d' })
 
         res.json({
             token
