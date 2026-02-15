@@ -51,7 +51,7 @@ api.interceptors.response.use(
           showToast('Недостатньо прав', 'error')
           break
         case 404:
-          showToast(`Помилка: ${message}`, 'error')
+          showToast(`Помилка: ${messages}`, 'error')
           break
         case 500:
           showToast('Помилка сервера', 'error')
