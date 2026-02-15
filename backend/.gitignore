@@ -1,4 +1,4 @@
 # Ігноруємо секрети в будь-яких папках
 .env
-node_modules/
+node_modules
 .DS_Store
