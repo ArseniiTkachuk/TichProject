@@ -1,7 +1,7 @@
 <template>
     <div class="verify">
         <div class="background_reg">
-            <h2 class="title">Код надіслани</h2>
+            <h2 class="title">Код надісланий</h2>
             <div class="description">
                 <p>Ми надіслали код підтвердження на email: <strong>{{ email }}</strong> </p>
                 <p>Введіть код підтвердження нище.</p>
@@ -16,13 +16,13 @@
 
             <p v-if="error" class="error">{{ error }}</p>
 
-            <div class="btn">
-                <button @click="ChanchEmail">⬅ Повернутися назад</button>
-                <button @click="sendCode">Надіслати код знову</button>
+            <div class="btn_bn_wrap">
+                <button @click="ChanchEmail" class="btn_bn">⬅ Повернутися назад</button>
+                <button @click="sendCode"class="btn_bn">Надіслати код знову</button>
             </div>
 
 
-            <button @click="Verify">Підтвердити email</button>
+            <button @click="Verify" class="btn">Підтвердити email</button>
         </div>
 
     </div>
@@ -162,9 +162,11 @@ export default {
 }
 
 .code-input input:focus {
-    border-color: #ff00b3;
-    box-shadow: 0 0 8px rgba(255, 0, 179, 0.6);
     outline: none;
+    border: 1px solid rgba(107, 255, 179, 0.4);
+    box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
 }
 
 .error {
@@ -198,39 +200,65 @@ export default {
     max-width: 380px;
     text-align: center;
 
+    background: rgba(200, 200, 200, 0.073);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 
-
-.background_reg button {
+.btn {
     width: 100%;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: none;
+    margin-top: 16px;
+    border: 1px solid rgba(107, 255, 179, 0.4);
+    background: linear-gradient(135deg, #34c98a, #1e6f50);
+    color: #fafafa;
+    padding: 12px;
+
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow:
+    0 8px 20px rgba(63, 220, 140, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: all 0.25s ease;
+    background: linear-gradient(135deg, #34c98a, #1e6f50);
+}
+
+
+.btn_bn_wrap {
+    display: flex;
+    gap: 12px;
+}
+
+
+.btn_bn {
+    flex: 1;
     padding: 12px;
     font-size: 16px;
     border-radius: 12px;
     cursor: pointer;
     border: none;
-    margin-top: 18px;
+    margin-top: 28px;
 
-    background: linear-gradient(135deg,
-            #4d0cff,
-            #b000f8,
-            #ff00b3);
-    color: white;
+   background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: #fafafa;
 
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.background_reg button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
-}
-
-.btn {
-    padding: 2px;
-    display: flex;
-    gap: 10px;
+.btn_bn:hover {
+    transform: scale(1.02);
+    background: rgba(236, 235, 235, 0.15) ;
+    box-shadow:
+    0 8px 20px rgba(177, 202, 189, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 
