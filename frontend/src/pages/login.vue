@@ -221,7 +221,7 @@ export default {
 .text_reg {
   color: #fafafa;
   font-size: 32px;
-  margin-bottom: 20px;
+  margin: 50px auto 17px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
@@ -330,8 +330,8 @@ export default {
 
 .btn-back {
   position: absolute;
-  top: 10px;
-  left: 20px;
+  top: 17px;
+  left: 17px;
   padding: 10px 16px;
   background: transparent;
   color: #fafafa;
