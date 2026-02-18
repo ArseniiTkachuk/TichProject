@@ -122,9 +122,15 @@ export default {
 
 .profile-page {
   min-height: 100vh;
-  width: 100%;
-  padding-top: 80px;
-  color: #fff;
+  padding-top: 90px;
+  color: #fafafa;
+  background: linear-gradient(
+    180deg,
+    #1f2423 0%,
+    #242d2b 40%,
+    #2e3b38 70%,
+    #465c57 100% /* <-- світліше і тепліше */
+  );
 }
 
 /* HEADER */
@@ -171,35 +177,46 @@ export default {
 /* DESKTOP BUTTONS */
 .profile-right .buttons-desktop {
   display: flex;
-  gap: 8px;
+  gap: 13px;
 }
 
 .action-btn {
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 30px;
   font-weight: 600;
   border: 2px solid rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  transition: all 0.2s;
+  color: #fafafa;
+  background: rgba(194, 193, 193, 0.221);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .action-btn:hover {
-  transform: scale(1.05);
-  border-color: #fff;
-  box-shadow: 0 4px 12px rgba(255, 0, 179, 0.4);
+  background: #f4f4f4;
+    color: #161817;
+    transform: translateY(-1.5px);
+    /*  background: rgba(224, 224, 224, 0.09);*/
+    box-shadow:
+    0 6px 17px rgba(206, 224, 215, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15);
 }
+
 
 .action-btn.primary {
   font-weight: 700;
 }
 
 .action-btn.danger {
-  background: linear-gradient(135deg, #ff4d4d, #ff0000);
-  border-color: rgba(255, 77, 77, 0.6);
+  border-radius: 12px;
+  border: solid 2px rgba(255, 255, 255, 0.6);
+  margin-left: 17px;
 }
 
+.action-btn.danger:hover {
+  border-color: rgba(255, 77, 77, 0.6);
+  background: linear-gradient(135deg, #ff4d4d, #ff0000);
+}
 /* MOBILE MENU */
 .menu-mobile {
   display: none;

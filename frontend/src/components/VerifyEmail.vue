@@ -157,7 +157,7 @@ export default {
     font-size: 24px;
     font-weight: bold;
     border-radius: 10px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     transition: 0.2s;
 }
 
@@ -167,12 +167,15 @@ export default {
     box-shadow:
     0 0 0 1px rgba(107, 255, 179, 0.4),
     0 8px 20px rgba(93, 255, 154, 0.35);
+    transform: scale(1.02);
+    
 }
 
 .error {
-    margin-top: 6px;
+    margin-top: 8px;
+    margin-bottom: 18px;
     font-size: 14px;
-    color: rgb(255, 200, 200);
+    color: rgb(250, 135, 135);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 }
 
@@ -227,6 +230,7 @@ export default {
     0 8px 20px rgba(63, 220, 140, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
     transition: all 0.25s ease;
+    border: 1px solid rgba(107, 255, 179, 0.4);
     background: linear-gradient(135deg, #34c98a, #1e6f50);
 }
 
@@ -243,7 +247,6 @@ export default {
     font-size: 16px;
     border-radius: 12px;
     cursor: pointer;
-    border: none;
     margin-top: 28px;
 
    background: transparent;
@@ -254,10 +257,12 @@ export default {
 }
 
 .btn_bn:hover {
-    transform: scale(1.02);
-    background: rgba(236, 235, 235, 0.15) ;
+    background: #f4f4f4;
+    color: #161817;
+    transform: translateY(-1.5px);
+    /*  background: rgba(224, 224, 224, 0.09);*/
     box-shadow:
-    0 8px 20px rgba(177, 202, 189, 0.35),
+    0 6px 17px rgba(206, 224, 215, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
