@@ -42,7 +42,7 @@ export const validateExercise = (ex) => {
   /*  ENTER  */
   if (ex.type === "enter") {
     if (!ex.correctAnswers || ex.correctAnswers.length === 0) {
-      return "Питання з введенням повинно мати правильну відповідь";
+      return "Питання з введенням повинно мати хоча б одну правильну відповідь";
     }
   }
 
@@ -67,4 +67,3 @@ export const validateExercise = (ex) => {
 
   return null;
 };
-
