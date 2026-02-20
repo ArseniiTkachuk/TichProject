@@ -1,28 +1,28 @@
 <template>
-
   <div class="home">
-
     <!-- HERO -->
     <section class="hero">
       <div class="hero-content">
-        <h1>{{ displayText[0] }}
+        <h1>
+          {{ displayText[0] }}
           <span v-if="textIndex === 0" class="cursor">|</span>
         </h1>
-        
 
-        <p>{{ displayText[1] }}
+        <p>
+          {{ displayText[1] }}
           <span v-if="textIndex === 1" class="cursor">|</span>
         </p>
-        
 
         <div class="actions">
-          <button class="primary" @click="enterCode = true"><span>Я студент</span></button>
-          <button class="secondary" @click="$router.push('/home')"><span>Я викладач</span></button>
+          <button class="primary" @click="enterCode = true">
+            <span>Я студент</span>
+          </button>
+          <button class="secondary" @click="$router.push('/home')">
+            <span>Я викладач</span>
+          </button>
         </div>
       </div>
     </section>
-
-
 
     <!-- HOW IT WORKS -->
     <section class="white">
@@ -33,40 +33,44 @@
         <div class="step3">🏆 Отримай результат</div>
       </div>
     </section>
-
-
   </div>
 
   <div v-if="enterCode" class="modal-overlay" @click="enterCode = false">
     <div class="modal-card" @click.stop>
-
       <h2 class="modal-title">Введіть код тесту</h2>
 
-      <input v-model="testCode" placeholder="Enter code" class="modal-input">
+      <form @submit.prevent="$router.push(`/test/${testCode}`)">
+        <input
+          v-model="testCode"
+          placeholder="Enter code"
+          class="modal-input"
+          required
+        />
 
-      <button class="modal-btn" @click="$router.push(`/test/${testCode}`)"><span>Go</span></button>
-
+        <button type="submit" class="modal-btn">
+          <span>Go</span>
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       enterCode: false,
-      testCode: '',
+      testCode: "",
 
       texts: [
         "Створюй тести. Проходь. Розвивайся.",
-        "Платформа для навчання та перевірки знань"
+        "Платформа для навчання та перевірки знань",
       ],
       displayText: ["", ""], // окремо для h1 і p
       textIndex: 0,
       charIndex: 0,
-      typeSpeed: 55
-    }
+      typeSpeed: 55,
+    };
   },
 
   mounted() {
@@ -90,19 +94,17 @@ export default {
         this.charIndex = 0;
         setTimeout(this.type, 400);
       }
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   font-family: "Playfair Display", serif;
-
 }
 
 .cursor {
@@ -113,12 +115,16 @@ export default {
 }
 
 @keyframes blink {
-  0%   { opacity: 1; }
-  50%  { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-
-
 
 /* ===== MODAL OVERLAY ===== */
 .modal-overlay {
@@ -132,14 +138,12 @@ export default {
   z-index: 1000;
 }
 
-
 .modal-text {
   color: white;
   font-size: 15px;
   margin-bottom: 20px;
   opacity: 0.9;
 }
-
 
 /* ===== MODAL CARD ===== */
 .modal-card {
@@ -171,7 +175,9 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.6);
   font-size: 16px;
   margin-bottom: 10px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .modal-input:focus {
@@ -179,7 +185,7 @@ export default {
   border: 1px solid rgba(107, 255, 179, 0.4);
   box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
   transform: scale(1.02);
-}   
+}
 
 /* ===== ERROR ===== */
 .modal-error {
@@ -201,7 +207,9 @@ export default {
   color: #fafafa;
   position: relative;
   overflow: hidden;
-  transition: color 0.4s ease, transform 0.3s ease;
+  transition:
+    color 0.4s ease,
+    transform 0.3s ease;
 }
 
 .modal-btn::before {
@@ -229,7 +237,6 @@ export default {
 
 .modal-btn:hover::before {
   opacity: 1; /* фон плавно з’являється */
-  
 }
 
 :global(body) {
@@ -239,7 +246,7 @@ export default {
 /*  GLOBAL  */
 .home {
   background: #f4f2f2;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   overflow-x: hidden;
 }
 
@@ -254,7 +261,7 @@ export default {
     #2e3b38 70%,
     #465c57 100% /* <-- світліше і тепліше */
   );
- display: flex;
+  display: flex;
   align-items: center;
   padding: 80px;
   color: white;
@@ -277,8 +284,6 @@ export default {
   );
   z-index: 0;
 }
-
-
 
 /* Content above blobs */
 .hero-content {
@@ -318,11 +323,13 @@ export default {
   border-radius: 30px;
   font-weight: 600;
   cursor: pointer;
-   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .primary:hover {
-   transform: translateY(-1px);
+  transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
 }
 
@@ -334,19 +341,16 @@ export default {
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
-  
 }
 
 .primary:hover::before {
   opacity: 1;
-  
 }
 
 .primary span {
   position: relative;
   z-index: 1;
 }
-
 
 .secondary {
   width: 250px;
@@ -360,11 +364,13 @@ export default {
   overflow: hidden;
   color: rgb(240, 238, 238);
   font-weight: 600;
-   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .secondary:hover {
-   transform: translateY(-1px);
+  transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(93, 255, 154, 0.35);
   border: 1px solid rgba(107, 255, 179, 0.4);
   color: #222223;
@@ -378,12 +384,10 @@ export default {
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
-  
 }
 
 .secondary:hover::before {
   opacity: 1;
-  
 }
 
 .secondary span {
@@ -397,10 +401,7 @@ export default {
   display: block;
   width: 100%;
   height: 120px;
-  
-  
 }
-
 
 /* WHITE SECTION  */
 .white {
@@ -414,7 +415,6 @@ export default {
     0 8px 20px rgba(0, 0, 0, 0.12);
   position: relative;
   z-index: 2;
-  
 }
 
 .steps {
@@ -425,8 +425,8 @@ export default {
 
 .step1 {
   flex: 1;
- background: linear-gradient(135deg, #fff7c9, #ffe49e);
-color: #4f3a00;
+  background: linear-gradient(135deg, #fff7c9, #ffe49e);
+  color: #4f3a00;
 
   padding: 30px;
   border-radius: 25px;
@@ -436,12 +436,14 @@ color: #4f3a00;
   overflow: hidden;
   color: #000;
   background-clip: padding-box;
-   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .step1:hover {
   background: linear-gradient(135deg, #ffe08a, #ffc857);
-   transform: translateY(-1px);
+  transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(189, 140, 5, 0.25);
 }
 
@@ -450,7 +452,6 @@ color: #4f3a00;
   background: linear-gradient(135deg, #ffd6d6, #ffbcbc);
   color: #5a1f1f;
 
-
   padding: 30px;
   border-radius: 25px;
   font-size: 20px;
@@ -459,7 +460,9 @@ color: #4f3a00;
   overflow: hidden;
   color: #000;
   background-clip: padding-box;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .step2:hover {
@@ -480,7 +483,9 @@ color: #4f3a00;
   overflow: hidden;
   color: #000;
   background-clip: padding-box;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .step3:hover {
@@ -505,7 +510,6 @@ color: #4f3a00;
 .step:hover {
   background: linear-gradient(135deg, #b982f1, #f56abd);
   box-shadow: 1px (#b982f1, #f56abd);
-
 }
 
 @media (max-width: 768px) {
@@ -518,12 +522,10 @@ color: #4f3a00;
 
   .hero h1 {
     font-size: 36px;
-
   }
 
   .hero p {
     font-size: 16px;
-
   }
 
   .actions {
