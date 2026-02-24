@@ -1,27 +1,28 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     passwordHash: {
-        type: String,
-        required: false
+      type: String,
+      required: false,
     },
     googleId: {
-        type: String, 
-        unique: true, 
-        sparse: true
+      type: String,
+      unique: true,
+      sparse: true,
     },
     imageUrl: {
-        type: String,
-        default: "/utils/defaultUserImg.png"
+      type: String,
+      default: "/utils/defaultUserImg.png",
     },
 
     verified: { type: Boolean, default: false },
@@ -30,11 +31,12 @@ const UserSchema = new mongoose.Schema({
     emailCodeExpires: Date,
 
     deleteAt: {
-        type: Date,
-        default: () => new Date(Date.now() + 24 * 60 * 60 * 1000),
-        index: { expires: 0 }
-    }
+      type: Date,
+      default: () => new Date(Date.now() + 24 * 60 * 60 * 1000),
+      index: { expires: 0 },
+    },
+  },
+  { timestamps: true },
+);
 
-}, { timestamps: true })
-
-export default mongoose.model('User', UserSchema);
+export default mongoose.model("User", UserSchema);
