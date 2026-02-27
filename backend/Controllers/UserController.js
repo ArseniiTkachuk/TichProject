@@ -301,10 +301,12 @@ export const editPassword = async (req, res) => {
       return res.status(404).json({ message: "Користувача не знайдено" });
     }
 
-    const isValid = bcrypt.compare(password, user.passwordHash);
+    if (user.passwordHash) {
+      const isValid = await bcrypt.compare(password, user._doc.passwordHash);
 
-    if (!isValid) {
-      return res.status(400).json({ message: "Старий пароль не вірний" });
+      if (!isValid) {
+        return res.status(400).json({ message: "Старий пароль не вірний" });
+      }
     }
 
     await UserModel.findByIdAndUpdate(req.userId, {
