@@ -271,18 +271,48 @@ export default {
 
 /* === mobile === */
 @media (max-width: 480px) {
+
     .background_reg {
-        padding: 28px 22px;
+        padding: 24px 16px;
+        border-radius: 18px;
     }
 
-    .text_reg {
-        font-size: 22px;
+    .title {
+        font-size: 20px;
+        margin-bottom: 14px;
     }
 
+    .description p {
+        font-size: 15px;
+        line-height: 1.4;
+    }
+
+    .code-input {
+        gap: 8px;
+        margin-top: 12px;
+    }
 
     .code-input input {
-        height: 45px;
-        font-size: 20px;
+        width: 40px;
+        height: 48px;
+        font-size: 18px;
+    }
+
+    .btn_bn_wrap {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .btn_bn {
+        margin-top: 10px;
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .btn {
+        font-size: 15px;
+        padding: 13px;
     }
 }
 </style>

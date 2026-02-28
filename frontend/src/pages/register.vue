@@ -273,13 +273,45 @@ export default {
 }
 
 /* === mobile === */
-@media (max-width: 480px) {
-    .background_reg {
-        padding: 28px 22px;
-    }
+@media (max-width: 768px) {
 
-    .text_reg {
-        font-size: 22px;
-    }
+  .auth {
+    min-height: 100svh; /* правильний vh для мобілок */
+    height: auto;
+    padding: 16px;
+  }
+
+  .background_reg {
+    max-width: 100%;
+    padding: 24px 20px 28px;
+    border-radius: 18px;
+  }
+
+  .text_reg {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* Inputs */
+  .background_reg input {
+    font-size: 16px; /* щоб iOS не зумів */
+    padding: 14px;
+  }
+
+  /* Buttons */
+  .background_reg button {
+    font-size: 16px;
+    padding: 14px;
+    margin-top: 20px;
+  }
+
+  .login-btn {
+    margin-top: 10px !important;
+  }
+
+  /* Password eye — більша зона кліку */
+  .eye {
+    padding: 6px;
+  }
 }
 </style>

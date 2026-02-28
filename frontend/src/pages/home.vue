@@ -508,33 +508,51 @@ color: #4f3a00;
 
 }
 
+/* =========================
+   📱 MOBILE (до 768px)
+========================= */
 @media (max-width: 768px) {
+
+  /* HERO */
   .hero {
+    min-height: 90vh;
     padding: 40px 20px;
-    min-height: 70vh;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+
+  .hero-content {
+    max-width: 100%;
   }
 
   .hero h1 {
-    font-size: 36px;
-
+    font-size: 32px;
+    min-height: 90px;
+    line-height: 1.2;
   }
 
   .hero p {
     font-size: 16px;
-
   }
 
+  /* Buttons */
   .actions {
     flex-direction: column;
     gap: 15px;
   }
 
+  .primary,
+  .secondary {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  /* WHITE SECTION */
   .white {
+    margin: 40px 16px;
     padding: 30px 20px;
-    margin: -40px 15px 40px;
-    border-radius: 30px;
+    border-radius: 25px;
   }
 
   .steps {
@@ -542,9 +560,29 @@ color: #4f3a00;
     gap: 20px;
   }
 
-  .step {
-    padding: 20px;
+  .step1,
+  .step2,
+  .step3 {
     font-size: 18px;
+    padding: 22px;
+  }
+
+  /* MODAL */
+  .modal-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .modal-input {
+    font-size: 15px;
+  }
+
+  .modal-btn {
+    font-size: 16px;
   }
 }
 </style>

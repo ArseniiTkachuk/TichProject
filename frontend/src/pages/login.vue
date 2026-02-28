@@ -357,13 +357,57 @@ export default {
 
 
 /* === mobile === */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+
+  .auth {
+    min-height: 100svh; /* правильний vh на мобільних */
+    height: auto;
+    padding: 16px;
+  }
+
   .background_reg {
-    padding: 28px 22px;
+    max-width: 100%;
+    padding: 24px 20px 28px;
+    border-radius: 18px;
   }
 
   .text_reg {
-    font-size: 22px;
+    font-size: 24px;
+    margin: 36px auto 14px; /* менше зверху */
+  }
+
+  .description p {
+    font-size: 16px;
+  }
+
+  /* Inputs */
+  .background_reg input {
+    font-size: 16px; /* щоб iOS не робив zoom */
+    padding: 14px;
+  }
+
+  /* Buttons */
+  .btn {
+    font-size: 16px;
+    padding: 14px;
+    margin-top: 16px;
+  }
+
+  .register-btn {
+    margin-top: 10px;
+  }
+
+  /* Back button */
+  .btn-back {
+    top: 12px;
+    left: 12px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  /* Eye — більша зона кліку */
+  .eye {
+    padding: 6px;
   }
 }
 </style>
