@@ -4,11 +4,10 @@ import crypto from "crypto";
 import sendpulse from "sendpulse-api";
 dotenv.config();
 
-
 sendpulse.init(
   process.env.SENDPULSE_API_ID,
   process.env.SENDPULSE_API_SECRET,
-  "/tmp/" // тимчасова папка для зберігання токена
+  "/tmp/", // тимчасова папка для зберігання токена
 );
 
 // функція для відправки коду
@@ -23,24 +22,26 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
   const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 хв
   await UserModel.findByIdAndUpdate(userId, {
     emailCodeHash: codeHash,
-    emailCodeExpires: expires
+    emailCodeExpires: expires,
   });
 
   //  Відправляємо лист
   return new Promise((resolve, reject) => {
-    sendpulse.smtpSendMail((response) => {
-      if (response && response.result) {
-        console.log("📧 Email sent successfully");
-        resolve(true);
-      } else {
-        console.error("❌ Email failed:", response);
-        reject(response);
-      }
-    }, {
-      from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
-      to: [{ email: userEmail }],
-      subject: "Підтвердження email",
-      html: `
+    sendpulse.smtpSendMail(
+      (response) => {
+        if (response && response.result) {
+          console.log("📧 Email sent successfully");
+          resolve(true);
+        } else {
+          console.error("❌ Email failed:", response);
+          reject(response);
+        }
+      },
+      {
+        from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
+        to: [{ email: userEmail }],
+        subject: "Підтвердження email",
+        html: `
   <div style="
     font-family: Arial, Helvetica, sans-serif;
     color: #333;
@@ -82,13 +83,10 @@ export const sendVerificationCode = async (userEmail, userId, UserModel) => {
     </p>
 
   </div>
-`
-
-
-    });
+`,
+      },
+    );
   });
-
-
 };
 
 // функція відправки листа з посиланням для відновлення паролю
@@ -103,29 +101,30 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
   const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 хв
   await UserModel.findByIdAndUpdate(userId, {
     emailCodeHash: hash,
-    emailCodeExpires: expires
+    emailCodeExpires: expires,
   });
 
   // створюємо посилання
   const resetUrl = `${baseURL}?token=${resetToken}&email=${userEmail}`;
 
-
   //  Відправляємо лист
 
   return new Promise((resolve, reject) => {
-    sendpulse.smtpSendMail((response) => {
-      if (response && response.result) {
-        console.log("📧 Email sent successfully");
-        resolve(true);
-      } else {
-        console.error("❌ Email failed:", response);
-        reject(response);
-      }
-    }, {
-      from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
-      to: [{ email: userEmail }],
-      subject: "Відновлення паролю",
-      html: `
+    sendpulse.smtpSendMail(
+      (response) => {
+        if (response && response.result) {
+          console.log("📧 Email sent successfully");
+          resolve(true);
+        } else {
+          console.error("❌ Email failed:", response);
+          reject(response);
+        }
+      },
+      {
+        from: { name: "TestHost", email: "arsenii.tkachuk@kpk-lp.com.ua" },
+        to: [{ email: userEmail }],
+        subject: "Відновлення паролю",
+        html: `
   <div style="
     font-family: Arial, Helvetica, sans-serif;
     color: #333;
@@ -173,8 +172,8 @@ export const sendLinkForgot = async (userEmail, userId, baseURL, UserModel) => {
     </p>
 
   </div>
-`
-    });
-
-  })
-}
+`,
+      },
+    );
+  });
+};

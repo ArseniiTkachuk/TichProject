@@ -1,16 +1,18 @@
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import UserModel from '../models/User.js'; // перевір шлях до моделі
-import dotenv from 'dotenv';
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import UserModel from "../models/User.js"; // перевір шлях до моделі
+import dotenv from "dotenv";
 
 dotenv.config();
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:2222/google/callback" 
-  },
-  async (accessToken, refreshToken, profile, done) => {
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:2222/google/callback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
       // 1. Шукаємо користувача за email (який обов'язковий у тебе в схемі)
       let user = await UserModel.findOne({ email: profile.emails[0].value });
 
@@ -30,11 +32,12 @@ passport.use(new GoogleStrategy({
         email: profile.emails[0].value,
         googleId: profile.id,
         verified: true,
-        deleteAt: null // Щоб акаунт не видалився через 24 години
+        deleteAt: null, // Щоб акаунт не видалився через 24 години
       });
 
       done(null, user);
-  }
-));
+    },
+  ),
+);
 
 export default passport;
