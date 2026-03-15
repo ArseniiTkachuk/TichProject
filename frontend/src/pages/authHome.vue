@@ -14,16 +14,16 @@
         <div class="buttons-desktop">
           <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
           <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
-          <button class="action-btn danger" @click="showModalRemote = true">🚪 Вийти</button>
+          <button class="action-btn danger" @click="showModalRemote = true"> ⭢ Вийти</button>
         </div>
 
         <!-- Mobile menu -->
         <div class="menu-mobile" @click.stop>
           <button class="menu-btn" @click.stop="toggleMobileMenu">⋮</button>
           <div v-if="mobileMenuOpen" class="mobile-dropdown">
-            <button class="action-btn primary" @click="$router.push('/createTest')">➕ Створити тест</button>
-            <button class="action-btn" @click="goToSettings">⚙️ Налаштування</button>
-            <button class="action-btn danger" @click="showModalRemote = true">🚪 Вийти</button>
+            <button class="action-btn-mob primary_mob" @click="$router.push('/createTest')">➕ Створити тест</button>
+            <button class="action-btn-mob" @click="goToSettings">⚙️ Налаштування</button>
+            <button class="action-btn-mob danger_mob" @click="showModalRemote = true">🚪 Вийти</button>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
 
   <!-- Модальне вікно вийти з профілю -->
   <div v-if="showModalRemote" class="modal-overlay" @click="showModalRemote = false">
-    <div class="modal-content delete-modal animated-modal" @click.stop>
+    <div class="modal-content delete-modal" @click.stop>
       <h2>🚪 Вийти з профілю?</h2>
       <div class="delete-text">
         <p>Ви впевнені, що хочете залишити цей профіль?</p>
@@ -214,9 +214,75 @@ export default {
 }
 
 .action-btn.danger:hover {
-  border-color: rgba(255, 77, 77, 0.6);
-  background: linear-gradient(135deg, #ff4d4d, #ff0000);
+  color: #fff;
+  background: linear-gradient(135deg, #ff3b3b, #b00000);
+  border-color: #ff4d4d;
+
+  transform: translateY(-1.5px);
+
+  box-shadow:
+    0 6px 20px rgba(255, 50, 50, 0.45),
+    0 0 12px rgba(255, 80, 80, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  transition: all 0.25s ease;
+
 }
+
+
+.action-btn-mob {
+  width: 180px;
+  padding: 8px 10px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fafafa;
+  background: rgba(194, 193, 193, 0.221);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1px;
+
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.action-btn-mob:hover {
+  background: #f4f4f4;
+    color: #161817;
+    transform: translateY(-1.5px);
+    /*  background: rgba(224, 224, 224, 0.09);*/
+    box-shadow:
+    0 6px 17px rgba(206, 224, 215, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+
+.action-btn-mob.primary_mob {
+  font-weight: 700;
+}
+
+.action-btn-mob.danger_mob {
+  margin-top: 5px;
+  border-radius: 12px;
+  border: solid 2px rgba(255, 255, 255, 0.6);
+}
+
+.action-btn-mob.danger_mob:hover {
+  color: #fff;
+  background: linear-gradient(135deg, #ff3b3b, #b00000);
+  border-color: #ff4d4d;
+
+  transform: translateY(-1.5px);
+
+  box-shadow:
+    0 6px 20px rgba(255, 50, 50, 0.45),
+    0 0 12px rgba(255, 80, 80, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  transition: all 0.25s ease;
+
+}
+
+
 /* MOBILE MENU */
 .menu-mobile {
   display: none;
@@ -224,24 +290,31 @@ export default {
 }
 
 .menu-btn {
-  font-size: 22px;
+  font-size: 23px;
   background: none;
   border: none;
-  color: #fff;
+  color: #fafafa;
   cursor: pointer;
 }
 
 .mobile-dropdown {
   position: absolute;
-  top: 35px;
+  top: auto;
   right: 0;
+
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  
+  width: auto;
+  gap: 8px;
   background: rgba(0, 0, 0, 0.4);
-  padding: 8px;
+  padding: 10px;
   border-radius: 8px;
+
   z-index: 100;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
 }
 
 /* TEST CARDS GRID */

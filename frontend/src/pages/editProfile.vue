@@ -3,7 +3,7 @@
     <button class="btn-back" @click="isEditPassword = false">⬅ Назад</button>
 
     <header class="profile-header">
-      <h1>🔐 Зміна паролю</h1>
+      <h2>🔐 Зміна паролю</h2>
     </header>
 
 
@@ -77,7 +77,7 @@
     <button class="btn-back" @click="$router.back()">⬅ Назад</button>
 
     <header class="profile-header">
-      <h1>⚙️ Налаштування профілю</h1>
+      <h2>⚙️ Налаштування профілю</h2>
     </header>
 
     <div class="profile-content">
@@ -93,7 +93,7 @@
 
       <!-- Ім'я -->
       <div class="profile-name">
-        <h3>Ім’я</h3>
+        <h3 class="name_text">Ім’я</h3>
         <input v-model="user.name" placeholder="Введіть ім’я" />
       </div>
 
@@ -230,38 +230,50 @@ export default {
 .profile-settings {
   max-width: 600px;
   margin: 50px auto;
-  padding: 40px 30px 60px;
-  background: #fefefe;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   position: relative;
   text-align: center;
+  backdrop-filter: blur(14px);
+  padding: 40px 30px 60px;
+  border-radius: 22px;
+  width: 100%;
+  background: rgba(200, 200, 200, 0.073);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1.2px solid rgba(255, 255, 255, 0.35);
 }
 
 .btn-back {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 17px;
+  left: 17px;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8);
-  color: white;
-  font-weight: 600;
-  border: none;
+  background: transparent;
+  color: #fafafa;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(77, 12, 255, 0.3);
+   box-shadow:
+  0 1px 9px rgba(177, 202, 189, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-back:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(77, 12, 255, 0.5);
+  background: #fafafa;
+  color: #161817;
+  transform: translateY(-1.5px);
+/*  background: rgba(224, 224, 224, 0.09);*/
+  box-shadow:
+  0 6px 17px rgba(206, 224, 215, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-.profile-header h1 {
-  font-size: 30px;
-  margin-bottom: 40px;
-  color: #4d0cff;
+.profile-header h2 {
+  color: #fafafa;
+  font-size: 32px;
+  margin: 40px auto 17px;
+  text-shadow: 1px 1px 2px rgba(243, 242, 242, 0.5);
 }
 
 .profile-avatar {
@@ -281,7 +293,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-bottom: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+   box-shadow: 0 6px 26px rgba(31, 30, 30, 0.3);
 }
 
 .avatar-preview img {
@@ -302,22 +314,32 @@ export default {
 
 .btn-upload {
   padding: 12px 20px;
-  background: #4d0cff;
-  color: #fff;
-  font-weight: 600;
-  border: none;
+  background: rgba(183, 183, 183, 0.125);
+  box-shadow: 0 6px 26px rgba(31, 30, 30, 0.3);
+  border: 0.2px solid #fafafa;
+  color: #eeedede7;
+  font-weight: 500;
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .btn-upload:hover {
-  background: #6e33ff;
-  transform: scale(1.05);
+  background: #f7f7f7;
+  box-shadow:
+    0 6px 17px rgba(206, 224, 215, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: rgba(31, 31, 31, 0.919);
+  transform: scale(1.02);
+}
+
+.name_text {
+  color: #fafafa;
+  padding-bottom: 5px;
 }
 
 .profile-name {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .profile-name input {

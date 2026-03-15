@@ -494,23 +494,6 @@ export default {
   box-shadow: 0 8px 20px rgba(166, 117, 18, 0.35);
 }
 
-.step {
-  flex: 1;
-  background: linear-gradient(135deg, #f3e7ff, #ffe6f5);
-  padding: 30px;
-  border-radius: 25px;
-  font-size: 20px;
-
-  position: relative;
-  overflow: hidden;
-  color: #000;
-  background-clip: padding-box;
-}
-
-.step:hover {
-  background: linear-gradient(135deg, #b982f1, #f56abd);
-  box-shadow: 1px (#b982f1, #f56abd);
-}
 
 /* =========================
    📱 MOBILE (до 768px)
