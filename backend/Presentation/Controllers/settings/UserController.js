@@ -3,6 +3,18 @@ import * as AuthUtils from "./../../Utils.js";
 import SendVerefyEmailCode from "./../../utils/sendVerefyEmailCode.js";
 import sendResetPasswordLink from "../../utils/sendResetPasswordLink.js";
 
+export const AuthGoogle = (req, res) => {
+  try {
+    const token = AuthUtils.CreateToken(req.user._id);
+    // ПЕРЕНАПРАВЛЕННЯ НА ФРОНТЕНД
+    const frontendUrl = process.env.FRONTEND_URL;
+    res.redirect(`${frontendUrl}/#/authSuccess?token=${token}`);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Не вдалося зареєструватися" });
+  }
+};
+
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;

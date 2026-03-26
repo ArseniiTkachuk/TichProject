@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config();
 
+import passport from "./utils/passport.js";
 import * as Controllers from "./Controllers/index.js";
 import * as DB from "./../Infractructure/DataBase/index.js";
 import { uploadImg, hashFiles, CheckAuthUser } from "./Utils.js";
@@ -30,6 +31,19 @@ app.use("/uploads", express.static(uploadDir));
 app.use("/utils", express.static(path.join(__dirname, "utils")));
 
 // Роути
+app.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${process.env.FRONTEND_URL}/#/register`,
+  }),
+  Controllers.UserController.AuthGoogle,
+);
+
 app.post(
   "/register",
   uploadImg.any(),
