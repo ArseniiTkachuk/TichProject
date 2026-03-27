@@ -5,7 +5,7 @@ export const CreateTest = async (req, res) => {
   try {
     const { title, exercises } = req.body;
 
-    const parsedExercises = await Utils.parsedExercises_AddSlug(exercises);
+    const parsedExercises = Utils.parsedExercises_AddSlug(exercises);
 
     Utils.ApplyFilesToExercises(req.files, parsedExercises);
 
@@ -197,7 +197,7 @@ export const Update = async (req, res) => {
     const { title, exercises } = req.body;
     const { id } = req.params; // id тесту з маршруту
 
-    const parsedExercises = await Utils.parsedExercises_AddSlug(exercises);
+    const parsedExercises = Utils.parsedExercises_AddSlug(exercises);
 
     Utils.ApplyFilesToExercises(req.files, parsedExercises);
 
