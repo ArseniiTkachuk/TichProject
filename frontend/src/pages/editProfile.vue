@@ -228,12 +228,12 @@ export default {
 }
 
 .profile-settings {
-  max-width: 600px;
+  max-width: 420px;
   margin: 50px auto;
   position: relative;
   text-align: center;
   backdrop-filter: blur(14px);
-  padding: 40px 30px 60px;
+  padding: 40px 10px;
   border-radius: 22px;
   width: 100%;
   background: rgba(200, 200, 200, 0.073);
@@ -336,10 +336,11 @@ export default {
 .name_text {
   color: #fafafa;
   padding-bottom: 5px;
+
 }
 
 .profile-name {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .profile-name input {
@@ -348,33 +349,47 @@ export default {
   border-radius: 12px;
   border: 1px solid #ccc;
   font-size: 16px;
-}
+    transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease
+  }
 
 .profile-name input:focus {
   outline: none;
-  border-color: #4d0cff;
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
 }
 
 .profile-actions {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .btn-save {
   padding: 18px 40px;
+  margin-top: 5px;
   font-size: 20px;
   border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: #fff;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 6px 20px rgba(77, 12, 255, 0.4);
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
+  color: #fafafa;
+
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn-save:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(77, 12, 255, 0.6);
+    transform: scale(1.02);
+ box-shadow:
+  0 8px 20px rgba(63, 220, 140, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
 }
 
 
@@ -391,30 +406,38 @@ export default {
 
 
 .password-wrapper input {
-  width: 100%;
+  width: 340px;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid rgba(246, 186, 212, 0.6);
+  border: 1px solid transparent;
   font-size: 16px;
-  margin-top: 0;
-  background: rgba(255, 255, 255, 0.85);
-  padding-right: 46px;
+  margin: 0px auto;
+  background: #ffffffef;
+  text-align: left;
+    transition:
+    border 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
 }
 
 .password-wrapper input:focus {
   outline: none;
-  border: 1px solid #ff00b3;
-  box-shadow: 0 0 6px rgba(255, 0, 179, 0.8);
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
 }
 
 .h3-newPasswerd {
   margin-top: 20px;
+  color: #ffffffef;
 }
 
 
 .eye {
   position: absolute;
-  right: 12px;
+  right: 37px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -429,7 +452,7 @@ export default {
 
 
 .eye:hover {
-  color: #ff00b3;
+  color: #3daa80de;
 }
 
 .forget {
@@ -449,21 +472,25 @@ export default {
 
 /* primary button */
 .btn {
-  width: 100%;
+  width: 340px;
   padding: 12px;
   font-size: 16px;
   border-radius: 12px;
   cursor: pointer;
-  border: none;
   margin-top: 30px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: white;
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
+  color: #fafafa;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 12px rgba(255, 0, 179, 0.6);
+  transform: scale(1.02);
+  box-shadow:
+  0 8px 20px rgba(63, 220, 140, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
 }
 
 .btn:disabled {
@@ -473,9 +500,102 @@ export default {
 
 
 .error {
-  margin-top: 12px;
-  color: #ff6b6b;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-  font-size: 14px;
+  margin: 15px auto 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  /*  м’який червоний tint + glass */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 80, 80, 0.12),
+    rgba(63, 46, 46, 0.45)
+  );
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-left: 4px solid #ff4d4f;
+
+  color: #fce5e5;
+  font-weight: 500;
+  font-size: 15px;
+  width: 340px;
+
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.25),
+    0 0 12px rgba(255, 80, 80, 0.2);
+
+  animation: fadeSlide 0.3s ease;
 }
+
+@media (max-width: 480px) {
+
+  .profile-settings {
+    margin: 15% auto;
+    padding: 30px 15px;
+    max-width: 95%; /* Залишаємо невеликі відступи по боках */
+    border-radius: 18px;
+  }
+
+  .profile-header h2 {
+    font-size: 24px; /* Менший заголовок для вузьких екранів */
+    margin: 35px auto 15px;
+  }
+
+  .avatar-preview {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Поля вводу робимо на всю доступну ширину */
+  .profile-name input,
+  .password-wrapper input,
+  .btn {
+    width: 100%;
+    max-width: 100%;
+    font-size: 15px;
+  }
+
+  .password-wrapper {
+    width: 100%;
+    padding: 0 5px;
+  }
+
+  /* Коригуємо позицію ока в інпуті */
+  .eye {
+    right: 20px;
+  }
+
+  .btn-save {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+  }
+
+  .btn-back {
+    padding: 8px 12px;
+    font-size: 12px;
+    top: 12px;
+    left: 12px;
+  }
+
+  .h3-newPasswerd {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-name, .profile-actions {
+    width: 100%;
+  }
+}
+
 </style>

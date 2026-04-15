@@ -11,10 +11,12 @@
     <input v-model="title" placeholder="Назва тесту" class="title-input" />
 
     <div v-for="(q, qIndex) in exercises" :key="qIndex" class="question-block">
-      <h4>Питання {{ qIndex + 1 }}</h4>
+    <div class="question-header"><h4>Питання:&nbsp; {{qIndex + 1 }}</h4>
+      <button @click="removeQuestion(qIndex)" class="btn-small btn-remove-question">Видалити питання</button>
+    </div>
       <input v-model="q.question" placeholder="Текст питання" class="question-input" />
 
-      <button @click="removeQuestion(qIndex)" class="btn-small btn-remove-question">Видалити питання</button>
+      
 
       <select v-model="q.type" class="type-select">
         <option value="one">Одне правильне</option>
@@ -40,18 +42,18 @@
                 @change="onAnswerImageChange($event, qIndex, aIndex)" :ref="'fileInput-' + qIndex + '-' + aIndex">
             </label>
           </div>
-
+          
           <label>
             <template v-if="q.type === 'many'">
-              <input type="checkbox" v-model="a.correct" /> Правильна
+              <input class="input_type" type="checkbox" v-model="a.correct" /><p class="number_test">Правильна</p>
             </template>
             <template v-else>
-              <input type="radio" :name="'one-' + qIndex" :value="aIndex" v-model="q.correctAnswerIndex" /> Правильна
+              <input class="input_type" type="radio" :name="'one-' + qIndex" :value="aIndex" v-model="q.correctAnswerIndex" /><p class="number_test"> Правильна </p>
             </template>
           </label>
 
           <label>
-            <input type="checkbox" v-model="a.isImage" /> Картинка
+            <input class="input_type" type="checkbox" v-model="a.isImage" /><p class="number_test"> Картинка</p>
           </label>
 
           <button @click="removeAnswer(qIndex, aIndex)" class="btn-small">Видалити</button>
@@ -73,7 +75,7 @@
         <div class="pair-columns">
           <!-- Ліва колонка -->
           <div>
-            <h6>Ліва колонка</h6>
+            <h4 class="colon">Ліва колонка</h4>
             <div v-for="(left, lIndex) in q.pairs.left" :key="'left-' + qIndex + '-' + lIndex" class="pair-row">
               <input v-if="!left.isImage" v-model="left.text" placeholder="Лівий елемент" class="pair-input" />
 
@@ -94,7 +96,7 @@
                 <input type="checkbox" v-model="left.isImage" /> Картинка
               </label>
 
-              <select v-model="q.pairs.correctMap[lIndex]">
+              <select v-model="q.pairs.correctMap[lIndex]" class="lis">
                 <option v-for="(right, rIndex) in q.pairs.right" :key="rIndex" :value="rIndex">
                   {{ rIndex + 1 }}
                 </option>
@@ -106,9 +108,9 @@
 
           <!-- Права колонка -->
           <div>
-            <h6>Права колонка</h6>
+            <h4 class="colon">Права колонка</h4>
             <div v-for="(right, rIndex) in q.pairs.right" :key="'right-' + qIndex + '-' + rIndex" class="pair-row">
-              <p>{{ rIndex + 1 }}</p>
+              <p class="number_test">{{ rIndex + 1 }}</p>
               <input v-if="!right.isImage" v-model="right.text" placeholder="Правий елемент" class="pair-input" />
 
               <div v-if="right.isImage">
@@ -127,7 +129,7 @@
               </div>
 
               <label>
-                <input type="checkbox" v-model="right.isImage" /> Картинка
+                <input class="input_type" type="checkbox" v-model="right.isImage" /> Картинка
               </label>
 
               <button @click="removeRight(qIndex, rIndex)" class="btn-small">Видалити правий</button>
@@ -137,12 +139,12 @@
         </div>
       </div>
     </div>
+     <p v-if="message" class="message">{{ message }}</p>
     <div class="btn-down">
       <button @click="addQuestion" class="btn-add-question">Додати питання</button>
       <button @click="createTest" class="btn-create-test">Створити тест</button>
     </div>
-    <p class="message">{{ message }}</p>
-  </div>
+   </div>
 
   <!-- Модальне вікно створеного тесту -->
   <div v-if="showModal" class="modal-overlay" @click="showModal = false">
@@ -321,14 +323,16 @@ export default {
 }
 
 .test-wrapper {
-  background-color: #f5f6f8;
+  backdrop-filter: blur(14px);
   width: 95%;
   max-width: 1000px;
-  margin: 30px auto;
-  border-radius: 25px;
-  padding: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s;
+  margin: 15px auto;
+  border-radius: 20px;
+  padding: 15px;
+
+  background: rgba(200, 200, 200, 0.073);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1.2px solid rgba(255, 255, 255, 0.35);
 }
 
 /* HEADER */
@@ -337,12 +341,13 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   padding: 15px 20px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  background: rgba(115, 115, 115, 0.684);
+  box-shadow: 0 6px 26px rgba(31, 30, 30, 0.3);
+  border: 0.1px solid #b1b1b1f8;
+  color: #eeedede5;
 
   /* Додаємо закріплення */
   position: sticky;
@@ -365,20 +370,60 @@ export default {
   padding: 8px 18px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.3);
-  color: white;
+  color: #fafafa;
   font-weight: 600;
   transition: 0.3s;
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.45);
-  transform: scale(1.05);
+  background: #fafafaf3;
+  color: #161817;
+  transform: translateY(-1.2px);
+/*  background: rgba(224, 224, 224, 0.09);*/
+  box-shadow:
+  0 6px 17px rgba(206, 224, 215, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 
+h4 {
+  color: #eeedede5;
+}
+
+.colon {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.p{
+  margin-right: 3px;
+}
+
+.number_test {
+  color: #eeedede5;
+}
+
+.title-input {
+  width: 500px;
+  display: block;
+  margin: 20px auto 25px;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 500;
+}
+
+
+.lis {
+  border-radius: 7px;
+}
+.input_type:focus {
+    box-shadow: none !important;
+    border: none !important;
+}
+
 /* INPUT / SELECT */
-input,
-select {
+input {
   width: 100%;
   padding: 12px 14px;
   margin-top: 12px;
@@ -392,7 +437,11 @@ select {
 input:focus,
 select:focus {
   outline: none;
-  border: 2px solid #b000f8;
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(107, 255, 179, 0.4),
+    0 8px 20px rgba(93, 255, 154, 0.35);
+  transform: scale(1.02);
 }
 
 /* BUTTONS */
@@ -406,49 +455,93 @@ select:focus {
   box-shadow: 0 4px 15px rgba(255, 0, 0, 0.5);
 }
 
+.type-select {
+   width: 55%;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: all 0.3s;
+  background-color: #fff;
+
+}
+
+.question-header {
+  display: flex;
+  align-items: center; /* Центрування по вертикалі */
+  justify-content: space-between; /* Заголовок зліва, кнопка справа */
+}
+
 .btn-small,
-.btn-add-question,
 .btn-create-test {
   padding: 10px 16px;
   border-radius: 12px;
-  border: none;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  color: white;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
+  background: rgba(194, 193, 193, 0.221);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid transparent;
+   color: #fafafa;
+  
+}
+
+.btn-add-question{
+    background: transparent ;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  width: 165px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  color: #fafafa;
+}
+
+.btn-create-test {
+  border: 1px solid rgba(107, 255, 179, 0.4);
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
+  color: #fafafa;
+  width: 165px;
+
+  transition: transform 0.3s, box-shadow 0.3s;
+
+}
+
+.btn-create-test:hover {
+  transform: scale(1.02);
+  box-shadow:
+  0 8px 20px rgba(63, 220, 140, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #2eb27b, #1e6f50);
 }
 
 .btn-small:hover,
-.btn-add-question:hover,
-.btn-create-test:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255, 0, 179, 0.5);
+.btn-add-question:hover {
+  transform: scale(1.02);
+  background: #f7f7f7;
+  box-shadow:
+    0 3px 5px rgba(206, 224, 215, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  color: #151515;
 }
+
 
 .btn-add {
   margin-top: 10px;
 }
 
-/* Відступ перед кнопками внизу */
-.btn-add-question,
-.btn-create-test {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  margin-top: 25px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: white;
-  transition: 0.3s;
-}
 
 .btn-down {
   justify-content: center;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 15px;
 }
 
 
@@ -458,8 +551,12 @@ select:focus {
 .enter-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 13px;
+  margin-top: 13px;
+}
+
+.pair-row {
+  margin-top: 5px !important;
 }
 
 .pairs-block .pair-columns {
@@ -485,14 +582,16 @@ select:focus {
   border-radius: 12px;
   object-fit: cover;
   margin-top: 5px;
-  border: 2px solid rgba(77, 12, 255, 0.6);
+  border: 1px solid #fafafaf3;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .preview-img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(77, 12, 255, 0.5);
+  transform: scale(1.03);
+  box-shadow:
+  0 6px 17px rgba(206, 224, 215, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* UPLOAD BUTTON */
@@ -500,17 +599,22 @@ select:focus {
   display: inline-block;
   padding: 10px 14px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: white;
-  font-weight: 600;
+   border: 1px solid rgba(107, 255, 179, 0.4);
+  background: linear-gradient(135deg, #34c98a, #1e6f50);
+  color: #fafafa;
+  font-weight: 500;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   margin-top: 5px;
 }
 
 .upload-label:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(255, 0, 179, 0.5);
+  transform: scale(1.02);
+  box-shadow:
+  0 8px 20px rgba(63, 220, 140, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.25s ease;
+  background: linear-gradient(135deg, #2eb27b, #1e6f50);
 }
 
 .upload-label-input[type="file"] {
@@ -519,10 +623,55 @@ select:focus {
 
 /* MESSAGES */
 .message {
-  margin-top: 20px;
-  color: rgb(220, 40, 40);
-  font-weight: 600;
+  margin-top: 15px;
+  padding: 14px 18px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  /*  м’який червоний tint + glass */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 80, 80, 0.12),
+    rgba(63, 46, 46, 0.45)
+  );
+  backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-left: 4px solid #ff4d4f;
+
+  color: #fce5e5;
+  font-weight: 500;
+  font-size: 15px;
+
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.25),
+    0 0 12px rgba(255, 80, 80, 0.2);
+
+  animation: fadeSlide 0.3s ease;
+}
+
+/* іконка */
+.message::before {
+  content: "⚠";
   font-size: 16px;
+  color: #ff6b6b;
+
+  /* трохи glow */
+  filter: drop-shadow(0 0 6px rgba(255, 80, 80, 0.5));
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ADAPTIVE */
@@ -569,11 +718,13 @@ select:focus {
 
 /* Modal Box */
 .modal-content {
-  background: linear-gradient(135deg, #4d0cff, #b000f8, #ff00b3);
-  color: white;
+  background: rgba(255, 255, 255, 0.262);
+  backdrop-filter: blur(14px);
+  color: #fafafa;
   padding: 50px 40px;
   border-radius: 25px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   max-width: 600px;
   width: 90%;
   text-align: center;
@@ -661,4 +812,202 @@ select:focus {
   background: rgba(255, 255, 255, 0.4);
   transform: scale(1.2);
 }
+
+@media (max-width: 768px) {
+
+    .test-header {
+    position: sticky; /* Залишаємо його прикріпленим зверху */
+    top: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column; /* Елементи (верхній ряд і лічильник) один під одним */
+    align-items: center; /* Центруємо все по горизонталі */
+    padding: 10px 15px; /* Зменшуємо відступи */
+    gap: 0; /* Прибираємо автоматичний відступ між елементами */
+  }
+
+  /* Створюємо віртуальний контейнер для верхнього ряду */
+  .test-header > .top-row-emulator {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Головний заголовок ідеально по центру */
+    align-items: center;
+    position: relative; /* Для позиціонування кнопки відносно цього ряду */
+    min-height: 40px; /* Задаємо мінімальну висоту, щоб кнопка влізла */
+  }
+
+  /* Кнопка "Назад" - позиціонуємо абсолютно всередині верхнього ряду */
+  .back-btn {
+    position: absolute;
+    left: 10px; /* Притискаємо до лівого краю */
+    top: 50%; /* Центруємо вертикально */
+    transform: translateY(-50%); /* Корекція для ідеального вертикального центру */
+    padding: 6px 10px; /* Компактна кнопка для мобілок */
+    font-size: 13px;
+    margin: 0; /* Прибираємо зовнішні відступи */
+    white-space: nowrap;
+    width: auto; /* Щоб кнопка не розтягувалася */
+  }
+
+  /* Заголовок "Створити тест" */
+  .test-title {
+    font-size: 18px; /* Оптимальний розмір для мобілок */
+    margin: 0; /* Прибираємо відступи */
+    text-align: center;
+    width: auto; /* Заголовок займає тільки необхідне місце */
+    max-width: 70%; /* Залишаємо місце для кнопки "Назад", щоб не наповзали */
+    order: 1; /* Перший елемент у колонці (візуально) */
+  }
+
+  /* Кількість питань (h3) */
+  .test-header h3 {
+    width: 100%; /* Займає всю ширину */
+    text-align: center; /* Центруємо текст */
+    margin: 8px 0 0 0; /* Відступ ТІЛЬКИ зверху, 8px */
+    font-size: 16px; /* Менший шрифт для лічильника */
+    color: #e0e0e0;
+    order: 2; /* Другий елемент у колонці */
+  }
+
+  .title-input {
+    width: 100%;
+    margin: 15px 0;
+  }
+
+  .type-select {
+    width: 75%;
+  }
+
+  /* питання */
+  .question-header {
+    margin-top: 10px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+
+  /* всі рядки стають колонками */
+  .answer-row,
+  .pair-row,
+  .enter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  /* кнопки */
+  .btn-small,
+  .btn-add-question,
+  .btn-create-test {
+    width: 100%;
+  }
+
+
+  .btn-small {
+    border-radius: 9px;
+  }
+
+  /* зображення */
+  .preview-img {
+    max-width: 100%;
+  }
+
+  /* пари */
+  .pairs-block .pair-columns {
+    flex-direction: column;
+  }
+
+  /* модалка */
+  .modal-content {
+    padding: 25px 15px;
+  }
+
+  .answer-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* А ОТ ЧЕКБОКСИ фіксимо */
+  .answer-row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: auto; /* важливо */
+  }
+
+  .input_type {
+    width: auto;
+    margin: 0;
+  }
+
+  .question-header {
+    flex-direction: row; /* В ОДИН РЯД */
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .question-header h4 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .btn-remove-question {
+    width: auto; /* щоб кнопка не розтягувалась */
+   padding: 20px 32px;
+    font-size: 19px;
+    white-space: nowrap; /* щоб текст не переносився */
+  }
+
+  .btn-down {
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .test-title {
+    font-size: 18px;
+  }
+
+  input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-small {
+    font-size: 14px;
+    padding: 8px;
+    margin-top: 5px
+  }
+
+  .btn-create-test {
+    font-size: 15px;
+  }
+
+  .modal-content h2 {
+    font-size: 20px;
+  }
+
+  input, select, textarea {
+  font-size: 16px;
+  }
+
+.btn-remove-question {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .test-wrapper {
+    width: 60%;
+  }
+
+  input, select, textarea {
+  font-size: 16px;
+ }
+}
+
 </style>

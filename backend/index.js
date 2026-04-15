@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 2222;
 
 // Підключення до Mongo
 mongoose
-  .connect(process.env.MONGO_DB)
+  .connect(process.env.MONGODB_URI)
   //  .connect("mongodb://localhost:27017/TichPrj")
   .then(() => console.log("DB OK"))
   .catch((err) => console.log("DB error:", err));
